@@ -2,6 +2,7 @@
 #define CAMERA_FPV_H
 
 #include "Camera.h"
+#include "SceneManager.h"
 
 class CameraFPV : public Camera
 {

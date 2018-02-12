@@ -17,6 +17,7 @@ public:
 	void AddScene(Scene *scene); //SCENE POINTER HAS TO ALREADY BE NEWED
 	void SetNextScene(int sceneID);
 	void Update(StopWatch*, bool Exiting = false);
+	int GetSceneID();
 	enum SCENE_ID
 	{
 		SCENEID_MAIN,
