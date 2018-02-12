@@ -64,3 +64,8 @@ void SceneManager::Update(StopWatch *m_timer,bool Exiting)
 		return;
 	}
 }
+
+int SceneManager::GetSceneID()
+{
+	return this->nextSceneID;
+}

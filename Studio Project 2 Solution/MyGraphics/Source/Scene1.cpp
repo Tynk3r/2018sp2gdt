@@ -74,6 +74,18 @@ void Scene1::Init()
 	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
 	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
 
+	m_parameters[U_LIGHT3_POSITION] = glGetUniformLocation(m_programID, "lights[3].position_cameraspace");
+	m_parameters[U_LIGHT3_COLOR] = glGetUniformLocation(m_programID, "lights[3].color");
+	m_parameters[U_LIGHT3_POWER] = glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID, "lights[3].kC");
+	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID, "lights[3].kL");
+	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID, "lights[3].kQ");
+	m_parameters[U_LIGHT3_TYPE] = glGetUniformLocation(m_programID, "lights[3].type");
+	m_parameters[U_LIGHT3_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[3].spotDirection");
+	m_parameters[U_LIGHT3_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[3].cosCutoff");
+	m_parameters[U_LIGHT3_COSINNER] = glGetUniformLocation(m_programID, "lights[3].cosInner");
+	m_parameters[U_LIGHT3_EXPONENT] = glGetUniformLocation(m_programID, "lights[3].exponent");
+
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -96,6 +108,18 @@ void Scene1::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[1].type = Light::LIGHT_POINT;
+	light[1].position.Set(0, 10, 0);
+	light[1].color.Set(1, 1, 1);
+	light[1].power = 10;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -128,7 +152,17 @@ void Scene1::Init()
 	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
 	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
 
-	glUniform1i(m_parameters[U_NUMLIGHTS], 3);
+	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
+	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
+	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
+	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
+	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
+	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -241,6 +275,25 @@ void Scene1::Render()
 	{
 		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
+	}
+
+	if (light[3].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[3].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
 	RenderSkybox(200.0f, godlights);

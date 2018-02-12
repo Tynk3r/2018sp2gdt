@@ -57,6 +57,19 @@ class Scene1 : public Scene
 		U_LIGHT2_COSCUTOFF,
 		U_LIGHT2_COSINNER,
 		U_LIGHT2_EXPONENT,
+
+		U_LIGHT3_POSITION,
+		U_LIGHT3_COLOR,
+		U_LIGHT3_POWER,
+		U_LIGHT3_KC,
+		U_LIGHT3_KL,
+		U_LIGHT3_KQ,
+		U_LIGHT3_TYPE,
+		U_LIGHT3_SPOTDIRECTION,
+		U_LIGHT3_COSCUTOFF,
+		U_LIGHT3_COSINNER,
+		U_LIGHT3_EXPONENT,
+
 		U_NUMLIGHTS,
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
@@ -112,7 +125,7 @@ private:
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 
-	Light light[3];
+	Light light[4];
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
