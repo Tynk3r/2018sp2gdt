@@ -191,7 +191,7 @@ void Scene1::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("model8", "OBJ//ringTarget.obj");
-	meshList[GEO_RING]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_RING]->textureID = LoadTGA("Image//ring.tga");
 }
 
 void Scene1::Update(double dt)
