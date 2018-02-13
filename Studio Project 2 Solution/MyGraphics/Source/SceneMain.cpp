@@ -164,11 +164,12 @@ void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+
 	if (Application::IsKeyPressed('6'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	else if (Application::IsKeyPressed('7'))
+	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f || camera.target.z <= -185.0f && camera.target.x >= -15.0f && camera.target.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
@@ -350,7 +351,7 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, -d);
+	modelStack.Translate(0, 0, 0);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
