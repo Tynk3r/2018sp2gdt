@@ -1,4 +1,6 @@
 #pragma once
+#ifndef SCENE_MANAGER_H
+#define SCENE_MANAGER_H
 #include <vector>
 #include <iostream> //to print out errors/warnings
 #include "Scene.h"
@@ -6,13 +8,14 @@
 class SceneManager
 {
 private:
-	std::vector<Scene*> SC_SceneList;
+	
 	int currSceneID;
 	int nextSceneID;
 	bool bFirstUsage;
 	static SceneManager *SM_Instance;
 	SceneManager();
 public:
+	std::vector<Scene*> SC_SceneList;
 	static SceneManager* instance(void);
 	void AddScene(Scene *scene); //SCENE POINTER HAS TO ALREADY BE NEWED
 	void SetNextScene(int sceneID);
@@ -73,3 +76,4 @@ m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to 
 
 //coded by coen
 */
+#endif

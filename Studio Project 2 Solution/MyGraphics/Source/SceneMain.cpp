@@ -159,7 +159,7 @@ void SceneMain::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
-	objs[1].setBox(0, 0, 0, 20); // dinoegg
+	objs[0].setBox(0, 0, 0, 10); // dinoegg
 }
 
 void SceneMain::Update(double dt)
@@ -252,8 +252,8 @@ void SceneMain::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	viewStack.PushMatrix();
-		viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
-		viewStack.Scale(objs[1].getSize(), objs[1].getSize(), objs[1].getSize());
+		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+		viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 		viewStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
 	viewStack.PopMatrix();
@@ -441,8 +441,12 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 
 bool SceneMain::collision(Vector3 c, Vector3 t) {
 	int i;
-	for (i = 0; i < OBJECTS; i++) {
-		if (c == objs[i].getPos() || t == objs[i].getPos()) {
+
+	for (i = 0; i < NUM_OBJECTS; i++) {
+		if	     (c.x >= objs[i].getPos().x -(objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
+			&& c.z >= objs[i].getPos().z -(objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
+			||	  t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
+			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)){
 			return true;
 		}
 	}

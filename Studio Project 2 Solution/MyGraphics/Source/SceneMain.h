@@ -1,6 +1,5 @@
 #ifndef SCENE_MAIN_H
 #define SCENE_MAIN_H
-#define OBJECTS 1
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -86,6 +85,13 @@ class SceneMain : public Scene
 	};
 	Mesh* meshList[NUM_GEOMETRY];
 
+	enum OBJECTS
+	{
+		OBJ_DINOEGG,
+
+		NUM_OBJECTS,
+	};
+
 public:
 	SceneMain();
 	~SceneMain();
@@ -102,7 +108,7 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
-	Object objs[OBJECTS];
+	Object objs[NUM_OBJECTS];
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);

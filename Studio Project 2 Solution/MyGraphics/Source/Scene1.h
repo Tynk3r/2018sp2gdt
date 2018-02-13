@@ -128,6 +128,7 @@ private:
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	bool collision(Vector3, Vector3) { return false; };
 
 	bool godlights = false;
 };
