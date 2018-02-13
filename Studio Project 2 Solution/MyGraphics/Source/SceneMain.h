@@ -11,6 +11,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "Object.h"
 
 
 
@@ -101,14 +102,14 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
-	Vector3 Object[OBJECTS];
+	Object objs[OBJECTS];
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	bool collision(Vector3);
+	bool collision(Vector3, Vector3);
 	
 	bool godlights = false;
 };
