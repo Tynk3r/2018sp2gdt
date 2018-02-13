@@ -156,8 +156,10 @@ void SceneMain::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("dinoegg", "OBJ//dinoegg.obj");
+	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
+
+	objs[0].setBox(0, 0, 0, 10); // dinoegg
 }
 
 void SceneMain::Update(double dt)
@@ -181,6 +183,8 @@ void SceneMain::Update(double dt)
 	{
 			godlights = true;
 	}
+	
+	
 }
 
 void SceneMain::Render()
@@ -248,8 +252,8 @@ void SceneMain::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 	viewStack.PushMatrix();
-		viewStack.Scale(15, 15, 15);
-		viewStack.Translate(0, 0, 0);
+		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+		viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 		viewStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
 	viewStack.PopMatrix();
@@ -435,14 +439,21 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 point) {
+bool SceneMain::collision(Vector3 c, Vector3 t) {
 	int i;
-	for (i = 0; i < OBJECTS; i++) {
-		if (point.x == Object[i].x && point.z == Object[i].z && point.y == Object[i].y) {
+
+	for (i = 0; i < NUM_OBJECTS; i++) {
+		if	     (c.x >= objs[i].getPos().x -(objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
+			&& c.z >= objs[i].getPos().z -(objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
+			||	  t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
+			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)){
 			return true;
 		}
 	}
-	if (i == OBJECTS) {
+	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || t.x >= 200.0f || t.x <= -200.0f || t.z >= 200.0f || t.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f || t.y >= 200.0f || t.y <= -200.0f) {
+		return true;
+	}
+	else {
 		return false;
 	}
 }

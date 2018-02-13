@@ -1,6 +1,5 @@
 #ifndef SCENE_MAIN_H
 #define SCENE_MAIN_H
-#define OBJECTS 1
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -11,6 +10,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "Object.h"
 
 
 
@@ -85,6 +85,13 @@ class SceneMain : public Scene
 	};
 	Mesh* meshList[NUM_GEOMETRY];
 
+	enum OBJECTS
+	{
+		OBJ_DINOEGG,
+
+		NUM_OBJECTS,
+	};
+
 public:
 	SceneMain();
 	~SceneMain();
@@ -101,14 +108,14 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
-	Vector3 Object[OBJECTS];
+	Object objs[NUM_OBJECTS];
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	bool collision(Vector3);
+	bool collision(Vector3, Vector3);
 	
 	bool godlights = false;
 };
