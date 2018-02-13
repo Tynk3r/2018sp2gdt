@@ -22,6 +22,11 @@ public:
 	virtual void Reset();
 	double prevX;
 	double prevY;
+
+	//Variable for Scene1
+	double horizMove;
+	double vertMove;
+	double SkyboxSize;
 };
 
 #endif
