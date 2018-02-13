@@ -156,8 +156,8 @@ void SceneMain::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	/*meshList[GEO_DEER] = MeshBuilder::GenerateOBJ("model8", "OBJ//deer.obj");
-	meshList[GEO_DEER]->textureID = LoadTGA("Image//deer.tga");*/ // example of obj
+	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("dinoegg", "OBJ//dinoegg.obj");
+	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 }
 
 void SceneMain::Update(double dt)
@@ -246,6 +246,13 @@ void SceneMain::Render()
 
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
+
+	viewStack.PushMatrix();
+		viewStack.Scale(15, 15, 15);
+		viewStack.Translate(0, 0, 0);
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_DINOEGG], godlights);
+	viewStack.PopMatrix();
 
 	/* sampel
 	viewStack.PushMatrix();
@@ -426,4 +433,16 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	modelStack.PopMatrix();
 
 	glEnable(GL_DEPTH_TEST);
+}
+
+bool SceneMain::collision(Vector3 point) {
+	int i;
+	for (i = 0; i < OBJECTS; i++) {
+		if (point.x == Object[i].x && point.z == Object[i].z && point.y == Object[i].y) {
+			return true;
+		}
+	}
+	if (i == OBJECTS) {
+		return false;
+	}
 }

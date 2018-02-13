@@ -1,5 +1,6 @@
 #ifndef SCENE_MAIN_H
 #define SCENE_MAIN_H
+#define OBJECTS 1
 
 #include "Scene.h"
 #include "SceneManager.h"
@@ -71,27 +72,15 @@ class SceneMain : public Scene
 	enum GEOMETRY_TYPE
 	{
 		GEO_AXES,
-		GEO_2DQUAD,
-		GEO_SPHERE1,
-		GEO_LIGHTBALL,
-		GEO_KNUCKL,
+		GEO_FRONT,
+		GEO_BACK,
 		GEO_LEFT,
 		GEO_RIGHT,
 		GEO_TOP,
 		GEO_BOTTOM,
-		GEO_FRONT,
-		GEO_BACK,
-		GEO_TREE_BRANCH,
-		GEO_LOG,
-		GEO_CAMPFIRE_UNLIT,
-		GEO_SHOE,
-		GEO_TREE_LEAVES,
-		GEO_TREE_TRUNK,
-		GEO_KUBELWAGEN,
-		GEO_BUSH,
-		GEO_DEER,
 		GEO_TEXT,
-
+		GEO_DINOEGG,
+		
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];
@@ -112,13 +101,15 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
+	Vector3 Object[OBJECTS];
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-
+	bool collision(Vector3);
+	
 	bool godlights = false;
 };
 #endif
