@@ -18,6 +18,7 @@ public:
 	static double GetCursorY(void);
 	static int GetWindowWidth(void);
 	static int GetWindowHeight(void);
+
 private:
 
 	//Declare a window object

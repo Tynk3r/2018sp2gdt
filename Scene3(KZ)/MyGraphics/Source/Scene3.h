@@ -9,6 +9,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "bush.h"
 #include <time.h>
 
 
@@ -102,10 +103,18 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-	
-	int currentTraps = 0;
+
+	int invTraps = 1;
 	int redFruits = 0;
-	int blueFruits = 0;
+	int bluFruits = 0;
+	int meat = 0;
+	
+	bush bush1;
+	bush bush2;
+	bush bush3;
+	bush bush4;
+	bush bush5;
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -123,7 +132,7 @@ private:
 
 	bool godlights = false;
 
-	bool harvestedBush;
-	bool harvestCheck;
+	bool trappedBush;
+	int trapState;
 };
 #endif

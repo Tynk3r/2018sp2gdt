@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\bush.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraFPV.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -173,6 +174,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\bush.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraFPV.h" />
     <ClInclude Include="Source\Light.h" />
