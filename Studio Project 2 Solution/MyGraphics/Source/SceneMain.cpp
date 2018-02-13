@@ -159,7 +159,7 @@ void SceneMain::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
-	objs[0].setBox(0, 0, 0, 10); // dinoegg
+	objs[0].setBox(0, 0, 0, 20); // dinoegg
 }
 
 void SceneMain::Update(double dt)
@@ -253,6 +253,41 @@ void SceneMain::Render()
 
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+		viewStack.PushMatrix();
+			viewStack.Translate(-18, 30, 0);
+			viewStack.Scale(4, 4, 4);
+			viewStack.PushMatrix();
+				viewStack.Translate(0, 0, 9);
+				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
+				viewStack.Translate(-3, -2, 0);
+				viewStack.Scale(2, 2, 2);
+				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
+			viewStack.PopMatrix();
+			viewStack.Rotate(90, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(-4.5, 0, 14);
+				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
+				viewStack.Translate(-3, -2, 0);
+				viewStack.Scale(2, 2, 2);
+				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
+			viewStack.PopMatrix();
+			viewStack.Rotate(90, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(-9, 0, 9);
+				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
+				viewStack.Translate(-3, -2, 0);
+				viewStack.Scale(2, 2, 2);
+				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
+			viewStack.PopMatrix();
+			viewStack.Rotate(90, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(-4.5, 0, 5);
+				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
+				viewStack.Translate(-3, -2, 0);
+				viewStack.Scale(2, 2, 2);
+				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
+			viewStack.PopMatrix();
+		viewStack.PopMatrix();
 		viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 		viewStack.Rotate(0, 0, 1, 0);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
