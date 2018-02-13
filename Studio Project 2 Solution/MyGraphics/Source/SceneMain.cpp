@@ -164,6 +164,7 @@ void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+
 	if (Application::IsKeyPressed('6'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
@@ -350,7 +351,7 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, -d);
+	modelStack.Translate(0, 0, 0);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
