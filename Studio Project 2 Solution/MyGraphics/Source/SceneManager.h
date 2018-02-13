@@ -25,6 +25,7 @@ public:
 	{
 		SCENEID_MAIN,
 		SCENEID_1,
+		SCENEID_4,
 
 		SCENEID_AMTOFSCENES //dont remove dis
 	};

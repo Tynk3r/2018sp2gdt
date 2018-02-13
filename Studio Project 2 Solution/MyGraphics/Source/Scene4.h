@@ -108,6 +108,8 @@ class Scene4 : public Scene
 
 
 		GEO_PLACEHOLDER_NPC,
+		GEO_PLACEHOLDER_TEXT_BOX1,
+		GEO_PLACEHOLDER_TEXT_BOX2,
 
 		NUM_GEOMETRY,
 	};
@@ -136,8 +138,12 @@ private:
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
+
+	bool collision(Vector3, Vector3) { return false; };
 
 	void RenderNPC();
+	void RenderTextBox();
 
 	bool godlights = false;
 };

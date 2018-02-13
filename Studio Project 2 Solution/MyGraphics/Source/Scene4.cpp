@@ -202,27 +202,29 @@ void Scene4::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
 
-	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholder", Color(1, 1, 1), 1, 5, 1);
-
-	/*meshList[GEO_DEER] = MeshBuilder::GenerateOBJ("model8", "OBJ//deer.obj");
-	meshList[GEO_DEER]->textureID = LoadTGA("Image//deer.tga");*/ // example of obj
+	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 }
 
 void Scene4::Update(double dt)
-{
+{	
+	// TODO remove the below testing code
+	////////start of testing code////////
+	std::cout << "Position : " << camera.position << std::endl;
+	std::cout << "Target : " << camera.target << std::endl;
+	////////end of testing code////////
+	// TODO remove the above testing code
+
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 	if (Application::IsKeyPressed('6'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	else if (Application::IsKeyPressed('7'))
-	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
-	}
 	else if (Application::IsKeyPressed('0'))
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
@@ -328,7 +330,6 @@ void Scene4::Render()
 	*/
 
 	viewStack.PushMatrix();
-		viewStack.Scale(10, 20, 10);
 		RenderNPC();
 	viewStack.PopMatrix();
 
@@ -434,14 +435,64 @@ void Scene4::RenderSkybox(float d, bool light)
 
 void Scene4::RenderNPC()
 {
+	int sizeOfBox = 35;
+	int textBoxRender = -1;
+
 	for (int i = 0; i < npc.numberOfNPCs; i++)
 	{
 		viewStack.PushMatrix();
 			viewStack.Translate(npc.getCoord(i).x, npc.getCoord(i).y, npc.getCoord(i).z);
-			viewStack.Scale(1, 1, 1);
+			viewStack.Scale(10, 20, 10);
 			RenderMesh(meshList[GEO_PLACEHOLDER_NPC], godlights);
 		viewStack.PopMatrix();
+
+		if (npc.textCollisions[i].IsPointInsideAABB(camera.position,npc.textCollisions[i]))
+		{
+			textBoxRender = i;
+		}
 	}
+
+	if (textBoxRender == NPC_WEATHER)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_LORE)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_HUNTING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_RAISING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_RACING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+}
+
+void Scene4::RenderTextBox()
+{
+	viewStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 100, 10); // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 100, 1);	// Bottom white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 100, 1);	// Top white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 1, 1, 10);	// Right white area
+	viewStack.PopMatrix();
 }
 
 void Scene4::RenderText(Mesh* mesh, std::string text, Color color)
@@ -512,5 +563,26 @@ void Scene4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+		modelStack.LoadIdentity();
+		//to do: scale and translate accordingly
+		modelStack.Translate(x, y, 0);
+		modelStack.Scale(sizex, sizey, 1);
+		RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }

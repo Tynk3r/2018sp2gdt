@@ -190,8 +190,14 @@ void Scene1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("model8", "OBJ//ringTarget.obj");
+	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ//ringTarget.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image//ring.tga");
+
+	//meshList[GEO_DINO] = MeshBuilder::Generate2DQuad("dino", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	//meshList[GEO_DINO]->textureID = LoadTGA("Image//flyingModel.tga");
+
+	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("ring", "OBJ//dinoegg.obj");
+	meshList[GEO_DINO]->textureID = LoadTGA("Image//bottom.tga");
 }
 
 void Scene1::Update(double dt)
@@ -296,7 +302,9 @@ void Scene1::Render()
 		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
+	//Render Skybox
 	RenderSkybox(camera.SkyboxSize, godlights);
+
 	RenderMesh(meshList[GEO_AXES], false);
 
 	/* sampel
@@ -309,12 +317,16 @@ void Scene1::Render()
 	viewStack.PopMatrix();
 	*/
 
+	//Render Ring
 	viewStack.PushMatrix();
 		viewStack.Scale(8, 8, 8);
 		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
 		RenderMesh(meshList[GEO_RING], godlights);
 	viewStack.PopMatrix();
+
+	//Render Dino//
+	RenderMeshOnScreen(meshList[GEO_DINO], 2, 0.45, 20, 20, (camera.horizMove)*0.5, camera.vertMove);
 
 	std::ostringstream ah;
 	ah << framerate;
@@ -324,6 +336,7 @@ void Scene1::Render()
 	oh << camera.position.y;
 	std::string str2 = oh.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "Altitude:" + str2, Color(1, 0, 0), 2, 1, 1);
+
 }
 
 void Scene1::Exit()
@@ -488,5 +501,27 @@ void Scene1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey, float horideg, float vertideg)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Scale(sizex, sizey, 1);
+	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(horideg, 0, 1, 0);
+	modelStack.Rotate(vertideg, 1, 0, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
