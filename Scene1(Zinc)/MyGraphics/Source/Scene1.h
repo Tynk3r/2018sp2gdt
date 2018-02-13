@@ -93,18 +93,16 @@ class Scene1 : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
-		GEO_TREE_BRANCH,
-		GEO_LOG,
-		GEO_CAMPFIRE_UNLIT,
-		GEO_SHOE,
-		GEO_TREE_LEAVES,
-		GEO_TREE_TRUNK,
-		GEO_KUBELWAGEN,
-		GEO_BUSH,
-		GEO_DEER,
+		
+		//Scene1 Models
+		GEO_RING,
+		GEO_DINO,
+		GEO_TREE,
+		GEO_CLIFF,
+
 		GEO_TEXT,
 
-		NUM_GEOMETRY,
+		NUM_GEOMETRY
 	};
 	Mesh* meshList[NUM_GEOMETRY];
 

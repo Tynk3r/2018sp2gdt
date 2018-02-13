@@ -26,6 +26,7 @@ public:
 	//Variable for Scene1
 	double horizMove;
 	double vertMove;
+	double SkyboxSize;
 };
 
 #endif

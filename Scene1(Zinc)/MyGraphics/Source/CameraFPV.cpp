@@ -23,14 +23,18 @@ void CameraFPV::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	Application::SetCursorVisible(false);
 	prevX = Application::GetCursorX();
 	prevY = Application::GetCursorY();
+
+	//Init for Scene1
 	horizMove = 0.0;
 	vertMove = 0.0;
-
+	SkyboxSize = 500.0f;
 }
 
 void CameraFPV::Update(double dt)
 {
 	
+	//Temp Var
+	bool PrintInfo = true;
 
 	if (SceneManager::instance()->GetSceneID() != SceneManager::SCENEID_1)
 	{
@@ -114,6 +118,10 @@ void CameraFPV::Update(double dt)
 		{
 			MOVEMENT_SPEED = 60.0f;
 		}
+		if (Application::IsKeyPressed('R'))
+		{
+			Reset();
+		}
 		else
 		{
 			MOVEMENT_SPEED = 30.0f;
@@ -125,7 +133,7 @@ void CameraFPV::Update(double dt)
 	else
 	{
 		static const float CAMERA_SPEED = 1.0f;
-		static float MOVEMENT_SPEED = 10.0f;
+		static float MOVEMENT_SPEED = 20.0f;
 
 		double yaw = -horizMove*dt;
 		Vector3 view = (target - position).Normalized();
@@ -143,24 +151,27 @@ void CameraFPV::Update(double dt)
 		Vector3 view1(view.x, view.y, view.z);
 		position += view1 * (float)(MOVEMENT_SPEED * dt);
 		target += view1 * (float)(MOVEMENT_SPEED * dt);
-		if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+		if (position.x >= SkyboxSize || position.x <= -SkyboxSize || position.z >= SkyboxSize || position.z <= -SkyboxSize || target.x >= SkyboxSize || target.x <= -SkyboxSize || target.z >= SkyboxSize || target.z <= -SkyboxSize || position.y >= SkyboxSize || position.y <= -SkyboxSize || target.y >= SkyboxSize || target.y <= -SkyboxSize) {
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
 		}
 
 		if (Application::IsKeyPressed(VK_UP))
 		{
+			if (up.y > 0)
+			{
+				if (vertMove != 30)
+					vertMove += (double)(2.0*CAMERA_SPEED);
+				else
+					vertMove = 30;
+			}
+		}
+		if (Application::IsKeyPressed(VK_DOWN))
+		{
 			if (vertMove != -20)
 				vertMove -= (double)(2.0*CAMERA_SPEED);
 			else
 				vertMove = -20;
-		}
-		if (Application::IsKeyPressed(VK_DOWN))
-		{
-			if (vertMove != 20)
-				vertMove += (double)(2.0*CAMERA_SPEED);
-			else
-				vertMove = 20;
 		}
 		if (Application::IsKeyPressed(VK_LEFT))
 		{
@@ -176,11 +187,46 @@ void CameraFPV::Update(double dt)
 			else
 				horizMove = 20;
 		}
-	}
+		if (Application::IsKeyPressed(VK_LSHIFT))
+		{
+			MOVEMENT_SPEED = 50.0f;
+		}
 
-	if (Application::IsKeyPressed('R'))
-	{
-		Reset();
+		//If not pressing Down, automatically pitch downwards
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			if (up.y > 0)
+			{
+				if (!Application::IsKeyPressed(VK_UP))
+				{
+					if (vertMove < 10)
+						vertMove += (double)(2.0*CAMERA_SPEED);
+				}
+			}
+			else
+			{
+				vertMove = 0;
+			}
+		}
+
+		if (Application::IsKeyPressed('R'))
+		{
+			Reset();
+		}
+		if (Application::IsKeyPressed('I'))
+		{
+			PrintInfo = false;
+		}
+
+
+		//Print out camera info in console
+		if (PrintInfo)
+		{
+			std::cout << "Position : " << position << std::endl;
+			std::cout << "Target : " << target << std::endl;
+			std::cout << "Up : " << up << std::endl;
+			std::cout << "View : " << view << std::endl;
+		}
 	}
 }
 

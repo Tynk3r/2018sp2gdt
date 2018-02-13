@@ -190,8 +190,8 @@ void Scene1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	/*meshList[GEO_DEER] = MeshBuilder::GenerateOBJ("model8", "OBJ//deer.obj");
-	meshList[GEO_DEER]->textureID = LoadTGA("Image//deer.tga");*/ // example of obj
+	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("model8", "OBJ//ringTarget.obj");
+	meshList[GEO_RING]->textureID = LoadTGA("Image//bottom.tga");
 }
 
 void Scene1::Update(double dt)
@@ -296,7 +296,7 @@ void Scene1::Render()
 		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox(200.0f, godlights);
+	RenderSkybox(camera.SkyboxSize, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
 	/* sampel
@@ -310,16 +310,20 @@ void Scene1::Render()
 	*/
 
 	viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
+		viewStack.Scale(8, 8, 8);
 		viewStack.Translate(0, 0, 0);
 		viewStack.Rotate(0, 0, 1, 0);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
+		RenderMesh(meshList[GEO_RING], godlights);
 	viewStack.PopMatrix();
 
 	std::ostringstream ah;
 	ah << framerate;
 	std::string str = ah.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 1, 2);
+	std::ostringstream oh;
+	oh << camera.position.y;
+	std::string str2 = oh.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Altitude:" + str2, Color(1, 0, 0), 2, 1, 1);
 }
 
 void Scene1::Exit()
@@ -471,7 +475,7 @@ void Scene1::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
