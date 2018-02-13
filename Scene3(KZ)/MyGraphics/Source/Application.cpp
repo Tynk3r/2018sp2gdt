@@ -55,6 +55,7 @@ int Application::WindowWidth = 2;
 int Application::WindowHeight = 2;
 void Application::Init()
 {
+	
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
 	//Initialize GLFW

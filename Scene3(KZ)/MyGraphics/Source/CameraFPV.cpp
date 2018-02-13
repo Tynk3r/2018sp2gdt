@@ -120,10 +120,10 @@ void CameraFPV::Update(double dt)
 	prevY = Application::GetCursorY();
 
 	//CHECK CORDS//
-	/*if (Application::IsKeyPressed('E'))
+	if (Application::IsKeyPressed('E'))
 	{
 		std::cout << position.x << "      " << position.z;
-	}*/
+	}
 }
 
 void CameraFPV::Reset()
