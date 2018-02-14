@@ -1,1 +1,9 @@
-﻿
+﻿  Scene1.cpp
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(262): warning C4244: '-=': conversion from 'double' to 'int', possible loss of data
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(346): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(384): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(384): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(414): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n506\documents\visual studio 2015\projects\sp2\studio project 2 solution\mygraphics\source\scene1.cpp(418): warning C4305: 'argument': truncation from 'double' to 'float'
+  MyGraphics.vcxproj -> D:\Users\n506\Documents\Visual Studio 2015\Projects\SP2\Studio Project 2 Solution\Debug\MyGraphics.exe
+  MyGraphics.vcxproj -> D:\Users\n506\Documents\Visual Studio 2015\Projects\SP2\Studio Project 2 Solution\Debug\MyGraphics.pdb (Full PDB)
