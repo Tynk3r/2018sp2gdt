@@ -45,10 +45,10 @@
     <ClCompile Include="Source\CameraFPV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneMain.cpp">
+    <ClCompile Include="Source\bush.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\bush.cpp">
+    <ClCompile Include="Source\Scene3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,10 +92,10 @@
     <ClInclude Include="Source\CameraFPV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneMain.h">
+    <ClInclude Include="Source\bush.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\bush.h">
+    <ClInclude Include="Source\Scene3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
