@@ -171,7 +171,7 @@ void SceneMain::Update(double dt)
 
 	if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+		//SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
 	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
