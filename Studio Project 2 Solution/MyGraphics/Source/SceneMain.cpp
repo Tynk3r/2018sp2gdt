@@ -477,20 +477,28 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c, Vector3 t) {
-	int i;
+bool SceneMain::collision(Vector3 c)
+{
+	float cameraActualY = c.y - 20;
 
-	for (i = 0; i < NUM_OBJECTS; i++) {
-		if (c.x >= objs[i].getPos().x - objs[i].getHalfSize() && c.x <= objs[i].getPos().x + objs[i].getHalfSize() &&
-			c.z >= objs[i].getPos().z - objs[i].getHalfSize() && c.z <= objs[i].getPos().z + objs[i].getHalfSize()
-			||
-			t.x >= objs[i].getPos().x - objs[i].getHalfSize() && t.x <= objs[i].getPos().x + objs[i].getHalfSize() &&
-			t.z >= objs[i].getPos().z - objs[i].getHalfSize() && t.z <= objs[i].getPos().z + objs[i].getHalfSize())
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		float minX = objs[i].getPos().x - objs[i].getHalfSize();
+		float maxX = objs[i].getPos().x + objs[i].getHalfSize();
+		float minY = objs[i].getPos().y - objs[i].getHalfSize();
+		float maxY = objs[i].getPos().y + objs[i].getHalfSize();
+		float minZ = objs[i].getPos().z - objs[i].getHalfSize();
+		float maxZ = objs[i].getPos().z + objs[i].getHalfSize();
+
+		if (c.x >= minX && c.x <= maxX &&
+			cameraActualY >= minY && cameraActualY <= maxY &&
+			c.z >= minZ && c.z <= maxZ)
 		{
 			return true;
 		}
 	}
-	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || t.x >= 200.0f || t.x <= -200.0f || t.z >= 200.0f || t.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f || t.y >= 200.0f || t.y <= -200.0f) {
+
+	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f) {
 		return true;
 	}
 	else {

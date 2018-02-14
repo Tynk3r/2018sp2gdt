@@ -57,7 +57,7 @@ void CameraFPV::Update(double dt)
 		{
 			position += right * (float)(MOVEMENT_SPEED * dt);
 			target += right * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position, target)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
 				position -= right * (float)(MOVEMENT_SPEED * dt);
 				target -= right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -66,7 +66,7 @@ void CameraFPV::Update(double dt)
 		{
 			position -= right * (float)(MOVEMENT_SPEED * dt);
 			target -= right * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position, target)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
 				position += right * (float)(MOVEMENT_SPEED * dt);
 				target += right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -76,7 +76,7 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position += view1 * (float)(MOVEMENT_SPEED * dt);
 			target += view1 * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position, target)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
 				position -= view1 * (float)(MOVEMENT_SPEED * dt);
 				target -= view1 * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -87,7 +87,7 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position, target)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
 				position += view1 * (float)(MOVEMENT_SPEED * dt);
 				target += view1 * (float)(MOVEMENT_SPEED * dt);
 			}
