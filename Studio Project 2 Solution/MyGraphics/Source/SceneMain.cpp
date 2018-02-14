@@ -161,7 +161,7 @@ void SceneMain::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
-	objs[0].setBox(0, 0, 0, 20); // dinoegg
+	objs[OBJ_DINOEGG].setBox(0, 0, 0, 20); // dinoegg
 }
 
 void SceneMain::Update(double dt)
@@ -462,18 +462,28 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c, Vector3 t) {
-	int i;
+bool SceneMain::collision(Vector3 c)
+{
+	float cameraActualY = c.y - 20;
 
-	for (i = 0; i < NUM_OBJECTS; i++) {
-		if	     (c.x >= objs[i].getPos().x -(objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& c.z >= objs[i].getPos().z -(objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
-			||	  t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)){
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		float minX = objs[i].getPos().x - objs[i].getHalfSize();
+		float maxX = objs[i].getPos().x + objs[i].getHalfSize();
+		float minY = objs[i].getPos().y - objs[i].getHalfSize();
+		float maxY = objs[i].getPos().y + objs[i].getHalfSize();
+		float minZ = objs[i].getPos().z - objs[i].getHalfSize();
+		float maxZ = objs[i].getPos().z + objs[i].getHalfSize();
+
+		if (c.x >= minX && c.x <= maxX &&
+			cameraActualY >= minY && cameraActualY <= maxY &&
+			c.z >= minZ && c.z <= maxZ)
+		{
 			return true;
 		}
 	}
-	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || t.x >= 200.0f || t.x <= -200.0f || t.z >= 200.0f || t.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f || t.y >= 200.0f || t.y <= -200.0f) {
+
+	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f) {
 		return true;
 	}
 	else {

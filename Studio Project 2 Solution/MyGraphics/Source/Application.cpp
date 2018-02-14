@@ -13,7 +13,8 @@
 
 #include "SceneMain.h"
 #include "Scene1.h"
-#include "Scene4.h"
+//TO DO ADD IN WHEN SCENE 4 IS FIXED
+//#include "Scene4.h"
 #include "SceneManager.h"
 
 GLFWwindow* m_window;
@@ -100,7 +101,8 @@ void Application::Init()
 	}
 	SceneManager::instance()->AddScene(new SceneMain());
 	SceneManager::instance()->AddScene(new Scene1());
-	SceneManager::instance()->AddScene(new Scene4());
+	//TO DO ADD IN WHEN SCENE 4 IS FIXED
+	//SceneManager::instance()->AddScene(new Scene4());
 }
 
 void Application::Run()
