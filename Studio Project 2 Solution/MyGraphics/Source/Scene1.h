@@ -11,7 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 #include "RingObject.h"
-
+#include "timer.h"
 
 class Scene1 : public Scene
 {
@@ -97,6 +97,7 @@ class Scene1 : public Scene
 		
 		//Scene1 Models
 		GEO_RING,
+		GEO_SMALLRING,
 		GEO_DINO,
 		GEO_TREE,
 		GEO_CLIFF,
@@ -108,11 +109,29 @@ class Scene1 : public Scene
 
 	enum OBJECTS
 	{
+		//Red Rings
+		OBJ_RING0,
 		OBJ_RING1,
 		OBJ_RING2,
 		OBJ_RING3,
 		OBJ_RING4,
 		OBJ_RING5,
+		OBJ_RING6,
+		OBJ_RING7,
+		OBJ_RING8,
+		OBJ_RING9,
+		OBJ_RING10,
+		OBJ_RING11,
+		OBJ_RING12,
+		OBJ_RING13,
+		OBJ_RING14,
+		OBJ_RING15,
+		OBJ_RING16,
+		OBJ_RING17,
+		OBJ_RING18,
+		OBJ_RING19,
+		//Blue Ring
+		OBJ_RING20,
 
 		NUM_OBJECTS,
 	};
@@ -147,13 +166,15 @@ private:
 
 	bool collision(Vector3);
 
-	int collideRing(Vector3, Vector3);
+	int collideRing(Vector3);
 
 	bool godlights = false;
 
 	int currentRing;
 	int points;
+	int totalTime;
 
 	Vector3 ringpos;
+	StopWatch timer;
 };
 #endif
