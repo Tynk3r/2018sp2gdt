@@ -20,10 +20,14 @@ Scene1::~Scene1()
 
 void Scene1::Init()
 {
+	currentRing = 0;
+	points = 0;
+	ringpos = Vector3(-13, 3, -13);
+
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(20, 100, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -197,17 +201,36 @@ void Scene1::Init()
 	//meshList[GEO_DINO]->textureID = LoadTGA("Image//flyingModel.tga");
 
 	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("ring", "OBJ//dinoegg.obj");
-	meshList[GEO_DINO]->textureID = LoadTGA("Image//bottom.tga");
+	meshList[GEO_DINO]->textureID = LoadTGA("Image//dinoegg.tga");
+
+	//Setup Ring Info 
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		ringpos.x *= i;
+		ringpos.y *= i;
+		ringpos.z *= i;
+		//Set Collision
+		objs[i].setBox(ringpos, 5);
+		//Set ID
+		objs[i].setID(i);
+	}
+
+	camera.horizMove = 0.0;
+	camera.vertMove = 0.0;
+	camera.SkyboxSize = 500.0f;
 }
 
 void Scene1::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-
-	if (Application::IsKeyPressed('6') || Application::IsKeyPressed('\b'))
+	if (Application::IsKeyPressed('6'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
+	}
+	else if (Application::IsKeyPressed('7'))
+	{
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
@@ -216,6 +239,17 @@ void Scene1::Update(double dt)
 	if (Application::IsKeyPressed('E')) // turn off global light
 	{
 			godlights = true;
+	}
+	if (Application::IsKeyPressed('R')) // Reset Points
+	{
+		currentRing = 0;
+		points = 0;
+	}
+
+	collideRing(camera.position, camera.target);
+	if (collideRing(camera.position, camera.target) > -1)
+	{
+		HandleRingCollide(collideRing(camera.position, camera.target));
 	}
 }
 
@@ -315,24 +349,43 @@ void Scene1::Render()
 	*/
 
 	//Render Ring
-	viewStack.PushMatrix();
-		viewStack.Scale(8, 8, 8);
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(90, 0, 1, 0);
-		RenderMesh(meshList[GEO_RING], godlights);
-	viewStack.PopMatrix();
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		if (currentRing == i)
+		{
+			viewStack.PushMatrix();
+			viewStack.Scale(1, 1, 1);
+			viewStack.Translate(ringpos.x*i, ringpos.y*i, ringpos.z*i);
+			viewStack.Rotate(0, 0, 1, 0);
+			RenderMesh(meshList[GEO_RING], godlights);
+			viewStack.PopMatrix();
+		}
+	}
 
 	//Render Dino//
 	RenderMeshOnScreen(meshList[GEO_DINO], 2, 0.45, 20, 20, (camera.horizMove)*0.5, camera.vertMove);
 
+	//Render Important Text//
 	std::ostringstream ah;
 	ah << framerate;
 	std::string str = ah.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 1, 2);
+	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 1, 1);
 	std::ostringstream oh;
 	oh << camera.position.y;
 	std::string str2 = oh.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Altitude:" + str2, Color(1, 0, 0), 2, 1, 1);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Altitude:" + str2, Color(1, 0, 0), 2, 1, 2);
+	std::ostringstream eh;
+	eh << points;
+	std::string str3 = eh.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Points:" + str3, Color(0, 0, 1), 2, 1, 3);
+	std::ostringstream uh;
+	uh << currentRing;
+	std::string str4 = uh.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring:" + str4, Color(1, 0, 1), 2, 1, 4);
+	std::ostringstream mh;
+	mh << collideRing(camera.position, camera.target);
+	std::string str5 = mh.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring ID:" + str4, Color(0, 1, 1), 2, 1, 5);
 
 }
 
@@ -521,4 +574,55 @@ void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
+}
+
+bool Scene1::collision(Vector3 c)
+{
+	float ActualYpos = c.y - 20;
+
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
+			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
+		{
+			return true;
+		}
+	}
+
+	if (c.x >= camera.SkyboxSize || c.x <= -camera.SkyboxSize || c.z >= camera.SkyboxSize || c.z <= -camera.SkyboxSize || c.y >= camera.SkyboxSize || c.y <= -camera.SkyboxSize) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+int Scene1::collideRing(Vector3 c, Vector3 t)
+{
+	float ActualYpos = c.y - 20;
+
+	for (int i = 0; i < NUM_OBJECTS; i++) {
+		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
+			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY) {
+			return objs[i].getID();
+		}
+	}
+	return -1;
+}
+
+void Scene1::HandleRingCollide(int id)
+{
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		if (currentRing == i)
+		{
+			if (id == objs[i].getID())
+			{
+				points += 10;
+				currentRing++;
+			}
+		}
+	}
 }

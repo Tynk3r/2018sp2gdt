@@ -10,6 +10,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Utility.h"
+#include "RingObject.h"
 
 
 class Scene1 : public Scene
@@ -104,6 +105,18 @@ class Scene1 : public Scene
 
 		NUM_GEOMETRY
 	};
+
+	enum OBJECTS
+	{
+		OBJ_RING1,
+		OBJ_RING2,
+		OBJ_RING3,
+		OBJ_RING4,
+		OBJ_RING5,
+
+		NUM_OBJECTS,
+	};
+
 	Mesh* meshList[NUM_GEOMETRY];
 
 public:
@@ -122,6 +135,7 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
+	RingObject objs[NUM_OBJECTS];
 
 	Light light[4];
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -129,8 +143,17 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey, float, float);
-	bool collision(Vector3) { return false; };
+	void HandleRingCollide(int);
+
+	bool collision(Vector3);
+
+	int collideRing(Vector3, Vector3);
 
 	bool godlights = false;
+
+	int currentRing;
+	int points;
+
+	Vector3 ringpos;
 };
 #endif
