@@ -156,6 +156,8 @@ void SceneMain::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
+	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
@@ -167,11 +169,11 @@ void SceneMain::Update(double dt)
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 
-	if (Application::IsKeyPressed('6'))
+	if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
-	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f || camera.target.z <= -185.0f && camera.target.x >= -15.0f && camera.target.x <= 15.0f)
+	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
@@ -184,6 +186,7 @@ void SceneMain::Update(double dt)
 			godlights = true;
 	}
 	
+	rotateMain++;
 	
 }
 
@@ -251,47 +254,32 @@ void SceneMain::Render()
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
-	viewStack.PushMatrix();
-		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
 		viewStack.PushMatrix();
-			viewStack.Translate(-18, 30, 0);
+		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+
+		viewStack.PushMatrix();
+			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
+			viewStack.Rotate(rotateMain, 0, 1, 0);
+			RenderMesh(meshList[GEO_DINOEGG], godlights);
+		viewStack.PopMatrix();
+
+		viewStack.PushMatrix();
+			viewStack.Translate(-18, 35, 0);
 			viewStack.Scale(4, 4, 4);
 			viewStack.PushMatrix();
-				viewStack.Translate(0, 0, 9);
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-			viewStack.Rotate(90, 0, 1, 0);
-			viewStack.PushMatrix();
-				viewStack.Translate(-4.5, 0, 14);
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-			viewStack.Rotate(90, 0, 1, 0);
-			viewStack.PushMatrix();
-				viewStack.Translate(-9, 0, 9);
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-			viewStack.Rotate(90, 0, 1, 0);
-			viewStack.PushMatrix();
-				viewStack.Translate(-4.5, 0, 5);
+				viewStack.PushMatrix();
+					viewStack.Translate(4.5, -1, 0);
+					viewStack.Scale(8.5, 2, 2);
+					RenderMesh(meshList[GEO_QUAD], false);
+				viewStack.PopMatrix();
 				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
 				viewStack.Translate(-3, -2, 0);
 				viewStack.Scale(2, 2, 2);
 				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
 			viewStack.PopMatrix();
 		viewStack.PopMatrix();
-		viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
-		viewStack.Rotate(0, 0, 1, 0);
-		RenderMesh(meshList[GEO_DINOEGG], godlights);
-	viewStack.PopMatrix();
+		
+		viewStack.PopMatrix();
 
 	/* sampel
 	viewStack.PushMatrix();

@@ -78,6 +78,7 @@ class SceneMain : public Scene
 		GEO_RIGHT,
 		GEO_TOP,
 		GEO_BOTTOM,
+		GEO_QUAD,
 		GEO_TEXT,
 		GEO_DINOEGG,
 		
@@ -116,6 +117,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool collision(Vector3, Vector3);
+	float rotateMain = 0;
 	
 	bool godlights = false;
 };
