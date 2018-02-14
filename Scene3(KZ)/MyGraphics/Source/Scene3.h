@@ -89,6 +89,7 @@ class Scene3 : public Scene
 		GEO_EXPLAINTEXT,
 		GEO_REDINV,
 		GEO_BLUINV,
+		GEO_TRAPINV,
 		GEO_TEXT,
 
 		NUM_GEOMETRY,
@@ -104,16 +105,31 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-	int invTraps = 1;
-	int redFruits = 0;
-	int bluFruits = 0;
-	int meat = 0;
+	//Temp INV for Scene 3//
+	int invTraps = 5;
+	int redFruits;
+	int bluFruits;
+	int meat;
 	
+	//Classes for bushes//
 	bush bush1;
 	bush bush2;
 	bush bush3;
 	bush bush4;
 	bush bush5;
+
+	//Keep storage of all trap states//
+	int trap1State;
+	int trap2State;
+	int trap3State;
+	int trap4State;
+	int trap5State;
+
+	bool trappedBush1;
+	bool trappedBush2;
+	bool trappedBush3;
+	bool trappedBush4;
+	bool trappedBush5;
 
 private:
 	unsigned m_vertexArrayID;
@@ -130,9 +146,8 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 
-	bool godlights = false;
+	void getFruuts();
 
-	bool trappedBush;
-	int trapState;
+	bool godlights = false;
 };
 #endif
