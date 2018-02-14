@@ -1,17 +1,37 @@
-#pragma once
+#ifndef OBJECT_H
+#define OBJECT_H
 #include "Vector3.h"
 
 class Object {
 private:
 	Vector3 pos;
+
 	float size;
 	float halfSize;
 public:
-	Object() { pos = { 0,0,0 }; size = 0; };
-	Object(Vector3 p, float s) { pos = p; size = s; halfSize = size / 2; }
-	~Object() {};
-	void setBox(float x, float y, float z, float s) { pos.x = x; pos.y = y; pos.z = z; size = s; halfSize = s / 2; };
-	float getSize(void) { return size; }
-	float getHalfSize(void) { return halfSize; }
-	Vector3 getPos(void) { return pos; }
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+	float minZ;
+	float maxZ;
+
+	// Constructors
+	Object();
+	Object(Vector3 p, float s);
+
+	// Set function
+	void setPos(Vector3 p);
+	void setSize(float s);
+	void setBox(Vector3 p, float s);
+
+	// Get functions
+	Vector3 getPos(void);
+	float getSize(void);
+
+	// Destructor
+	~Object();
+
 };
+
+#endif

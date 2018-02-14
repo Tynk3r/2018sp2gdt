@@ -33,7 +33,9 @@ void CameraFPV::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void CameraFPV::Update(double dt)
 {
-	if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_MAIN) {
+	if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_MAIN ||
+		SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_4)
+	{
 		static const float CAMERA_SPEED = 4.0f;
 		static float MOVEMENT_SPEED = 30.0f;
 

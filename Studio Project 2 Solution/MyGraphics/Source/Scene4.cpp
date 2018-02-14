@@ -1,4 +1,4 @@
-#include "SceneMain.h"
+#include "Scene4.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -9,19 +9,30 @@
 #include <string>
 #include <sstream>
 
-
-SceneMain::SceneMain()
+Scene4::Scene4()
 {
 }
 
-SceneMain::~SceneMain()
+Scene4::~Scene4()
 {
 }
 
-void SceneMain::Init()
+void Scene4::Init()
 {
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
+
+	// TODO remove the below testing code
+	////////start of testing code////////
+	std::cout << "Total : " << npc.numberOfNPCs << std::endl;
+	std::cout << "Weather : " << npc.getCoord(NPC_WEATHER) << std::endl;
+	std::cout << "Lore : " << npc.getCoord(NPC_LORE) << std::endl;
+	std::cout << "Hunting : " << npc.getCoord(NPC_HUNTING) << std::endl;
+	std::cout << "Raising : " << npc.getCoord(NPC_RAISING) << std::endl;
+	std::cout << "Racing : " << npc.getCoord(NPC_RACING) << std::endl;
+	////////end of testing code////////
+	// TODO remove the above testing code
+
 
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
@@ -74,6 +85,18 @@ void SceneMain::Init()
 	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
 	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
 
+	m_parameters[U_LIGHT3_POSITION] = glGetUniformLocation(m_programID, "lights[3].position_cameraspace");
+	m_parameters[U_LIGHT3_COLOR] = glGetUniformLocation(m_programID, "lights[3].color");
+	m_parameters[U_LIGHT3_POWER] = glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID, "lights[3].kC");
+	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID, "lights[3].kL");
+	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID, "lights[3].kQ");
+	m_parameters[U_LIGHT3_TYPE] = glGetUniformLocation(m_programID, "lights[3].type");
+	m_parameters[U_LIGHT3_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[3].spotDirection");
+	m_parameters[U_LIGHT3_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[3].cosCutoff");
+	m_parameters[U_LIGHT3_COSINNER] = glGetUniformLocation(m_programID, "lights[3].cosInner");
+	m_parameters[U_LIGHT3_EXPONENT] = glGetUniformLocation(m_programID, "lights[3].exponent");
+
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -96,6 +119,18 @@ void SceneMain::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[1].type = Light::LIGHT_POINT;
+	light[1].position.Set(0, 10, 0);
+	light[1].color.Set(1, 1, 1);
+	light[1].power = 10;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -128,7 +163,17 @@ void SceneMain::Init()
 	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
 	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
 
-	glUniform1i(m_parameters[U_NUMLIGHTS], 3);
+	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
+	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
+	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
+	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
+	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
+	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -142,44 +187,44 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
-	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
-
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
+	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 }
 
-void SceneMain::Update(double dt)
-{
+void Scene4::Update(double dt)
+{	
+	// TODO remove the below testing code
+	////////start of testing code////////
+	std::cout << "Position : " << camera.position << std::endl;
+	std::cout << "Target : " << camera.target << std::endl;
+	////////end of testing code////////
+	// TODO remove the above testing code
+
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	//camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f door for scene 4
-	if (Application::IsKeyPressed('6'))
+	if (Application::IsKeyPressed('0'))
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	else if (Application::IsKeyPressed('7'))
+	else if (Application::IsKeyPressed('0'))
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
-	}
-	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
-	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
@@ -189,12 +234,9 @@ void SceneMain::Update(double dt)
 	{
 			godlights = true;
 	}
-	
-	rotateMain++;
-	
 }
 
-void SceneMain::Render()
+void Scene4::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -255,35 +297,27 @@ void SceneMain::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
+	if (light[3].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[3].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+	}
+
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
-
-		viewStack.PushMatrix();
-		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
-			viewStack.Rotate(rotateMain, 0, 1, 0);
-			RenderMesh(meshList[GEO_DINOEGG], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Translate(-18, 35, 0);
-			viewStack.Scale(4, 4, 4);
-			viewStack.PushMatrix();
-				viewStack.PushMatrix();
-					viewStack.Translate(4.5, -1, 0);
-					viewStack.Scale(8.5, 2, 2);
-					RenderMesh(meshList[GEO_QUAD], false);
-				viewStack.PopMatrix();
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-		viewStack.PopMatrix();
-		
-		viewStack.PopMatrix();
 
 	/* sampel
 	viewStack.PushMatrix();
@@ -295,18 +329,22 @@ void SceneMain::Render()
 	viewStack.PopMatrix();
 	*/
 
+	viewStack.PushMatrix();
+		RenderNPC();
+	viewStack.PopMatrix();
+
 	std::ostringstream ah;
 	ah << framerate;
-	std::string str = ah.str();
+	std::string str = ah.str(); 
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
 }
 
-void SceneMain::Exit()
+void Scene4::Exit()
 {
 	glDeleteProgram(m_programID);
 }
 
-void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
+void Scene4::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -348,7 +386,7 @@ void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
 	}
 }
 
-void SceneMain::RenderSkybox(float d, bool light)
+void Scene4::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
 	//modelStack.Rotate(0, 0, 0, 0);
@@ -389,13 +427,73 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0);
+	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
 }
 
-void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
+void Scene4::RenderNPC()
+{
+	int sizeOfBox = 35;
+	textBoxRender = -1;
+
+	for (int i = 0; i < npc.numberOfNPCs; i++)
+	{
+		viewStack.PushMatrix();
+			viewStack.Translate(npc.getCoord(i).x, npc.getCoord(i).y, npc.getCoord(i).z);
+			viewStack.PushMatrix();
+				viewStack.Scale(10, 40, 10);
+				RenderMesh(meshList[GEO_PLACEHOLDER_NPC], godlights);
+			viewStack.PopMatrix();
+		viewStack.PopMatrix();
+	}
+	textCollision();
+
+	if (textBoxRender == NPC_WEATHER)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_LORE)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_HUNTING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_RAISING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (textBoxRender == NPC_RACING)
+	{
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+}
+
+void Scene4::RenderTextBox()
+{
+	viewStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 100, 10); // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 100, 1);	// Bottom white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 100, 1);	// Top white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 1, 1, 10);	// Right white area
+	viewStack.PopMatrix();
+}
+
+void Scene4::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -422,7 +520,7 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Scene4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -466,15 +564,35 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c)
+void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+		modelStack.LoadIdentity();
+		modelStack.Translate(x, y, 0);
+		modelStack.Scale(sizex, sizey, 1);
+		RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+}
+
+bool Scene4::collision(Vector3 c)
 {
 	float ActualYpos = c.y - 20;
 
-	for (int i = 0; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < NPC_TOTAL; i++)
 	{
-		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
-			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
-			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
+		if (c.x >= npc.NPCS[i].minX && c.x <= npc.NPCS[i].maxX &&
+			c.z >= npc.NPCS[i].minZ && c.z <= npc.NPCS[i].maxZ &&
+			ActualYpos >= npc.NPCS[i].minY && ActualYpos <= npc.NPCS[i].maxY)
 		{
 			return true;
 		}
@@ -485,5 +603,21 @@ bool SceneMain::collision(Vector3 c)
 	}
 	else {
 		return false;
+	}
+}
+
+void Scene4::textCollision()
+{
+	float ActualYpos = camera.position.y - 20;
+	float textRange = 20;
+
+	for (int i = 0; i < NPC_TOTAL; i++)
+	{
+		if (camera.position.x >= (npc.NPCS[i].minX - textRange) && camera.position.x <= (npc.NPCS[i].maxX + textRange) &&
+			camera.position.z >= (npc.NPCS[i].minZ - textRange) && camera.position.z <= (npc.NPCS[i].maxZ + textRange) &&
+			ActualYpos >= (npc.NPCS[i].minY - textRange) && ActualYpos <= (npc.NPCS[i].maxY + textRange))
+		{
+		textBoxRender = i;
+		}
 	}
 }

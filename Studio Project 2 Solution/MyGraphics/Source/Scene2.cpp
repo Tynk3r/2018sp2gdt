@@ -161,7 +161,7 @@ void Scene2::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
-	objs[OBJ_DINOEGG].setBox(0, 0, 0, 20); // dinoegg
+	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
 }
 
 void Scene2::Update(double dt)
@@ -440,20 +440,13 @@ void Scene2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 
 bool Scene2::collision(Vector3 c)
 {
-	float cameraActualY = c.y - 20;
+	float ActualYpos = c.y - 20;
 
 	for (int i = 0; i < NUM_OBJECTS; i++)
 	{
-		float minX = objs[i].getPos().x - objs[i].getHalfSize();
-		float maxX = objs[i].getPos().x + objs[i].getHalfSize();
-		float minY = objs[i].getPos().y - objs[i].getHalfSize();
-		float maxY = objs[i].getPos().y + objs[i].getHalfSize();
-		float minZ = objs[i].getPos().z - objs[i].getHalfSize();
-		float maxZ = objs[i].getPos().z + objs[i].getHalfSize();
-
-		if (c.x >= minX && c.x <= maxX &&
-			cameraActualY >= minY && cameraActualY <= maxY &&
-			c.z >= minZ && c.z <= maxZ)
+		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
+			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
 		{
 			return true;
 		}

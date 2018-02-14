@@ -167,7 +167,11 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\NPC.cpp" />
+    <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\Scene1.cpp" />
+    <ClCompile Include="Source\Scene2.cpp" />
+    <ClCompile Include="Source\Scene4.cpp" />
     <ClCompile Include="Source\SceneMain.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -183,9 +187,12 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Scene1.h" />
+    <ClInclude Include="Source\Scene2.h" />
+    <ClInclude Include="Source\Scene4.h" />
     <ClInclude Include="Source\SceneMain.h" />
     <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\shader.hpp" />
