@@ -24,11 +24,6 @@ void CameraFPV::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 	Application::SetCursorVisible(false);
 	prevX = Application::GetCursorX();
 	prevY = Application::GetCursorY();
-
-	//Init for Scene1
-	horizMove = 0.0;
-	vertMove = 0.0;
-	SkyboxSize = 500.0f;
 }
 
 void CameraFPV::Update(double dt)
@@ -156,7 +151,7 @@ void CameraFPV::Update(double dt)
 		Vector3 view1(view.x, view.y, view.z);
 		position += view1 * (float)(MOVEMENT_SPEED * dt);
 		target += view1 * (float)(MOVEMENT_SPEED * dt);
-		if (position.x >= SkyboxSize || position.x <= -SkyboxSize || position.z >= SkyboxSize || position.z <= -SkyboxSize || target.x >= SkyboxSize || target.x <= -SkyboxSize || target.z >= SkyboxSize || target.z <= -SkyboxSize || position.y >= SkyboxSize || position.y <= -SkyboxSize || target.y >= SkyboxSize || target.y <= -SkyboxSize) {
+		if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
 		}

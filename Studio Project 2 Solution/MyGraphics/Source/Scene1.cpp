@@ -206,11 +206,18 @@ void Scene1::Init()
 	//Setup Ring Info 
 	for (int i = 0; i < NUM_OBJECTS; i++)
 	{
+		ringpos.x *= i;
+		ringpos.y *= i;
+		ringpos.z *= i;
 		//Set Collision
-		objs[i].setBox(ringpos.x*i, ringpos.y*i, ringpos.z*i, 5);
+		objs[i].setBox(ringpos, 5);
 		//Set ID
 		objs[i].setID(i);
 	}
+
+	camera.horizMove = 0.0;
+	camera.vertMove = 0.0;
+	camera.SkyboxSize = 500.0f;
 }
 
 void Scene1::Update(double dt)
@@ -569,18 +576,21 @@ void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool Scene1::collision(Vector3 c, Vector3 t) {
-	/*int i;
+bool Scene1::collision(Vector3 c)
+{
+	float ActualYpos = c.y - 20;
 
-	for (i = 0; i < NUM_OBJECTS; i++) {
-		if (c.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& c.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
-			|| t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)) {
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
+		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
+			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
+		{
 			return true;
 		}
-	}*/
-	if (c.x >= camera.SkyboxSize || c.x <= -camera.SkyboxSize || c.z >= camera.SkyboxSize || c.z <= -camera.SkyboxSize || t.x >= camera.SkyboxSize || t.x <= -camera.SkyboxSize || t.z >= camera.SkyboxSize || t.z <= -camera.SkyboxSize || c.y >= camera.SkyboxSize || c.y <= -camera.SkyboxSize || t.y >= camera.SkyboxSize || t.y <= -camera.SkyboxSize) {
+	}
+
+	if (c.x >= camera.SkyboxSize || c.x <= -camera.SkyboxSize || c.z >= camera.SkyboxSize || c.z <= -camera.SkyboxSize || c.y >= camera.SkyboxSize || c.y <= -camera.SkyboxSize) {
 		return true;
 	}
 	else {
@@ -590,13 +600,12 @@ bool Scene1::collision(Vector3 c, Vector3 t) {
 
 int Scene1::collideRing(Vector3 c, Vector3 t)
 {
-	int i;
+	float ActualYpos = c.y - 20;
 
-	for (i = 0; i < NUM_OBJECTS; i++) {
-		if (c.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& c.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
-			|| t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)) {
+	for (int i = 0; i < NUM_OBJECTS; i++) {
+		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
+			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY) {
 			return objs[i].getID();
 		}
 	}
@@ -605,9 +614,7 @@ int Scene1::collideRing(Vector3 c, Vector3 t)
 
 void Scene1::HandleRingCollide(int id)
 {
-	int i = 0;
-
-	for (i; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < NUM_OBJECTS; i++)
 	{
 		if (currentRing == i)
 		{

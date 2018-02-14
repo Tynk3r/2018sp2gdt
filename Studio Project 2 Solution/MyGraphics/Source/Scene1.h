@@ -145,7 +145,7 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey, float, float);
 	void HandleRingCollide(int);
 
-	bool collision(Vector3, Vector3);
+	bool collision(Vector3);
 
 	int collideRing(Vector3, Vector3);
 
