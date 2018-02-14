@@ -1,5 +1,5 @@
-#ifndef NPCS_H
-#define NPCS_H
+#ifndef NPC_H
+#define NPC_H
 
 #include "Vector3.h"
 #include "Object.h"
@@ -12,6 +12,7 @@ enum NPC_TYPE
 	NPC_HUNTING,
 	NPC_RAISING,
 	NPC_RACING,
+	NPC_SHOP,
 
 	NPC_TOTAL,
 };
@@ -20,6 +21,10 @@ class NPC
 {
 public:
 	const static int numberOfNPCs = NPC_TOTAL;
+	static const int sizeOfBoxMove = 10;
+	static const int sizeOfTextMove = 20;
+
+
 	Object NPCS[numberOfNPCs];
 	
 	// Get the coord of the requested NPC type using the NPC_TYPE

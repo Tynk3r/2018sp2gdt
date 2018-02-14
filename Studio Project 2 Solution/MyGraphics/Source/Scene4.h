@@ -12,7 +12,7 @@
 #include "Utility.h"
 
 #include "NPC.h"
-
+#include "Shop.h"
 
 class Scene4 : public Scene
 {
@@ -117,8 +117,6 @@ class Scene4 : public Scene
 
 	enum OBJECTS
 	{
-		OBJ_DINOEGG,
-
 		NUM_OBJECTS,
 	};
 
@@ -139,6 +137,7 @@ private:
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 	NPC npc;
+	SHOP shop;
 	int textBoxRender;
 
 	Light light[4];
@@ -153,7 +152,13 @@ private:
 
 	void RenderNPC();
 	void RenderTextBox();
+	void RenderShopTextBox();
 
 	bool godlights = false;
+
+	bool shopping = false;
+	bool wantToShop = false;
+	bool leavingShop = false;
+	bool clicked = false;
 };
 #endif

@@ -2,77 +2,163 @@
 
 Object::Object()
 {
-	pos = Vector3(0, 0, 0);
+	position = Vector3(0, 0, 0);
 	
-	size = 0;
-	halfSize = size / 2;
+	sizeX = 0;
+	sizeY = 0;
+	sizeZ = 0;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
 
-	minX = pos.x - halfSize;
-	maxX = pos.x + halfSize;
-	minY = pos.y - halfSize;
-	maxY = pos.y + halfSize;
-	minZ = pos.z - halfSize;
-	maxZ = pos.z + halfSize;
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
 }
 
-Object::Object(Vector3 p, float s)
+Object::Object(Vector3 pos, float size)
 {
-	pos = p;
+	position = pos;
 	
-	size = s;
-	halfSize = size / 2;
+	sizeX = size;
+	sizeY = size;
+	sizeZ = size;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
 
-	minX = pos.x - halfSize;
-	maxX = pos.x + halfSize;
-	minY = pos.y - halfSize;
-	maxY = pos.y + halfSize;
-	minZ = pos.z - halfSize;
-	maxZ = pos.z + halfSize;
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
 }
 
-void Object::setPos(Vector3 p)
+Object::Object(Vector3 pos, float xSize, float ySize, float zSize)
 {
-	pos = p;
+	position = pos;
+
+	sizeX = xSize;
+	sizeY = ySize;
+	sizeZ = zSize;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
+
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
 }
 
-void Object::setSize(float s)
+void Object::setPos(Vector3 pos)
 {
-	size = s;
-	halfSize = size / 2;
-
-	minX = pos.x - halfSize;
-	maxX = pos.x + halfSize;
-	minY = pos.y - halfSize;
-	maxY = pos.y + halfSize;
-	minZ = pos.z - halfSize;
-	maxZ = pos.z + halfSize;
+	position = pos;
 }
 
-void Object::setBox(Vector3 p, float s)
+void Object::setSize(float size)
 {
-	pos = p;
-	size = s;
+	sizeX = size;
+	sizeY = size;
+	sizeZ = size;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
 
-	halfSize = size / 2;
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
+}
 
-	minX = pos.x - halfSize;
-	maxX = pos.x + halfSize;
-	minY = pos.y - halfSize;
-	maxY = pos.y + halfSize;
-	minZ = pos.z - halfSize;
-	maxZ = pos.z + halfSize;
+void Object::setSize(float xSize, float ySize, float zSize)
+{
+	sizeX = xSize;
+	sizeY = ySize;
+	sizeZ = zSize;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
+
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
+}
+
+void Object::setBox(Vector3 pos, float size)
+{
+	position = pos;
+
+	sizeX = size;
+	sizeY = size;
+	sizeZ = size;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
+
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
+}
+
+
+void Object::setBox(Vector3 pos, float xSize, float ySize, float zSize)
+{
+	position = pos;
+
+	sizeX = xSize;
+	sizeY = ySize;
+	sizeZ = zSize;
+	halfSizeX = sizeX / 2;
+	halfSizeY = sizeY / 2;
+	halfSizeZ = sizeZ / 2;
+
+	minX = position.x - halfSizeX;
+	maxX = position.x + halfSizeX;
+	minY = position.y - halfSizeY;
+	maxY = position.y + halfSizeY;
+	minZ = position.z - halfSizeZ;
+	maxZ = position.z + halfSizeZ;
 }
 
 Vector3 Object::getPos(void)
-{ 
-	return pos;
+{
+	return position;
 }
 
 float Object::getSize(void)
 {
-	return size;
+	return sizeX;
 }
 
+float Object::getSizeX(void)
+{
+	return sizeX;
+}
+
+float Object::getSizeY(void)
+{
+	return sizeY;
+}
+
+float Object::getSizeZ(void)
+{
+	return sizeZ;
+}
 
 Object::~Object()
 {

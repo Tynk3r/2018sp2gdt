@@ -4,10 +4,14 @@
 
 class Object {
 private:
-	Vector3 pos;
+	Vector3 position;
 
-	float size;
-	float halfSize;
+	float sizeX;
+	float sizeY;
+	float sizeZ;
+	float halfSizeX;
+	float halfSizeY;
+	float halfSizeZ;
 public:
 	float minX;
 	float maxX;
@@ -18,16 +22,22 @@ public:
 
 	// Constructors
 	Object();
-	Object(Vector3 p, float s);
+	Object(Vector3 pos, float size);
+	Object(Vector3 pos, float xSize, float ySize, float zSize);
 
 	// Set function
-	void setPos(Vector3 p);
-	void setSize(float s);
-	void setBox(Vector3 p, float s);
+	void setPos(Vector3 pos);
+	void setSize(float size);
+	void setSize(float xSize, float ySize, float zSize);
+	void setBox(Vector3 pos, float size);
+	void setBox(Vector3 pos, float xSize, float ySize, float zSize);
 
 	// Get functions
 	Vector3 getPos(void);
 	float getSize(void);
+	float getSizeX(void);
+	float getSizeY(void);
+	float getSizeZ(void);
 
 	// Destructor
 	~Object();

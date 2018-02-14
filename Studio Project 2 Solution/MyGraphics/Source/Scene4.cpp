@@ -211,13 +211,18 @@ void Scene4::Update(double dt)
 {	
 	// TODO remove the below testing code
 	////////start of testing code////////
+	/*
 	std::cout << "Position : " << camera.position << std::endl;
 	std::cout << "Target : " << camera.target << std::endl;
+	*/
 	////////end of testing code////////
 	// TODO remove the above testing code
 
 	framerate = 1.0 / dt;
-	camera.Update(dt);
+	if (shopping == false)
+	{
+		camera.Update(dt);
+	}
 
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -231,6 +236,42 @@ void Scene4::Update(double dt)
 	{
 			godlights = true;
 	}
+
+	////////////////////////////////////////////////////////////////// START OF SHOP CODE //////////////////////////////////////////////////////////////////
+	if (shopping == true)
+	{
+		Application::SetCursorVisible(true);
+
+		// TODO remove the below testing code
+		////////start of testing code////////
+		std::cout << " x " << Application::GetCursorX() << std::endl;
+		std::cout << " y " << Application::GetCursorY() << std::endl;
+		////////end of testing code////////
+		// TODO remove the above testing code
+
+		if (Application::IsKeyPressed(VK_LBUTTON))
+		{
+			if (Application::GetCursorX() >= shop.SHOPS[SHOP_EXIT].minX && Application::GetCursorX() <= shop.SHOPS[SHOP_EXIT].maxX &&
+				Application::GetCursorY() >= shop.SHOPS[SHOP_EXIT].minY && Application::GetCursorY() <= shop.SHOPS[SHOP_EXIT].maxY)
+			{
+				shopping = false;
+				Application::SetCursorVisible(false);
+				camera.prevX = Application::GetCursorX();
+				camera.prevY = Application::GetCursorY();
+				clicked = true;
+			}
+			else if (Application::GetCursorX() >= shop.SHOPS[SHOP_BUY_FRUIT].minX && Application::GetCursorX() <= shop.SHOPS[SHOP_BUY_FRUIT].maxX &&
+				Application::GetCursorY() >= shop.SHOPS[SHOP_BUY_FRUIT].minY && Application::GetCursorY() <= shop.SHOPS[SHOP_BUY_FRUIT].maxY)
+			{
+				shopping = false;
+				Application::SetCursorVisible(false);
+				camera.prevX = Application::GetCursorX();
+				camera.prevY = Application::GetCursorY();
+				clicked = true;
+			}
+		}
+	}
+	////////////////////////////////////////////////////////////////// END OF SHOP CODE ////////////////////////////////////////////////////////////////////
 }
 
 void Scene4::Render()
@@ -432,7 +473,6 @@ void Scene4::RenderSkybox(float d, bool light)
 
 void Scene4::RenderNPC()
 {
-	int sizeOfBox = 35;
 	textBoxRender = -1;
 
 	for (int i = 0; i < npc.numberOfNPCs; i++)
@@ -477,16 +517,53 @@ void Scene4::RenderNPC()
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
+	else if (textBoxRender == NPC_SHOP)
+	{
+		if (shopping == false)
+		{
+			viewStack.PushMatrix();
+			RenderTextBox();
+			viewStack.PopMatrix();
+
+			if (Application::IsKeyPressed('X')) // Start shopping
+			{
+				shopping = true;
+			}
+		}
+		else if (shopping == true)
+		{
+			viewStack.PushMatrix();
+			RenderShopTextBox();
+			viewStack.PopMatrix();
+		}
+	}
 }
 
 void Scene4::RenderTextBox()
 {
 	viewStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 100, 10); // Middle black area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 100, 1);	// Bottom white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 100, 1);	// Top white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 80, 10); // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 80, 1);	// Bottom white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 80, 1);	// Top white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 1, 1, 10);	// Right white area
+	viewStack.PopMatrix();
+}
+
+void Scene4::RenderShopTextBox()
+{
+	viewStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 30, 80, 20); // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 11, 80, 1);	// Bottom white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 50, 80, 1);	// Top white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 30, 1, 20);	// Left white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 30, 1, 20);	// Right white area
+
+		viewStack.PushMatrix();
+		//RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + (x * 5), 15 + (i * 5), 2, 2); x is horizontal, i is vertical
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 60, 15 + 15, 4, 2);
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 65, 15 + 15, 2, 2);
+		viewStack.PopMatrix();
 	viewStack.PopMatrix();
 }
 
@@ -606,13 +683,12 @@ bool Scene4::collision(Vector3 c)
 void Scene4::textCollision()
 {
 	float ActualYpos = camera.position.y - 20;
-	float textRange = 20;
 
 	for (int i = 0; i < NPC_TOTAL; i++)
 	{
-		if (camera.position.x >= (npc.NPCS[i].minX - textRange) && camera.position.x <= (npc.NPCS[i].maxX + textRange) &&
-			camera.position.z >= (npc.NPCS[i].minZ - textRange) && camera.position.z <= (npc.NPCS[i].maxZ + textRange) &&
-			ActualYpos >= (npc.NPCS[i].minY - textRange) && ActualYpos <= (npc.NPCS[i].maxY + textRange))
+		if (camera.position.x >= (npc.NPCS[i].minX - npc.sizeOfTextMove) && camera.position.x <= (npc.NPCS[i].maxX + npc.sizeOfTextMove) &&
+			camera.position.z >= (npc.NPCS[i].minZ - npc.sizeOfTextMove) && camera.position.z <= (npc.NPCS[i].maxZ + npc.sizeOfTextMove) &&
+			ActualYpos >= (npc.NPCS[i].minY - npc.sizeOfTextMove) && ActualYpos <= (npc.NPCS[i].maxY + npc.sizeOfTextMove))
 		{
 		textBoxRender = i;
 		}
