@@ -204,13 +204,10 @@ void Scene1::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	if (Application::IsKeyPressed('6'))
+
+	if (Application::IsKeyPressed('6') || Application::IsKeyPressed('\b'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
-	}
-	else if (Application::IsKeyPressed('7'))
-	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{

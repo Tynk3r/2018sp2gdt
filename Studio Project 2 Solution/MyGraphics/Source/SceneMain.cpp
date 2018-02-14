@@ -168,12 +168,12 @@ void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	//camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f door for scene 4
-	if (Application::IsKeyPressed('6'))
+	// door for scene 4
+	if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
 	}
-	else if (Application::IsKeyPressed('7'))
+	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
