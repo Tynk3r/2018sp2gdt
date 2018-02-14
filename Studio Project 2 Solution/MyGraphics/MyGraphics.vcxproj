@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\bush.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraFPV.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -169,8 +170,10 @@
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\NPC.cpp" />
     <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\RingObject.cpp" />
     <ClCompile Include="Source\Scene1.cpp" />
     <ClCompile Include="Source\Scene2.cpp" />
+    <ClCompile Include="Source\Scene3.cpp" />
     <ClCompile Include="Source\Scene4.cpp" />
     <ClCompile Include="Source\SceneMain.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
@@ -179,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\bush.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraFPV.h" />
     <ClInclude Include="Source\Light.h" />
@@ -189,9 +193,11 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\RingObject.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Scene1.h" />
     <ClInclude Include="Source\Scene2.h" />
+    <ClInclude Include="Source\Scene3.h" />
     <ClInclude Include="Source\Scene4.h" />
     <ClInclude Include="Source\SceneMain.h" />
     <ClInclude Include="Source\SceneManager.h" />

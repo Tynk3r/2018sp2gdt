@@ -22,7 +22,9 @@ void Scene1::Init()
 {
 	currentRing = 0;
 	points = 0;
-	ringpos = Vector3(-13, 3, -13);
+	ringpos = Vector3(0, -23, 0);
+	totalTime = 20000;
+	timer.startTimer();
 
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
@@ -194,26 +196,27 @@ void Scene1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ//ringTarget.obj");
-	meshList[GEO_RING]->textureID = LoadTGA("Image//ring.tga");
+	meshList[GEO_RING] = MeshBuilder::GenerateRing("hoop",Color(1,0,0),4,5);
+	meshList[GEO_SMALLRING] = MeshBuilder::GenerateRing("lastone", Color(0, 0, 1), 2, 4);
+	//meshList[GEO_RING]->textureID = LoadTGA("Image//dinoegg.tga");
 
 	//meshList[GEO_DINO] = MeshBuilder::Generate2DQuad("dino", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	//meshList[GEO_DINO]->textureID = LoadTGA("Image//flyingModel.tga");
 
-	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("ring", "OBJ//dinoegg.obj");
+	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
 	meshList[GEO_DINO]->textureID = LoadTGA("Image//dinoegg.tga");
 
 	//Setup Ring Info 
-	for (int i = 0; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
-		ringpos.x *= i;
-		ringpos.y *= i;
-		ringpos.z *= i;
 		//Set Collision
-		objs[i].setBox(ringpos, 5);
+		objs[i].setBox(Vector3(ringpos.x*i, ringpos.y*i, ringpos.z*i), 10);
 		//Set ID
 		objs[i].setID(i);
 	}
+	//Last Ring
+	objs[20].setBox(Vector3(0, 100, 0), 5);
+	objs[20].setID(20);
 
 	camera.horizMove = 0.0;
 	camera.vertMove = 0.0;
@@ -224,7 +227,7 @@ void Scene1::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	if (Application::IsKeyPressed('6'))
+	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
@@ -246,11 +249,17 @@ void Scene1::Update(double dt)
 		points = 0;
 	}
 
-	collideRing(camera.position, camera.target);
-	if (collideRing(camera.position, camera.target) > -1)
+	collideRing(camera.position);
+	if (collideRing(camera.position) > -1)
 	{
-		HandleRingCollide(collideRing(camera.position, camera.target));
+		HandleRingCollide(collideRing(camera.position));
 	}
+	else
+	{
+		std::cout << "No ring in contact yet" << std::endl;
+		std::cout << collideRing(camera.position) << std::endl;
+	}
+	totalTime -= timer.getElapsedTime();
 }
 
 void Scene1::Render()
@@ -349,7 +358,7 @@ void Scene1::Render()
 	*/
 
 	//Render Ring
-	for (int i = 0; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
 		if (currentRing == i)
 		{
@@ -360,6 +369,15 @@ void Scene1::Render()
 			RenderMesh(meshList[GEO_RING], godlights);
 			viewStack.PopMatrix();
 		}
+	}
+	if (currentRing == 20)
+	{
+		viewStack.PushMatrix();
+		viewStack.Scale(1, 1, 1);
+		viewStack.Translate(0, 100, 0);
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_SMALLRING], godlights);
+		viewStack.PopMatrix();
 	}
 
 	//Render Dino//
@@ -383,9 +401,22 @@ void Scene1::Render()
 	std::string str4 = uh.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring:" + str4, Color(1, 0, 1), 2, 1, 4);
 	std::ostringstream mh;
-	mh << collideRing(camera.position, camera.target);
+	mh << collideRing(camera.position);
 	std::string str5 = mh.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring ID:" + str4, Color(0, 1, 1), 2, 1, 5);
+	RenderTextOnScreen(meshList[GEO_TEXT], "collideRing(pos): " + str4, Color(0, 1, 1), 2, 1, 5);
+	std::ostringstream th;
+	th << totalTime;
+	std::string str6 = th.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time : " + str6, Color(0, 0, 0), 2, 17, 29);
+
+	if (camera.position.y <= -495)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "You crashed into the ground!", Color(1, 0.1, 0.1), 3, 3, 9);
+	}
+	if (totalTime <= 0)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "You ran out of time!", Color(1, 0.1, 0.1), 3, 5, 9);
+	}
 
 }
 
@@ -578,7 +609,7 @@ void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float
 
 bool Scene1::collision(Vector3 c)
 {
-	float ActualYpos = c.y - 20;
+	/*float ActualYpos = c.y + 100;
 
 	for (int i = 0; i < NUM_OBJECTS; i++)
 	{
@@ -586,9 +617,10 @@ bool Scene1::collision(Vector3 c)
 			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
 			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
 		{
+			HandleRingCollide(objs[i].getID());
 			return true;
 		}
-	}
+	}*/
 
 	if (c.x >= camera.SkyboxSize || c.x <= -camera.SkyboxSize || c.z >= camera.SkyboxSize || c.z <= -camera.SkyboxSize || c.y >= camera.SkyboxSize || c.y <= -camera.SkyboxSize) {
 		return true;
@@ -598,14 +630,16 @@ bool Scene1::collision(Vector3 c)
 	}
 }
 
-int Scene1::collideRing(Vector3 c, Vector3 t)
+int Scene1::collideRing(Vector3 c)
 {
-	float ActualYpos = c.y - 20;
+	float ActualYpos = c.y;
 
-	for (int i = 0; i < NUM_OBJECTS; i++) {
+	for (int i = 0; i < NUM_OBJECTS; i++)
+	{
 		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
 			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
-			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY) {
+			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
+		{
 			return objs[i].getID();
 		}
 	}
@@ -614,7 +648,7 @@ int Scene1::collideRing(Vector3 c, Vector3 t)
 
 void Scene1::HandleRingCollide(int id)
 {
-	for (int i = 0; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
 		if (currentRing == i)
 		{
@@ -624,5 +658,10 @@ void Scene1::HandleRingCollide(int id)
 				currentRing++;
 			}
 		}
+	}
+	if (id == 20)
+	{
+		points += 50;
+		currentRing = -1;
 	}
 }

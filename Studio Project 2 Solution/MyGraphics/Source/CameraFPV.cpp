@@ -207,6 +207,10 @@ void CameraFPV::Update(double dt)
 		{
 			MOVEMENT_SPEED = 50.0f;
 		}
+		else
+		{
+			MOVEMENT_SPEED = 10.0f;
+		}
 
 		//If not pressing Down, automatically pitch downwards
 		if (!Application::IsKeyPressed(VK_DOWN))
