@@ -14,6 +14,7 @@
 #include "SceneMain.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "Scene3.h"
 #include "Scene4.h"
 #include "SceneManager.h"
 
@@ -102,6 +103,7 @@ void Application::Init()
 	SceneManager::instance()->AddScene(new SceneMain());
 	SceneManager::instance()->AddScene(new Scene1());
 	SceneManager::instance()->AddScene(new Scene2());
+	SceneManager::instance()->AddScene(new Scene3());
 	SceneManager::instance()->AddScene(new Scene4());
 }
 

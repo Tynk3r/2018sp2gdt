@@ -26,6 +26,7 @@ public:
 		SCENEID_MAIN,
 		SCENEID_1,
 		SCENEID_2,
+		SCENEID_3,
 		SCENEID_4,
 
 		SCENEID_AMTOFSCENES //dont remove dis

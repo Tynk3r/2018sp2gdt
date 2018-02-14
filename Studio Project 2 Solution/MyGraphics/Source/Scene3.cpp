@@ -1,4 +1,4 @@
-#include "SceneMain.h"
+#include "Scene3.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -10,15 +10,15 @@
 #include <sstream>
 
 
-SceneMain::SceneMain()
+Scene3::Scene3()
 {
 }
 
-SceneMain::~SceneMain()
+Scene3::~Scene3()
 {
 }
 
-void SceneMain::Init()
+void Scene3::Init()
 {
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
@@ -85,15 +85,15 @@ void SceneMain::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 10, 0);
+	light[0].type = Light::LIGHT_SPOT;
+	light[0].position.Set(0, 199, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 10;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
-	light[0].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[0].cosInner = cos(Math::DegreeToRadian(30));
+	light[0].cosCutoff = cos(Math::DegreeToRadian(90));
+	light[0].cosInner = cos(Math::DegreeToRadian(90));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
 
@@ -142,63 +142,308 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_EXPLAINTEXT] = MeshBuilder::GenerateText("foragingInstruction", 16, 16);
+	meshList[GEO_EXPLAINTEXT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
+	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
+	meshList[GEO_BLUINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TRAPINV] = MeshBuilder::GenerateText("trpInv", 16, 16);
+	meshList[GEO_TRAPINV]->textureID = LoadTGA("Image//calibri.tga");
+	
+	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
+	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
 
-	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_BUSH] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempBush.obj");
 
-	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
+	meshList[GEO_FRUITRED] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
+	meshList[GEO_FRUITRED]->textureID = LoadTGA("Image/fruitRed.tga");
 
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
+	bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
+	bush1.harvestCheck = false;  //Check for single-time Harvest
+
+	bush2.harvestedBush = false;
+	bush2.harvestCheck = false;
+
+	bush3.harvestedBush = false;
+	bush3.harvestCheck = false;
+
+	bush4.harvestedBush = false;
+	bush4.harvestCheck = false;
+
+	bush5.harvestedBush = false;
+	bush5.harvestCheck = false;
+
+	//TEMPORARY FOR TESING TRAP STATES//
+	//0 = no trap
+	//1 = empty trap
+	//2 = trapped animal
+
+	trappedBush1 = false;
+	trappedBush2 = false;
+	trappedBush3 = false;
+	trappedBush4 = false;
+	trappedBush5 = false;
+
+	//Checking Trap1 State//
+	if (trap1State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap1State = 2;
+			trappedBush1 = true;
+		}
+	}
+
+	//Checking Trap2 State//
+	if (trap2State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap2State = 2;
+			trappedBush2 = true;
+		}
+	}
+
+	//Checking Trap3 State//
+	if (trap1State == 3)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap3State = 2;
+			trappedBush3 = true;
+		}
+	}
+
+	//Checking Trap4 State//
+	if (trap4State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap4State = 2;
+			trappedBush4 = true;
+		}
+	}
+
+	//Checking Trap5 State//
+	if (trap5State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap5State = 2;
+			trappedBush5 = true;
+		}
+	}
 }
 
-void SceneMain::Update(double dt)
+void Scene3::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	// door for scene 4
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+
+	if (Application::IsKeyPressed('6') || Application::IsKeyPressed('\b'))
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+
+	//Checking Bush 1//
+	if (Application::IsKeyPressed('E') && (camera.position.x <= 125.0f && camera.position.x >= 95.0f && camera.position.z <= 85.0f && camera.position.z >= 55.0f)) //Harvest Bush Function
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
+		bush1.harvestedBush = true;
+
+		if (bush1.harvestCheck == false)
+		{
+			getFruuts();
+			bush1.harvestCheck = true;
+		}
 	}
-	else if (Application::IsKeyPressed('6'))
+
+	if (Application::IsKeyPressed('V') && (camera.position.x <= 125.0f && camera.position.x >= 95.0f && camera.position.z <= 85.0f && camera.position.z >= 55.0f)) //Trap Interactions
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
+		if ((trappedBush1 == false) && (invTraps != 0)) //Setting a trap
+		{
+			trap1State = 1;
+			invTraps -= 1;
+			trappedBush1 = true;
+		}
+
+		else if (trap1State == 2) //Collecting trapped animal
+		{
+			trappedBush1 = false;
+			trap1State = 0;
+			meat += 2;
+		}
 	}
-	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+
+	//Checking Bush 2//
+	if (Application::IsKeyPressed('E') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) //Harvest Bush Function
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+		bush2.harvestedBush = true;
+
+		if (bush2.harvestCheck == false)
+		{
+			getFruuts();
+			bush2.harvestCheck = true;
+		}
 	}
-	if (Application::IsKeyPressed('Q')) // turn on global light
+
+	if (Application::IsKeyPressed('V') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) //Trap Interactions
+		{
+			if ((trappedBush2 == false) && (invTraps != 0)) //Setting a trap
+			{
+				trappedBush2 = true;
+				trap2State = 1;
+				invTraps -= 1;
+			}
+
+			else if (trap2State == 2) //Collecting trapped animal
+			{
+				trappedBush2 = false;
+				trap2State = 0;
+				meat += 2;
+			}
+		}
+
+	//Checking Bush 3//
+	if (Application::IsKeyPressed('E') && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f)) //Harvest Bush Function
 	{
-			godlights = false;
+		bush3.harvestedBush = true;
+
+		if (bush3.harvestCheck == false)
+		{
+			getFruuts();
+			bush3.harvestCheck = true;
+		}
 	}
-	if (Application::IsKeyPressed('E')) // turn off global light
+
+	if (Application::IsKeyPressed('V') && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f)) //Trap Interactions
+		{
+			if (trappedBush3 == false) //Setting a trap
+			{
+				if (invTraps > 0) //Checks for traps in inv
+				{
+					trappedBush3 = true;
+					trap3State = 1;
+					invTraps -= 1;
+				}
+			}
+
+			else if ((trappedBush3 == true) && (trap3State == 2)) //Collecting trapped animal
+			{
+				trappedBush3 = false;
+				trap3State = 0;
+				meat += 2;
+			}
+		}
+
+	//Checking Bush 4//
+	if (Application::IsKeyPressed('E') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) //Harvest Bush Function
 	{
-			godlights = true;
+		bush4.harvestedBush = true;
+
+		if (bush4.harvestCheck == false)
+		{
+			getFruuts();
+			bush4.harvestCheck = true;
+		}
 	}
-	
-	rotateMain++;
-	
+
+	if (Application::IsKeyPressed('V') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) //Trap Interactions
+		{
+			if (trappedBush4 == false) //Setting a trap
+			{
+				if (invTraps > 0) //Checks for traps in inv
+				{
+					trappedBush4 = true;
+					trap4State = 1;
+					invTraps -= 1;
+				}
+			}
+
+			else if ((trappedBush4 == true) && (trap4State == 2)) //Collecting trapped animal
+			{
+				trappedBush4 = false;
+				trap4State = 0;
+				meat += 2;
+			}
+		}
+
+	//Checking Bush 5//
+	if (Application::IsKeyPressed('E') && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f)) //Harvest Bush Function
+	{
+		bush5.harvestedBush = true;
+
+		if (bush5.harvestCheck == false)
+		{
+			getFruuts();
+			bush5.harvestCheck = true;
+		}
+	}
+
+	if (Application::IsKeyPressed('V') && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f)) //Trap Interactions
+	{
+		if (trappedBush5 == false) //Setting a trap
+		{
+			if (invTraps > 0) //Checks for traps in inv
+			{
+				trappedBush5 = true;
+				trap5State = 1;
+				invTraps -= 1;
+			}
+		}
+
+		else if ((trappedBush5 == true) && (trap5State == 2)) //Collecting trapped animal
+		{
+			trappedBush5 = false;
+			trap5State = 0;
+			meat += 2;
+		}
+	}
 }
 
-void SceneMain::Render()
+void Scene3::getFruuts()
+{
+	int gain = 0;
+	srand(time(NULL));
+	gain = rand() % 5 + 1;
+	redFruits += gain;
+	bluFruits += (5 - gain);
+}
+
+void Scene3::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -262,33 +507,6 @@ void SceneMain::Render()
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
-		viewStack.PushMatrix();
-		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
-			viewStack.Rotate(rotateMain, 0, 1, 0);
-			RenderMesh(meshList[GEO_DINOEGG], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Translate(-18, 35, 0);
-			viewStack.Scale(4, 4, 4);
-			viewStack.PushMatrix();
-				viewStack.PushMatrix();
-					viewStack.Translate(4.5, -1, 0);
-					viewStack.Scale(8.5, 2, 2);
-					RenderMesh(meshList[GEO_QUAD], false);
-				viewStack.PopMatrix();
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-		viewStack.PopMatrix();
-		
-		viewStack.PopMatrix();
-
 	/* sampel
 	viewStack.PushMatrix();
 		viewStack.Scale(1, 1, 1);
@@ -299,18 +517,231 @@ void SceneMain::Render()
 	viewStack.PopMatrix();
 	*/
 
+	/*
+	viewStack.PushMatrix();
+	viewStack.Scale(3, 3, 3);
+	RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
+	viewStack.PopMatrix();
+	*/
+
+	//BUSH 1//
+	viewStack.PushMatrix();
+	viewStack.Translate(110, 0, 70);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(70, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUSH], light);
+	viewStack.PopMatrix();
+
+	if (bush1.harvestedBush == false) //Bush 1 With fruits
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(110, 30, 70);
+		viewStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_FRUITRED], light);
+		viewStack.PopMatrix();
+	}
+
+	if (trap1State == 1) //Trap w/o Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(90, 0, 70);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(70, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		viewStack.PopMatrix();
+	}
+
+	 else if (trap1State == 2) //Trap w/ Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(90, 0, 70);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(70, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		viewStack.PopMatrix();
+	}
+
+	//BUSH 2//
+	viewStack.PushMatrix();
+	viewStack.Translate(-30, 0, 50);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(120, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUSH], light);
+	viewStack.PopMatrix();
+
+	if (bush2.harvestedBush == false) //Bush 2 With fruits
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-30, 30, 50);
+		viewStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_FRUITRED], light);
+		viewStack.PopMatrix();
+	}
+
+	if (trap2State == 1) //Trap w/o Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-18, 0, 36);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-50, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		viewStack.PopMatrix();
+	}
+
+	else if (trap2State == 2) //Trap w/ Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-18, 0, 36);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-50, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		viewStack.PopMatrix();
+	}
+
+	//BUSH 3//
+	viewStack.PushMatrix();
+	viewStack.Translate(150, 0, -90);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(10, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUSH], light);
+	viewStack.PopMatrix();
+
+	if (bush3.harvestedBush == false) //Bush 3 With fruits
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(150, 30, -90);
+		viewStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_FRUITRED], light);
+		viewStack.PopMatrix();
+	}
+
+	if (trap3State == 1) //Trap w/o Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(130, 0, -77);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-230, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		viewStack.PopMatrix();
+	}
+
+	else if (trap3State == 2) //Trap w/ Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(130, 0, -77);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-230, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		viewStack.PopMatrix();
+	}
+
+	//BUSH 4//
+
+	viewStack.PushMatrix();
+	viewStack.Translate(80, 0, -150);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUSH], light);
+	viewStack.PopMatrix();
+	if (bush4.harvestedBush == false) //Bush 4 With fruits
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(80, 30, -150);
+		viewStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_FRUITRED], light);
+		viewStack.PopMatrix();
+	}
+
+	if (trap4State == 1) //Trap w/o Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(66, 0, -137);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-230, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		viewStack.PopMatrix();
+	}
+
+	else if (trap4State == 2) //Trap w/ Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(66, 0, -137);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-230, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		viewStack.PopMatrix();
+	}
+
+	//BUSH 5//
+	viewStack.PushMatrix();
+	viewStack.Translate(-70, 0, -100);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(50, 0, 1, 0);
+	RenderMesh(meshList[GEO_BUSH], light);
+	viewStack.PopMatrix();
+
+	if (bush5.harvestedBush == false) //Bush 5 With fruits
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-70, 30, -100);
+		viewStack.Scale(15, 15, 15);
+		RenderMesh(meshList[GEO_FRUITRED], light);
+		viewStack.PopMatrix();
+	}
+
+	if (trap5State == 1) //Trap w/o Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-91, 0, -95);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-100, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		viewStack.PopMatrix();
+	}
+
+	else if (trap5State == 2) //Trap w/ Animal
+	{
+		viewStack.PushMatrix();
+		viewStack.Translate(-91, 0, -95);
+		viewStack.Scale(15, 15, 15);
+		viewStack.Rotate(-100, 0, 1, 0);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		viewStack.PopMatrix();
+	}
+
+	//GENERATE TEXT ON SCREEN//
 	std::ostringstream ah;
 	ah << framerate;
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(0, 1, 0), 1.8, 27.5, 31);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set a trap", Color(0, 1, 0), 1.8, 28, 30);
+
+	std::ostringstream inv1;
+	inv1 << redFruits;
+	std::ostringstream inv2;
+	inv2 << bluFruits;
+	std::ostringstream inv3;
+	inv3 << meat;
+	std::ostringstream inv4;
+	inv4 << invTraps;
+	std::string red = inv1.str();
+	std::string blu = inv2.str();
+	std::string met = inv3.str();
+	std::string trp = inv4.str();
+
+	RenderTextOnScreen(meshList[GEO_REDINV], "Red Fruits: " + red, Color(1, 0, 0), 2, 5, 5);
+	RenderTextOnScreen(meshList[GEO_BLUINV], "Blu Fruits: " + blu, Color(0, 0, 1), 2, 5, 4);
+	RenderTextOnScreen(meshList[GEO_BLUINV], "Meat Chunk: " + met, Color(0.7, 0.31, 0), 2, 5, 3);
+	RenderTextOnScreen(meshList[GEO_TRAPINV], "Traps Left: " + trp, Color(1, 1, 1), 2, 5, 6);
 }
 
-void SceneMain::Exit()
+void Scene3::Exit()
 {
 	glDeleteProgram(m_programID);
 }
 
-void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
+void Scene3::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -352,7 +783,7 @@ void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
 	}
 }
 
-void SceneMain::RenderSkybox(float d, bool light)
+void Scene3::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
 	//modelStack.Rotate(0, 0, 0, 0);
@@ -399,7 +830,7 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PopMatrix();
 }
 
-void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
+void Scene3::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -426,7 +857,7 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Scene3::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -470,7 +901,7 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c)
+bool Scene3::collision(Vector3 c)
 {
 	float ActualYpos = c.y - 20;
 
