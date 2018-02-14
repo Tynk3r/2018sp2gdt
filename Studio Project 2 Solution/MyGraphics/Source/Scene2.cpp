@@ -1,4 +1,4 @@
-#include "SceneMain.h"
+#include "Scene2.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -10,15 +10,15 @@
 #include <sstream>
 
 
-SceneMain::SceneMain()
+Scene2::Scene2()
 {
 }
 
-SceneMain::~SceneMain()
+Scene2::~Scene2()
 {
 }
 
-void SceneMain::Init()
+void Scene2::Init()
 {
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
@@ -142,17 +142,17 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//2front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//2back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//2left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//2right.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//2top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//2bottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
@@ -164,18 +164,14 @@ void SceneMain::Init()
 	objs[OBJ_DINOEGG].setBox(0, 0, 0, 20); // dinoegg
 }
 
-void SceneMain::Update(double dt)
+void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	//camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f door for scene 4
-	if (Application::IsKeyPressed('6'))
+
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
-	}
-	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
-	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
@@ -190,7 +186,7 @@ void SceneMain::Update(double dt)
 	
 }
 
-void SceneMain::Render()
+void Scene2::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -255,30 +251,10 @@ void SceneMain::Render()
 	RenderMesh(meshList[GEO_AXES], false);
 
 		viewStack.PushMatrix();
-		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
-
-		viewStack.PushMatrix();
+			viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
 			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 			viewStack.Rotate(rotateMain, 0, 1, 0);
 			RenderMesh(meshList[GEO_DINOEGG], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Translate(-18, 35, 0);
-			viewStack.Scale(4, 4, 4);
-			viewStack.PushMatrix();
-				viewStack.PushMatrix();
-					viewStack.Translate(4.5, -1, 0);
-					viewStack.Scale(8.5, 2, 2);
-					RenderMesh(meshList[GEO_QUAD], false);
-				viewStack.PopMatrix();
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-		viewStack.PopMatrix();
-		
 		viewStack.PopMatrix();
 
 	/* sampel
@@ -297,12 +273,12 @@ void SceneMain::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
 }
 
-void SceneMain::Exit()
+void Scene2::Exit()
 {
 	glDeleteProgram(m_programID);
 }
 
-void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
+void Scene2::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -344,7 +320,7 @@ void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
 	}
 }
 
-void SceneMain::RenderSkybox(float d, bool light)
+void Scene2::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
 	//modelStack.Rotate(0, 0, 0, 0);
@@ -391,7 +367,7 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PopMatrix();
 }
 
-void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
+void Scene2::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -418,7 +394,7 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Scene2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -462,7 +438,7 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c)
+bool Scene2::collision(Vector3 c)
 {
 	float cameraActualY = c.y - 20;
 
