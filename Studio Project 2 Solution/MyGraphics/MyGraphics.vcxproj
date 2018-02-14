@@ -183,6 +183,7 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\Scene1.h" />
     <ClInclude Include="Source\SceneMain.h" />

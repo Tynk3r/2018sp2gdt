@@ -159,7 +159,7 @@ void SceneMain::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
-	objs[0].setBox(0, 0, 0, 20); // dinoegg
+	objs[OBJ_DINOEGG].setBox(0, 0, 0, 20); // dinoegg
 }
 
 void SceneMain::Update(double dt)
@@ -167,11 +167,14 @@ void SceneMain::Update(double dt)
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 
+	// TO DO ADD IN WHEN SCENE 4 IS FIXED
+	/*
 	if (Application::IsKeyPressed('6'))
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
-	else if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f || camera.target.z <= -185.0f && camera.target.x >= -15.0f && camera.target.x <= 15.0f)
+	*/
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f || camera.target.z <= -185.0f && camera.target.x >= -15.0f && camera.target.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
@@ -478,10 +481,12 @@ bool SceneMain::collision(Vector3 c, Vector3 t) {
 	int i;
 
 	for (i = 0; i < NUM_OBJECTS; i++) {
-		if	     (c.x >= objs[i].getPos().x -(objs[i].getSize() / 2) && c.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& c.z >= objs[i].getPos().z -(objs[i].getSize() / 2) && c.z <= objs[i].getPos().z + (objs[i].getSize() / 2)
-			||	  t.x >= objs[i].getPos().x - (objs[i].getSize() / 2) && t.x <= objs[i].getPos().x + (objs[i].getSize() / 2)
-			&& t.z >= objs[i].getPos().z - (objs[i].getSize() / 2) && t.z <= objs[i].getPos().z + (objs[i].getSize() / 2)){
+		if (c.x >= objs[i].getPos().x - objs[i].getHalfSize() && c.x <= objs[i].getPos().x + objs[i].getHalfSize() &&
+			c.z >= objs[i].getPos().z - objs[i].getHalfSize() && c.z <= objs[i].getPos().z + objs[i].getHalfSize()
+			||
+			t.x >= objs[i].getPos().x - objs[i].getHalfSize() && t.x <= objs[i].getPos().x + objs[i].getHalfSize() &&
+			t.z >= objs[i].getPos().z - objs[i].getHalfSize() && t.z <= objs[i].getPos().z + objs[i].getHalfSize())
+		{
 			return true;
 		}
 	}

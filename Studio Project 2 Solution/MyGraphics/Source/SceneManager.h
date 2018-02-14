@@ -25,7 +25,8 @@ public:
 	{
 		SCENEID_MAIN,
 		SCENEID_1,
-		SCENEID_4,
+		//TO DO ADD IN WHEN SCENE 4 IS FIXED
+		//		SCENEID_4,
 
 		SCENEID_AMTOFSCENES //dont remove dis
 	};
