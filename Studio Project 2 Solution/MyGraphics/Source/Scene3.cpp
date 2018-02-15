@@ -14,97 +14,6 @@
 
 Scene3::Scene3()
 {
-	//Keep this here//
-	//Should be done everytime scene 3 is loaded up//
-	/*bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
-	bush1.harvestCheck = false;  //Check for single-time Harvest
-
-	bush2.harvestedBush = false;
-	bush2.harvestCheck = false;
-
-	bush3.harvestedBush = false;
-	bush3.harvestCheck = false;
-
-	bush4.harvestedBush = false;
-	bush4.harvestCheck = false;
-
-	bush5.harvestedBush = false;
-	bush5.harvestCheck = false;
-
-	//Trap State Chart//
-	//0 = no trap
-	//1 = empty trap
-	//2 = trapped animal
-
-	//Checking Trap1 State//
-	if (trap1State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap1State = 2;
-			trappedBush1 = true;
-		}
-	}
-
-	//Checking Trap2 State//
-	if (trap2State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap2State = 2;
-			trappedBush2 = true;
-		}
-	}
-
-	//Checking Trap3 State//
-	if (trap1State == 3)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap3State = 2;
-			trappedBush3 = true;
-		}
-	}
-
-	//Checking Trap4 State//
-	if (trap4State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap4State = 2;
-			trappedBush4 = true;
-		}
-	}
-
-	//Checking Trap5 State//
-	if (trap5State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap5State = 2;
-			trappedBush5 = true;
-		}
-	}*/
 }
 
 Scene3::~Scene3()
@@ -118,6 +27,8 @@ void Scene3::Init()
 
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
+	//Keep this here//
+	//Should be done everytime scene 3 is loaded up//
 	bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
 	bush1.harvestCheck = false;  //Check for single-time Harvest
 
@@ -167,7 +78,7 @@ void Scene3::Init()
 	}
 
 	//Checking Trap3 State//
-	if (trap1State == 3)
+	if (trap3State == 3)
 	{
 		int TRAPCARD;
 		srand(time(NULL));
@@ -343,6 +254,8 @@ void Scene3::Init()
 
 	meshList[GEO_INVINTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INVINTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
 
 	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
 	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
@@ -355,9 +268,10 @@ void Scene3::Init()
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
 
 	meshList[GEO_BUSH] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempBush.obj");
+	meshList[GEO_BUSH]->textureID = LoadTGA("Image//bush.tga");
 
 	meshList[GEO_FRUITRED] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
-	meshList[GEO_FRUITRED]->textureID = LoadTGA("Image/fruitRed.tga");
+	meshList[GEO_FRUITRED]->textureID = LoadTGA("Image//fruitRed.tga");
 }
 
 void Scene3::Update(double dt)
@@ -522,6 +436,15 @@ void Scene3::Update(double dt)
 			trap5State = 0;
 			meat += 2;
 		}
+	}
+
+	if (Application::IsKeyPressed('I'))
+	{
+		showInventory = true;
+	}
+	else
+	{
+		showInventory = false;
 	}
 }
 
@@ -801,12 +724,14 @@ void Scene3::Render()
 	}
 
 	//GENERATE TEXT ON SCREEN//
-	std::ostringstream ah;
+	/*std::ostringstream ah;
 	ah << framerate;
 	std::string str = ah.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
-	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(0, 1, 0), 1.8, 27.5, 31);
-	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set a trap", Color(0, 1, 0), 1.8, 28, 30);
+	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);*/
+	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set a trap", Color(1, 1, 1), 1.5, 33, 37);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<I> to show inventory", Color(1, 1, 1), 1.5, 33, 39);
 
 	std::ostringstream inv1;
 	inv1 << redFruits;
@@ -821,11 +746,14 @@ void Scene3::Render()
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
 
-	RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
-	RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
-	RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
-	RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
-	RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+	if (showInventory == true)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
+		RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
+		RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+	}
 }
 
 void Scene3::Exit()

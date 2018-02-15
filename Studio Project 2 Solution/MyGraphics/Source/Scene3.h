@@ -95,6 +95,7 @@ class Scene3 : public Scene
 		GEO_BLUINV,
 		GEO_TRAPINV,
 		GEO_INVINTERFACE,
+		GEO_INSTRUCTIONS,
 		GEO_TEXT,
 
 		NUM_GEOMETRY,
@@ -143,6 +144,9 @@ public:
 	bool trappedBush3;
 	bool trappedBush4;
 	bool trappedBush5;
+
+	//Toggle for Inv Overlay//
+	bool showInventory = false;
 
 private:
 	unsigned m_vertexArrayID;
