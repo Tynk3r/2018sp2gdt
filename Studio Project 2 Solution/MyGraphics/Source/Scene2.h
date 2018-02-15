@@ -118,6 +118,13 @@ class Scene2 : public Scene
 		NUM_OBJECTS,
 	};
 
+	enum PTERO_STATE {
+		P_EGG = 0,
+		P_BABY,
+		P_ADOLESCENT,
+		P_ADULT,
+	};
+
 public:
 	Scene2();
 	~Scene2();
@@ -143,6 +150,10 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool collision(Vector3);
 	float rotateMain = 0;
+
+	bool hungry = true;
+	bool incubating = false;
+	int pteroStage;
 	
 	bool godlights = false;
 };

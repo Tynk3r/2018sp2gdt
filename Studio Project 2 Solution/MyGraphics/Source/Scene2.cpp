@@ -12,6 +12,7 @@
 
 Scene2::Scene2()
 {
+	pteroStage = P_EGG;
 }
 
 Scene2::~Scene2()
@@ -165,7 +166,7 @@ void Scene2::Init()
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 
-	objs[OBJ_DINOEGG].setBox(Vector3(-2.5, 0, 0), 20); 
+	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 6.25), 10); 
 	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 0.4, 2.5), 25); 
 
 	objs[OBJ_FENCE].setBox(Vector3(0, 0, 2.5), 10);
@@ -191,12 +192,41 @@ void Scene2::Init()
 	objs[OBJ_FENCE20].setBox(Vector3(-9.0, 0, 2.5), 10);
 
 	camera.SkyboxSize = 100.0f;
+
+	switch (pteroStage)	{
+	case P_EGG:
+		if (incubating) {
+			pteroStage++;
+		}
+		incubating = false;
+		break;
+	case P_BABY:
+		if (!hungry) {
+			pteroStage++;
+		}
+		hungry = true;
+		break;
+	case P_ADOLESCENT:
+		if (!hungry) {
+			pteroStage++;
+		}
+		hungry = true;
+		break;
+	case P_ADULT:
+		hungry = true;
+		break;
+	default:
+		break;
+	}
+
 }
 
 void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+
+	//std::cout << camera.position.x << ", " << camera.position.z << std::endl;
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -209,6 +239,18 @@ void Scene2::Update(double dt)
 	if (Application::IsKeyPressed('E')) // turn off global light
 	{
 			godlights = true;
+	}
+	if (Application::IsKeyPressed('X') && camera.position.z >= 19.0f)
+	{
+		if (hungry && pteroStage != P_EGG) {
+			hungry = false;
+			std::cout << "Fed dino" << std::endl;
+		}
+		if (pteroStage == P_EGG && !incubating) {
+			std::cout << "Incubating egg" << std::endl;
+			incubating = true;
+		}
+		std::cout << "Stage " << pteroStage << std::endl;
 	}
 	
 	rotateMain++;
@@ -279,17 +321,31 @@ void Scene2::Render()
 	RenderSkybox(camera.SkyboxSize, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
-	viewStack.PushMatrix();
+	switch (pteroStage) {
+	case P_EGG:
+		viewStack.PushMatrix();
 		viewStack.Scale(objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize());
 		viewStack.Translate(objs[OBJ_DINOEGG].getPos().x, objs[OBJ_DINOEGG].getPos().y, objs[OBJ_DINOEGG].getPos().z);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
-	viewStack.PopMatrix();
-
-	viewStack.PushMatrix();
+		viewStack.PopMatrix();
+		break;
+	case P_BABY:
+		viewStack.PushMatrix();
 		viewStack.Scale(objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize());
 		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
+		viewStack.Rotate(180, 0, 1, 0);
 		RenderMesh(meshList[GEO_PTERO], godlights);
-	viewStack.PopMatrix();
+		viewStack.PopMatrix();
+		break;
+	default:
+		viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
+		RenderText(meshList[GEO_TEXT], "dis nigga DEAD bruh", Color(1, 0, 0));
+		viewStack.PopMatrix();
+		break;
+	}
+
+	
 
 	//fences
 	{
@@ -428,6 +484,52 @@ void Scene2::Render()
 		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
 	viewStack.PopMatrix();
 	*/
+
+	switch (pteroStage) {
+	case P_EGG:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: EGG", Color(1, 1, 1), 3, 1, 1);
+		if (incubating) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "EGG INCUBATED", Color(1, 0, 0), 2, 1, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
+		}
+		else if (camera.position.z >= 19.0f) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO INCUBATE EGG", Color(1, 0, 0), 2, 1, 29);
+		}
+		break;
+	case P_BABY:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: BABY", Color(0, 1, 0), 3, 1, 1);
+		if (!hungry) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
+		}
+		else if (camera.position.z >= 19.0f) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		}
+		break;
+	case P_ADOLESCENT:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: ADOLESCENT", Color(0, 1, 0), 3, 1, 1);
+		if (!hungry) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
+		}
+		else if (camera.position.z >= 19.0f) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		}
+		break;
+	case P_ADULT:
+		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: ADULT", Color(0, 1, 0), 3, 1, 1);
+		if (!hungry) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
+			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
+		}
+		else if (camera.position.z >= 19.0f) {
+			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		}
+		break;
+	default:
+		
+		break;
+	}
 
 	std::ostringstream ah;
 	ah << framerate;
