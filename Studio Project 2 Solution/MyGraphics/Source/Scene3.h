@@ -14,6 +14,8 @@
 #include "bush.h"
 #include <time.h>
 
+//THIS IS THE SP FOLDER VERSION//
+//THIS ONE IS TO BE MODIFIED FOR RELEASE//
 
 class Scene3 : public Scene
 {
@@ -92,6 +94,7 @@ class Scene3 : public Scene
 		GEO_REDINV,
 		GEO_BLUINV,
 		GEO_TRAPINV,
+		GEO_INVINTERFACE,
 		GEO_TEXT,
 
 		NUM_GEOMETRY,
@@ -156,6 +159,7 @@ private:
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	bool collision(Vector3);
 	float rotateMain = 0;
 

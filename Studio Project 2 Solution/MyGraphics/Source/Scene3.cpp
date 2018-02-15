@@ -9,9 +9,102 @@
 #include <string>
 #include <sstream>
 
+//THIS IS THE SP FOLDER VERSION//
+//THIS ONE IS TO BE MODIFIED FOR RELEASE//
 
 Scene3::Scene3()
 {
+	//Keep this here//
+	//Should be done everytime scene 3 is loaded up//
+	/*bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
+	bush1.harvestCheck = false;  //Check for single-time Harvest
+
+	bush2.harvestedBush = false;
+	bush2.harvestCheck = false;
+
+	bush3.harvestedBush = false;
+	bush3.harvestCheck = false;
+
+	bush4.harvestedBush = false;
+	bush4.harvestCheck = false;
+
+	bush5.harvestedBush = false;
+	bush5.harvestCheck = false;
+
+	//Trap State Chart//
+	//0 = no trap
+	//1 = empty trap
+	//2 = trapped animal
+
+	//Checking Trap1 State//
+	if (trap1State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap1State = 2;
+			trappedBush1 = true;
+		}
+	}
+
+	//Checking Trap2 State//
+	if (trap2State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap2State = 2;
+			trappedBush2 = true;
+		}
+	}
+
+	//Checking Trap3 State//
+	if (trap1State == 3)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap3State = 2;
+			trappedBush3 = true;
+		}
+	}
+
+	//Checking Trap4 State//
+	if (trap4State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap4State = 2;
+			trappedBush4 = true;
+		}
+	}
+
+	//Checking Trap5 State//
+	if (trap5State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap5State = 2;
+			trappedBush5 = true;
+		}
+	}*/
 }
 
 Scene3::~Scene3()
@@ -24,6 +117,96 @@ void Scene3::Init()
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+
+	bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
+	bush1.harvestCheck = false;  //Check for single-time Harvest
+
+	bush2.harvestedBush = false;
+	bush2.harvestCheck = false;
+
+	bush3.harvestedBush = false;
+	bush3.harvestCheck = false;
+
+	bush4.harvestedBush = false;
+	bush4.harvestCheck = false;
+
+	bush5.harvestedBush = false;
+	bush5.harvestCheck = false;
+
+	//Trap State Chart//
+	//0 = no trap
+	//1 = empty trap
+	//2 = trapped animal
+
+	//Checking Trap1 State//
+	if (trap1State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap1State = 2;
+			trappedBush1 = true;
+		}
+	}
+
+	//Checking Trap2 State//
+	if (trap2State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap2State = 2;
+			trappedBush2 = true;
+		}
+	}
+
+	//Checking Trap3 State//
+	if (trap1State == 3)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap3State = 2;
+			trappedBush3 = true;
+		}
+	}
+
+	//Checking Trap4 State//
+	if (trap4State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap4State = 2;
+			trappedBush4 = true;
+		}
+	}
+
+	//Checking Trap5 State//
+	if (trap5State == 1)
+	{
+		int TRAPCARD;
+		srand(time(NULL));
+		TRAPCARD = rand() % 70 + 1;
+
+		if (TRAPCARD <= 70)
+		{
+			trap5State = 2;
+			trappedBush5 = true;
+		}
+	}
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -157,6 +340,10 @@ void Scene3::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_EXPLAINTEXT] = MeshBuilder::GenerateText("foragingInstruction", 16, 16);
 	meshList[GEO_EXPLAINTEXT]->textureID = LoadTGA("Image//calibri.tga");
+
+	meshList[GEO_INVINTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INVINTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+
 	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
 	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
@@ -171,102 +358,6 @@ void Scene3::Init()
 
 	meshList[GEO_FRUITRED] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
 	meshList[GEO_FRUITRED]->textureID = LoadTGA("Image/fruitRed.tga");
-
-	bush1.harvestedBush = false; //Sets all bush to be harvestable upon startup
-	bush1.harvestCheck = false;  //Check for single-time Harvest
-
-	bush2.harvestedBush = false;
-	bush2.harvestCheck = false;
-
-	bush3.harvestedBush = false;
-	bush3.harvestCheck = false;
-
-	bush4.harvestedBush = false;
-	bush4.harvestCheck = false;
-
-	bush5.harvestedBush = false;
-	bush5.harvestCheck = false;
-
-	//TEMPORARY FOR TESING TRAP STATES//
-	//0 = no trap
-	//1 = empty trap
-	//2 = trapped animal
-
-	trappedBush1 = false;
-	trappedBush2 = false;
-	trappedBush3 = false;
-	trappedBush4 = false;
-	trappedBush5 = false;
-
-	//Checking Trap1 State//
-	if (trap1State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap1State = 2;
-			trappedBush1 = true;
-		}
-	}
-
-	//Checking Trap2 State//
-	if (trap2State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap2State = 2;
-			trappedBush2 = true;
-		}
-	}
-
-	//Checking Trap3 State//
-	if (trap1State == 3)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap3State = 2;
-			trappedBush3 = true;
-		}
-	}
-
-	//Checking Trap4 State//
-	if (trap4State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap4State = 2;
-			trappedBush4 = true;
-		}
-	}
-
-	//Checking Trap5 State//
-	if (trap5State == 1)
-	{
-		int TRAPCARD;
-		srand(time(NULL));
-		TRAPCARD = rand() % 70 + 1;
-
-		if (TRAPCARD <= 70)
-		{
-			trap5State = 2;
-			trappedBush5 = true;
-		}
-	}
 }
 
 void Scene3::Update(double dt)
@@ -730,10 +821,11 @@ void Scene3::Render()
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
 
-	RenderTextOnScreen(meshList[GEO_REDINV], "Red Fruits: " + red, Color(1, 0, 0), 2, 5, 5);
-	RenderTextOnScreen(meshList[GEO_BLUINV], "Blu Fruits: " + blu, Color(0, 0, 1), 2, 5, 4);
-	RenderTextOnScreen(meshList[GEO_BLUINV], "Meat Chunk: " + met, Color(0.7, 0.31, 0), 2, 5, 3);
-	RenderTextOnScreen(meshList[GEO_TRAPINV], "Traps Left: " + trp, Color(1, 1, 1), 2, 5, 6);
+	RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
+	RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
+	RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
+	RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
+	RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
 }
 
 void Scene3::Exit()
@@ -898,6 +990,26 @@ void Scene3::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Scene3::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(sizex, sizey, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
 
