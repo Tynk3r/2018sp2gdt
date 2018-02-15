@@ -198,7 +198,7 @@ void Scene2::Update(double dt)
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
