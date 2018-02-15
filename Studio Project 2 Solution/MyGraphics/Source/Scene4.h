@@ -156,9 +156,17 @@ private:
 
 	bool godlights = false;
 
-	bool shopping = false;
-	bool wantToShop = false;
-	bool leavingShop = false;
+	// For shop
+	bool shopping = false;				// If the player is in the process of shopping (Switch to mouse controls)
 	bool clicked = false;
+	int clickedDelay = 0;			// Prevent the double click buy/sell
+	int itemQuantity = 0;			// The quantity of a item that the player wants to buy/sell
+	SHOP_ACTION shopAction = SHOP_EXIT;	// The action that the player wants, buy/sell. exit = do nothing
+
+	//TODO replace this with actual currency
+	int currency = 100;	// Temp player currency
+	int fruit = 10;	// Temp player fruits
+	int meat = 10;	// Temp player meat
+	int trap = 10;	// Temp player traps
 };
 #endif

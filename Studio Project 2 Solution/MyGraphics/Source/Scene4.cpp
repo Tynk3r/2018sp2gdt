@@ -244,31 +244,164 @@ void Scene4::Update(double dt)
 
 		// TODO remove the below testing code
 		////////start of testing code////////
-		std::cout << " x " << Application::GetCursorX() << std::endl;
-		std::cout << " y " << Application::GetCursorY() << std::endl;
+		//std::cout << " x " << Application::GetCursorX() << std::endl;
+		//std::cout << " y " << Application::GetCursorY() << std::endl;
 		////////end of testing code////////
 		// TODO remove the above testing code
 
-		if (Application::IsKeyPressed(VK_LBUTTON))
+		// Check what the player clicked on
+		if (clickedDelay == 20)
 		{
-			if (Application::GetCursorX() >= shop.SHOPS[SHOP_EXIT].minX && Application::GetCursorX() <= shop.SHOPS[SHOP_EXIT].maxX &&
-				Application::GetCursorY() >= shop.SHOPS[SHOP_EXIT].minY && Application::GetCursorY() <= shop.SHOPS[SHOP_EXIT].maxY)
+			if (Application::IsKeyPressed(VK_LBUTTON))
 			{
-				shopping = false;
-				Application::SetCursorVisible(false);
-				camera.prevX = Application::GetCursorX();
-				camera.prevY = Application::GetCursorY();
-				clicked = true;
+				if (Application::GetCursorX() >= shop.coord[SHOP_EXIT].minX && Application::GetCursorX() <= shop.coord[SHOP_EXIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_EXIT].minY && Application::GetCursorY() <= shop.coord[SHOP_EXIT].maxY)
+				{
+					shopping = false;
+					Application::SetCursorVisible(false);
+					camera.prevX = Application::GetCursorX();
+					camera.prevY = Application::GetCursorY();
+					clicked = true;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_FRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_FRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_FRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_FRUIT].maxY)
+				{
+					shopAction = SHOP_BUY_FRUIT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_MEAT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_MEAT].maxY)
+				{
+					shopAction = SHOP_BUY_MEAT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_TRAP].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_TRAP].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_TRAP].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_TRAP].maxY)
+				{
+					shopAction = SHOP_BUY_TRAP;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_FRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_FRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_FRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_FRUIT].maxY)
+				{
+					shopAction = SHOP_SELL_FRUIT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_MEAT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_MEAT].maxY)
+				{
+					shopAction = SHOP_SELL_MEAT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_TRAP].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_TRAP].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_TRAP].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_TRAP].maxY)
+				{
+					shopAction = SHOP_SELL_TRAP;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_RESET_QUANTITY].minX && Application::GetCursorX() <= shop.coord[SHOP_RESET_QUANTITY].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_RESET_QUANTITY].minY && Application::GetCursorY() <= shop.coord[SHOP_RESET_QUANTITY].maxY)
+				{
+					itemQuantity = 0;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_1].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_1].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_1].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_1].maxY)
+				{
+					itemQuantity += 1;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxY)
+				{
+					itemQuantity -= 1;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxY)
+				{
+					itemQuantity += 10;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxY)
+				{
+					itemQuantity -= 10;
+
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxY)
+				{
+					itemQuantity += 100;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxY)
+				{
+					itemQuantity -= 100;
+				}
 			}
-			else if (Application::GetCursorX() >= shop.SHOPS[SHOP_BUY_FRUIT].minX && Application::GetCursorX() <= shop.SHOPS[SHOP_BUY_FRUIT].maxX &&
-				Application::GetCursorY() >= shop.SHOPS[SHOP_BUY_FRUIT].minY && Application::GetCursorY() <= shop.SHOPS[SHOP_BUY_FRUIT].maxY)
+
+			// Resolve the shopAction
+			if (shopAction == SHOP_BUY_FRUIT)
 			{
-				shopping = false;
-				Application::SetCursorVisible(false);
-				camera.prevX = Application::GetCursorX();
-				camera.prevY = Application::GetCursorY();
-				clicked = true;
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_BUY_FRUIT] * itemQuantity))
+				{
+					currency - (shop.cost[SHOP_BUY_FRUIT] * itemQuantity);
+					fruit += itemQuantity;
+				}
 			}
+			if (shopAction == SHOP_BUY_MEAT)
+			{
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_BUY_MEAT] * itemQuantity))
+				{
+					currency - (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
+					meat += itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_BUY_TRAP)
+			{
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_BUY_TRAP] * itemQuantity))
+				{
+					currency - (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
+					trap += itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_SELL_FRUIT)
+			{
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_SELL_FRUIT] * itemQuantity))
+				{
+					currency += (shop.cost[SHOP_SELL_FRUIT] * itemQuantity);
+					fruit -= itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_SELL_MEAT)
+			{
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_SELL_MEAT] * itemQuantity))
+				{
+					currency += (shop.cost[SHOP_SELL_MEAT] * itemQuantity);
+					meat -= itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_SELL_TRAP)
+			{
+				int currency = 0;
+				if (currency >= (shop.cost[SHOP_SELL_TRAP] * itemQuantity))
+				{
+					currency += (shop.cost[SHOP_SELL_TRAP] * itemQuantity);
+					trap -= itemQuantity;
+				}
+			}
+			shopAction = SHOP_EXIT;
+
+			// TODO remove the below testing code
+			////////start of testing code////////
+			std::cout << " Money :  " << currency << std::endl;
+			std::cout << " Fruit :  " << fruit << std::endl;
+			std::cout << " Meat	 : " << meat << std::endl;
+			std::cout << " Trap  : " << trap << std::endl;
+			std::cout << " Numb  : " << itemQuantity << std::endl;
+			////////end of testing code////////
+			// TODO remove the above testing code
+			clickedDelay = 0;
+		}
+		else
+		{
+			clickedDelay++;
 		}
 	}
 	////////////////////////////////////////////////////////////////// END OF SHOP CODE ////////////////////////////////////////////////////////////////////
@@ -487,55 +620,52 @@ void Scene4::RenderNPC()
 	}
 	textCollision();
 
+
+	if (Application::IsKeyPressed('X') && textBoxRender == NPC_SHOP)
+	{
+		shopping = true;
+	}
 	if (textBoxRender == NPC_WEATHER)
 	{
 		viewStack.PushMatrix();
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
-	else if (textBoxRender == NPC_LORE)
+	if (textBoxRender == NPC_LORE)
 	{
 		viewStack.PushMatrix();
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
-	else if (textBoxRender == NPC_HUNTING)
+	if (textBoxRender == NPC_HUNTING)
 	{
 		viewStack.PushMatrix();
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
-	else if (textBoxRender == NPC_RAISING)
+	if (textBoxRender == NPC_RAISING)
 	{
 		viewStack.PushMatrix();
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
-	else if (textBoxRender == NPC_RACING)
+	if (textBoxRender == NPC_RACING)
 	{
 		viewStack.PushMatrix();
 		RenderTextBox();
 		viewStack.PopMatrix();
 	}
-	else if (textBoxRender == NPC_SHOP)
+	if (shopping == false && textBoxRender == NPC_SHOP)
 	{
-		if (shopping == false)
-		{
-			viewStack.PushMatrix();
-			RenderTextBox();
-			viewStack.PopMatrix();
-
-			if (Application::IsKeyPressed('X')) // Start shopping
-			{
-				shopping = true;
-			}
-		}
-		else if (shopping == true)
-		{
-			viewStack.PushMatrix();
-			RenderShopTextBox();
-			viewStack.PopMatrix();
-		}
+		viewStack.PushMatrix();
+		RenderTextBox();
+		viewStack.PopMatrix();
+	}
+	else if (shopping == true && textBoxRender == NPC_SHOP)
+	{
+		viewStack.PushMatrix();
+		RenderShopTextBox();
+		viewStack.PopMatrix();
 	}
 }
 
@@ -561,8 +691,27 @@ void Scene4::RenderShopTextBox()
 
 		viewStack.PushMatrix();
 		//RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + (x * 5), 15 + (i * 5), 2, 2); x is horizontal, i is vertical
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 60, 15 + 15, 4, 2);
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 65, 15 + 15, 2, 2);
+		for (int i = 0; i < 7; i++)
+		{
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 15, 4, 2);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 20, 4, 2);
+		}
+		for (int i = 0; i < 4; i++)
+		{
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 10, 4, 2);
+		}
+		for (int i = 1; i < 3; i++)
+		{
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (3 * 10), 35 + (i * 5), 4, 2);
+		}
+		for (int i = 1; i < 3; i++)
+		{
+			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (3 * 10), 25 - (i * 5), 4, 2);
+		}
+		//	RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 65, 15 + 15, 2, 2);
 		viewStack.PopMatrix();
 	viewStack.PopMatrix();
 }
