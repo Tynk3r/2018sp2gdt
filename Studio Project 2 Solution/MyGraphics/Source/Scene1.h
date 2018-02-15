@@ -12,6 +12,7 @@
 #include "Utility.h"
 #include "RingObject.h"
 #include "timer.h"
+//#include <irrKlang.h>
 
 class Scene1 : public Scene
 {

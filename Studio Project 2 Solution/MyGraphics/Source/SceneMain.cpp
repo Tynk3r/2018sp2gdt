@@ -179,7 +179,7 @@ void SceneMain::Update(double dt)
 	}
 	else if (Application::IsKeyPressed('6'))
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
 	}
 	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{

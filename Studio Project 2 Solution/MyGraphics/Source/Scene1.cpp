@@ -23,7 +23,7 @@ void Scene1::Init()
 	currentRing = 0;
 	points = 0;
 	ringpos = Vector3(0, -23, 0);
-	totalTime = 20000;
+	totalTime = 1500;
 	timer.startTimer();
 
 	framerate = 0.0f;
@@ -204,7 +204,7 @@ void Scene1::Init()
 	//meshList[GEO_DINO]->textureID = LoadTGA("Image//flyingModel.tga");
 
 	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
-	meshList[GEO_DINO]->textureID = LoadTGA("Image//dinoegg.tga");
+	meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
 
 	//Setup Ring Info 
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
@@ -225,9 +225,19 @@ void Scene1::Init()
 
 void Scene1::Update(double dt)
 {
+	//Developer Tools
+	if (Application::IsKeyPressed('1'))
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0)
+	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing == 21)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
@@ -247,6 +257,7 @@ void Scene1::Update(double dt)
 	{
 		currentRing = 0;
 		points = 0;
+		totalTime = 1500;
 	}
 
 	collideRing(camera.position);
@@ -254,12 +265,9 @@ void Scene1::Update(double dt)
 	{
 		HandleRingCollide(collideRing(camera.position));
 	}
-	else
-	{
-		std::cout << "No ring in contact yet" << std::endl;
-		std::cout << collideRing(camera.position) << std::endl;
-	}
 	totalTime -= timer.getElapsedTime();
+
+	std::cout << (camera.horizMove) * 10 << std::endl;
 }
 
 void Scene1::Render()
@@ -381,7 +389,7 @@ void Scene1::Render()
 	}
 
 	//Render Dino//
-	RenderMeshOnScreen(meshList[GEO_DINO], 2, 0.45, 20, 20, (camera.horizMove)*0.5, camera.vertMove);
+	RenderMeshOnScreen(meshList[GEO_DINO], 0.6, 0, 65, 60, (camera.horizMove)*0.5, camera.vertMove);
 
 	//Render Important Text//
 	std::ostringstream ah;
@@ -407,7 +415,7 @@ void Scene1::Render()
 	std::ostringstream th;
 	th << totalTime;
 	std::string str6 = th.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Time : " + str6, Color(0, 0, 0), 2, 17, 29);
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time : " + str6, Color(1, 1, 0), 2, 17, 29);
 
 	if (camera.position.y <= -495)
 	{
@@ -416,6 +424,10 @@ void Scene1::Render()
 	if (totalTime <= 0)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You ran out of time!", Color(1, 0.1, 0.1), 3, 5, 9);
+	}
+	if (currentRing == 21)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
 	}
 
 }
@@ -589,15 +601,16 @@ void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
 	viewStack.LoadIdentity(); //No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
-	modelStack.Scale(sizex, sizey, 1);
+	modelStack.Scale(sizex, sizey, sizey);
 	modelStack.Translate(x, y, 0);
+	modelStack.Rotate(-170, 0, 1, 0);
 	modelStack.Rotate(horideg, 0, 1, 0);
 	modelStack.Rotate(vertideg, 1, 0, 1);
 	RenderMesh(mesh, false); //UI should not have light
@@ -662,6 +675,6 @@ void Scene1::HandleRingCollide(int id)
 	if (id == 20)
 	{
 		points += 50;
-		currentRing = -1;
+		currentRing = 21;
 	}
 }
