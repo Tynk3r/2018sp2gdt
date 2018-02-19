@@ -89,16 +89,21 @@ class Scene3 : public Scene
 		GEO_TRAPDEFAULT,
 		GEO_TRAPCAUGHT,
 		GEO_BUSH,
-		GEO_FRUITRED,
-		GEO_FRUITBLUE,
+		GEO_REDFRUIT,
+		GEO_BLUFRUIT,
 		GEO_EXPLAINTEXT,
-		GEO_REDINV,
-		GEO_BLUINV,
-		GEO_TRAPINV,
-		GEO_INVINTERFACE,
 		GEO_INSTRUCTIONS,
+		
+		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+		GEO_INV_REDFRUIT,
+		GEO_INV_BLUFRUIT,
+		GEO_INV_MEAT,
+		GEO_INV_TRAP,
+		GEO_INV_INCUBATOR,
+		GEO_INV_INTERFACE,
+		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+		
 		GEO_TEXT,
-
 		NUM_GEOMETRY,
 	};
 

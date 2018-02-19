@@ -163,6 +163,7 @@
     <ClCompile Include="Source\bush.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CameraFPV.cpp" />
+    <ClCompile Include="Source\Inventory.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Source\bush.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CameraFPV.h" />
+    <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
