@@ -92,6 +92,8 @@ class Scene2 : public Scene
 	{
 		OBJ_DINOEGG,
 		OBJ_PTERO_BABY,
+		OBJ_PTERO_ADOLESCENT, 
+		OBJ_PTERO_ADULT,
 		OBJ_FENCE,
 
 		NUM_OBJECTS,

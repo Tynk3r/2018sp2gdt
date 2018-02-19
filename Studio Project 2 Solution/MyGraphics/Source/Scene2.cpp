@@ -12,7 +12,7 @@
 
 Scene2::Scene2()
 {
-	pteroStage = P_EGG;
+	pteroStage = P_BABY;
 }
 
 Scene2::~Scene2()
@@ -24,7 +24,7 @@ void Scene2::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 10, 20), Vector3(0, 20, 0), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 62.5), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -167,9 +167,10 @@ void Scene2::Init()
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 
 	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 62.5), 10); 
-	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 0, 62.5), 25); 
-
-	objs[OBJ_FENCE].setBox(Vector3(90.0, 0, 25), 400, 10, 10);
+	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 5, 62.5), 10); 
+	objs[OBJ_PTERO_ADOLESCENT].setBox(Vector3(0, 10, 62.5), 25);
+	objs[OBJ_PTERO_ADULT].setBox(Vector3(0, 15, 62.5), 40);
+	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 
 	camera.SkyboxSize = 100.0f;
 
@@ -224,17 +225,13 @@ void Scene2::Update(double dt)
 	{
 		if (hungry && pteroStage != P_EGG) {
 			hungry = false;
-			std::cout << "Fed dino" << std::endl;
 		}
 		if (pteroStage == P_EGG && !incubating) {
 			std::cout << "Incubating egg" << std::endl;
-			incubating = true;
 		}
-		std::cout << "Stage " << pteroStage << std::endl;
 	}
 	
 	rotateMain++;
-	
 }
 
 void Scene2::Render()
@@ -317,6 +314,22 @@ void Scene2::Render()
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
+	case P_ADOLESCENT:
+		viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_PTERO_ADOLESCENT].getPos().x, objs[OBJ_PTERO_ADOLESCENT].getPos().y, objs[OBJ_PTERO_ADOLESCENT].getPos().z);
+		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize());
+		RenderMesh(meshList[GEO_PTERO], godlights);
+		viewStack.PopMatrix();
+		break;
+	case P_ADULT:
+		viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_PTERO_ADULT].getPos().x, objs[OBJ_PTERO_ADULT].getPos().y, objs[OBJ_PTERO_ADULT].getPos().z);
+		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize());
+		RenderMesh(meshList[GEO_PTERO], godlights);
+		viewStack.PopMatrix();
+		break;
 	default:
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
@@ -325,7 +338,7 @@ void Scene2::Render()
 		break;
 	}
 
-	for (int i = 0; i <= 180; i += 10) {
+	for (int i = 0; i <= 200; i += 10) { // fence
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
 		viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
