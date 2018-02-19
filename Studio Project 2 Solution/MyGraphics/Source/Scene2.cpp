@@ -166,30 +166,10 @@ void Scene2::Init()
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 6.25), 10); 
-	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 0.4, 2.5), 25); 
+	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 62.5), 10); 
+	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 0, 62.5), 25); 
 
-	objs[OBJ_FENCE].setBox(Vector3(0, 0, 2.5), 10);
-	objs[OBJ_FENCE1].setBox(Vector3(0.9, 0, 2.5), 10);
-	objs[OBJ_FENCE2].setBox(Vector3(1.8, 0, 2.5), 10);
-	objs[OBJ_FENCE3].setBox(Vector3(2.7, 0, 2.5), 10);
-	objs[OBJ_FENCE4].setBox(Vector3(3.6, 0, 2.5), 10);
-	objs[OBJ_FENCE5].setBox(Vector3(4.5, 0, 2.5), 10);
-	objs[OBJ_FENCE6].setBox(Vector3(5.4, 0, 2.5), 10);
-	objs[OBJ_FENCE7].setBox(Vector3(6.3, 0, 2.5), 10);
-	objs[OBJ_FENCE8].setBox(Vector3(7.2, 0, 2.5), 10);
-	objs[OBJ_FENCE9].setBox(Vector3(8.1, 0, 2.5), 10);
-	objs[OBJ_FENCE10].setBox(Vector3(9.0, 0, 2.5), 10);
-	objs[OBJ_FENCE11].setBox(Vector3(-0.9, 0, 2.5), 10);
-	objs[OBJ_FENCE12].setBox(Vector3(-1.8, 0, 2.5), 10);
-	objs[OBJ_FENCE13].setBox(Vector3(-2.7, 0, 2.5), 10);
-	objs[OBJ_FENCE14].setBox(Vector3(-3.6, 0, 2.5), 10);
-	objs[OBJ_FENCE15].setBox(Vector3(-4.5, 0, 2.5), 10);
-	objs[OBJ_FENCE16].setBox(Vector3(-5.4, 0, 2.5), 10);
-	objs[OBJ_FENCE17].setBox(Vector3(-6.3, 0, 2.5), 10);
-	objs[OBJ_FENCE18].setBox(Vector3(-7.2, 0, 2.5), 10);
-	objs[OBJ_FENCE19].setBox(Vector3(-8.1, 0, 2.5), 10);
-	objs[OBJ_FENCE20].setBox(Vector3(-9.0, 0, 2.5), 10);
+	objs[OBJ_FENCE].setBox(Vector3(90.0, 0, 25), 400, 10, 10);
 
 	camera.SkyboxSize = 100.0f;
 
@@ -324,16 +304,16 @@ void Scene2::Render()
 	switch (pteroStage) {
 	case P_EGG:
 		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize());
 		viewStack.Translate(objs[OBJ_DINOEGG].getPos().x, objs[OBJ_DINOEGG].getPos().y, objs[OBJ_DINOEGG].getPos().z);
+		viewStack.Scale(objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize(), objs[OBJ_DINOEGG].getSize());
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
 		break;
 	case P_BABY:
 		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize());
 		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
 		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize());
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
@@ -345,134 +325,12 @@ void Scene2::Render()
 		break;
 	}
 
-	
-
-	//fences
-	{
+	for (int i = 0; i <= 180; i += 10) {
 		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE].getSize(), objs[OBJ_FENCE].getSize(), objs[OBJ_FENCE].getSize());
-			viewStack.Translate(objs[OBJ_FENCE].getPos().x, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE1].getSize(), objs[OBJ_FENCE1].getSize(), objs[OBJ_FENCE1].getSize());
-			viewStack.Translate(objs[OBJ_FENCE1].getPos().x, objs[OBJ_FENCE1].getPos().y, objs[OBJ_FENCE1].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE2].getSize(), objs[OBJ_FENCE2].getSize(), objs[OBJ_FENCE2].getSize());
-			viewStack.Translate(objs[OBJ_FENCE2].getPos().x, objs[OBJ_FENCE2].getPos().y, objs[OBJ_FENCE2].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE3].getSize(), objs[OBJ_FENCE3].getSize(), objs[OBJ_FENCE3].getSize());
-			viewStack.Translate(objs[OBJ_FENCE3].getPos().x, objs[OBJ_FENCE3].getPos().y, objs[OBJ_FENCE3].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE4].getSize(), objs[OBJ_FENCE4].getSize(), objs[OBJ_FENCE4].getSize());
-			viewStack.Translate(objs[OBJ_FENCE4].getPos().x, objs[OBJ_FENCE4].getPos().y, objs[OBJ_FENCE4].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE5].getSize(), objs[OBJ_FENCE5].getSize(), objs[OBJ_FENCE5].getSize());
-			viewStack.Translate(objs[OBJ_FENCE5].getPos().x, objs[OBJ_FENCE5].getPos().y, objs[OBJ_FENCE5].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE6].getSize(), objs[OBJ_FENCE6].getSize(), objs[OBJ_FENCE6].getSize());
-			viewStack.Translate(objs[OBJ_FENCE6].getPos().x, objs[OBJ_FENCE6].getPos().y, objs[OBJ_FENCE6].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE7].getSize(), objs[OBJ_FENCE7].getSize(), objs[OBJ_FENCE7].getSize());
-			viewStack.Translate(objs[OBJ_FENCE7].getPos().x, objs[OBJ_FENCE7].getPos().y, objs[OBJ_FENCE7].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE8].getSize(), objs[OBJ_FENCE8].getSize(), objs[OBJ_FENCE8].getSize());
-			viewStack.Translate(objs[OBJ_FENCE8].getPos().x, objs[OBJ_FENCE8].getPos().y, objs[OBJ_FENCE8].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE9].getSize(), objs[OBJ_FENCE9].getSize(), objs[OBJ_FENCE9].getSize());
-			viewStack.Translate(objs[OBJ_FENCE9].getPos().x, objs[OBJ_FENCE9].getPos().y, objs[OBJ_FENCE9].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[OBJ_FENCE10].getSize(), objs[OBJ_FENCE10].getSize(), objs[OBJ_FENCE10].getSize());
-			viewStack.Translate(objs[OBJ_FENCE10].getPos().x, objs[OBJ_FENCE10].getPos().y, objs[OBJ_FENCE10].getPos().z);
-			RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE11].getSize(), objs[OBJ_FENCE11].getSize(), objs[OBJ_FENCE11].getSize());
-		viewStack.Translate(objs[OBJ_FENCE11].getPos().x, objs[OBJ_FENCE11].getPos().y, objs[OBJ_FENCE11].getPos().z);
+		viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
+		viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
 		RenderMesh(meshList[GEO_FENCE], godlights);
 		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE12].getSize(), objs[OBJ_FENCE12].getSize(), objs[OBJ_FENCE12].getSize());
-		viewStack.Translate(objs[OBJ_FENCE12].getPos().x, objs[OBJ_FENCE12].getPos().y, objs[OBJ_FENCE12].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE13].getSize(), objs[OBJ_FENCE13].getSize(), objs[OBJ_FENCE13].getSize());
-		viewStack.Translate(objs[OBJ_FENCE13].getPos().x, objs[OBJ_FENCE13].getPos().y, objs[OBJ_FENCE13].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE14].getSize(), objs[OBJ_FENCE14].getSize(), objs[OBJ_FENCE14].getSize());
-		viewStack.Translate(objs[OBJ_FENCE14].getPos().x, objs[OBJ_FENCE14].getPos().y, objs[OBJ_FENCE14].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE15].getSize(), objs[OBJ_FENCE15].getSize(), objs[OBJ_FENCE15].getSize());
-		viewStack.Translate(objs[OBJ_FENCE15].getPos().x, objs[OBJ_FENCE15].getPos().y, objs[OBJ_FENCE15].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE16].getSize(), objs[OBJ_FENCE16].getSize(), objs[OBJ_FENCE16].getSize());
-		viewStack.Translate(objs[OBJ_FENCE16].getPos().x, objs[OBJ_FENCE16].getPos().y, objs[OBJ_FENCE16].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE17].getSize(), objs[OBJ_FENCE17].getSize(), objs[OBJ_FENCE17].getSize());
-		viewStack.Translate(objs[OBJ_FENCE17].getPos().x, objs[OBJ_FENCE17].getPos().y, objs[OBJ_FENCE17].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE18].getSize(), objs[OBJ_FENCE18].getSize(), objs[OBJ_FENCE18].getSize());
-		viewStack.Translate(objs[OBJ_FENCE18].getPos().x, objs[OBJ_FENCE18].getPos().y, objs[OBJ_FENCE18].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE19].getSize(), objs[OBJ_FENCE19].getSize(), objs[OBJ_FENCE19].getSize());
-		viewStack.Translate(objs[OBJ_FENCE19].getPos().x, objs[OBJ_FENCE19].getPos().y, objs[OBJ_FENCE19].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Scale(objs[OBJ_FENCE20].getSize(), objs[OBJ_FENCE20].getSize(), objs[OBJ_FENCE20].getSize());
-		viewStack.Translate(objs[OBJ_FENCE20].getPos().x, objs[OBJ_FENCE20].getPos().y, objs[OBJ_FENCE20].getPos().z);
-		RenderMesh(meshList[GEO_FENCE], godlights);
 	}
 
 	/* sampel

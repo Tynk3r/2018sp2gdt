@@ -13,6 +13,7 @@
 #include "Object.h"
 #include "bush.h"
 #include <time.h>
+#include "Inventory.h"
 
 //THIS IS THE SP FOLDER VERSION//
 //THIS ONE IS TO BE MODIFIED FOR RELEASE//
@@ -118,12 +119,6 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-
-	//Temp INV for Scene 3//
-	int invTraps = 5;
-	int redFruits;
-	int bluFruits;
-	int meat;
 	
 	//Classes for bushes//
 	bush bush1;
