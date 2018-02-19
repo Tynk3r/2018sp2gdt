@@ -135,6 +135,10 @@ private:
 	bool hungry = true;
 	bool incubating = false;
 	int pteroStage;
+	float pteroLocationX = 0;
+	float pteroLocationZ = 62.5;
+	float pteroDirection = 180.0f;
+	float pteroMovementSpeed = 0.0f;
 	
 	bool godlights = false;
 };

@@ -7,12 +7,13 @@
 #include "Vertex.h"
 #include "LoadTGA.h"
 #include <string>
+#include <ctime>
 #include <sstream>
 
 
 Scene2::Scene2()
 {
-	pteroStage = P_BABY;
+	pteroStage = P_EGG;
 }
 
 Scene2::~Scene2()
@@ -21,10 +22,11 @@ Scene2::~Scene2()
 
 void Scene2::Init()
 {
+	srand(time(NULL));
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 62.5), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -166,14 +168,15 @@ void Scene2::Init()
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 62.5), 10); 
-	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 5, 62.5), 10); 
-	objs[OBJ_PTERO_ADOLESCENT].setBox(Vector3(0, 10, 62.5), 25);
-	objs[OBJ_PTERO_ADULT].setBox(Vector3(0, 15, 62.5), 40);
+	objs[OBJ_DINOEGG].setBox(Vector3(pteroLocationX, 0, pteroLocationZ), 10);
+	objs[OBJ_PTERO_BABY].setBox(Vector3(pteroLocationX, 5, pteroLocationZ), 10); 
+	objs[OBJ_PTERO_ADOLESCENT].setBox(Vector3(pteroLocationX, 10, pteroLocationZ), 25);
+	objs[OBJ_PTERO_ADULT].setBox(Vector3(pteroLocationX, 20, pteroLocationZ), 40);
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 
 	camera.SkyboxSize = 100.0f;
 
+	//updating stage
 	switch (pteroStage)	{
 	case P_EGG:
 		if (incubating) {
@@ -199,15 +202,29 @@ void Scene2::Init()
 	default:
 		break;
 	}
-
+	// movement speed
+	switch (pteroStage) {
+	case P_EGG:
+		pteroMovementSpeed = 0.0f;
+		break;
+	case P_BABY:
+		pteroMovementSpeed = 0.5f;
+		break;
+	case P_ADOLESCENT:
+		pteroMovementSpeed = 0.5f;
+		break;
+	case P_ADULT:
+		pteroMovementSpeed = 0.5f;
+		break;
+	default:
+		break;
+	}
 }
 
 void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-
-	//std::cout << camera.position.x << ", " << camera.position.z << std::endl;
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -227,11 +244,151 @@ void Scene2::Update(double dt)
 			hungry = false;
 		}
 		if (pteroStage == P_EGG && !incubating) {
+			incubating = true;
 			std::cout << "Incubating egg" << std::endl;
 		}
 	}
-	
-	rotateMain++;
+
+	// ptero movement
+	int r = rand() % 200 + 1;
+	switch ((int)pteroDirection) {
+	case 180:	// front
+		switch (r) {
+		case 1: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		case 2: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		}
+		break;
+	case 90:		// right
+		switch (r) {
+		case 1: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// back
+		switch (r) {
+		case 1: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// left
+		switch (r) {
+		case 1: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		default: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		}
+		break;
+	default:
+		pteroDirection = 180;
+		break;
+	}
+
+	objs[OBJ_DINOEGG].setPos(Vector3(pteroLocationX, 0, pteroLocationZ));
+	objs[OBJ_PTERO_BABY].setPos(Vector3(pteroLocationX, 5, pteroLocationZ));
+	objs[OBJ_PTERO_ADOLESCENT].setPos(Vector3(pteroLocationX, 10, pteroLocationZ));
+	objs[OBJ_PTERO_ADULT].setPos(Vector3(pteroLocationX, 15, pteroLocationZ));
 }
 
 void Scene2::Render()
@@ -309,7 +466,7 @@ void Scene2::Render()
 	case P_BABY:
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
-		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize());
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -317,7 +474,7 @@ void Scene2::Render()
 	case P_ADOLESCENT:
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_PTERO_ADOLESCENT].getPos().x, objs[OBJ_PTERO_ADOLESCENT].getPos().y, objs[OBJ_PTERO_ADOLESCENT].getPos().z);
-		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize());
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -325,7 +482,7 @@ void Scene2::Render()
 	case P_ADULT:
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_PTERO_ADULT].getPos().x, objs[OBJ_PTERO_ADULT].getPos().y, objs[OBJ_PTERO_ADULT].getPos().z);
-		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize());
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
