@@ -81,6 +81,7 @@ class SceneMain : public Scene
 		GEO_QUAD,
 		GEO_TEXT,
 		GEO_DINOEGG,
+		GEO_TREE,
 		
 		NUM_GEOMETRY,
 	};
@@ -89,6 +90,9 @@ class SceneMain : public Scene
 	enum OBJECTS
 	{
 		OBJ_DINOEGG,
+		OBJ_TREE1,
+		OBJ_TREE2,
+		OBJ_TREE3,
 
 		NUM_OBJECTS,
 	};

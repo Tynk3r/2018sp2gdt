@@ -7,7 +7,9 @@
 #include "Vertex.h"
 #include "LoadTGA.h"
 #include <string>
+#include <ctime>
 #include <sstream>
+#include "Inventory.h"
 
 
 Scene2::Scene2()
@@ -21,10 +23,11 @@ Scene2::~Scene2()
 
 void Scene2::Init()
 {
+	srand(time(NULL));
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 10, 20), Vector3(0, 20, 0), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -159,6 +162,17 @@ void Scene2::Init()
 
 	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
+	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
+	meshList[GEO_BLUINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TRAPINV] = MeshBuilder::GenerateText("trpInv", 16, 16);
+	meshList[GEO_TRAPINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INVINTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INVINTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 	meshList[GEO_PTERO] = MeshBuilder::GenerateOBJ("objs2", "OBJ//pterodactyl.obj");
@@ -166,13 +180,15 @@ void Scene2::Init()
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 62.5), 10); 
-	objs[OBJ_PTERO_BABY].setBox(Vector3(0, 0, 62.5), 25); 
-
-	objs[OBJ_FENCE].setBox(Vector3(90.0, 0, 25), 400, 10, 10);
+	objs[OBJ_DINOEGG].setBox(Vector3(pteroLocationX, 0, pteroLocationZ), 10);
+	objs[OBJ_PTERO_BABY].setBox(Vector3(pteroLocationX, 5, pteroLocationZ), 10); 
+	objs[OBJ_PTERO_ADOLESCENT].setBox(Vector3(pteroLocationX, 10, pteroLocationZ), 25);
+	objs[OBJ_PTERO_ADULT].setBox(Vector3(pteroLocationX, 20, pteroLocationZ), 40);
+	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 
 	camera.SkyboxSize = 100.0f;
 
+	//updating stage
 	switch (pteroStage)	{
 	case P_EGG:
 		if (incubating) {
@@ -198,15 +214,30 @@ void Scene2::Init()
 	default:
 		break;
 	}
-
+	// movement speed
+	switch (pteroStage) {
+	case P_EGG:
+		pteroMovementSpeed = 0.0f;
+		break;
+	case P_BABY:
+		pteroMovementSpeed = 0.5f;
+		break;
+	case P_ADOLESCENT:
+		pteroMovementSpeed = 0.5f;
+		break;
+	case P_ADULT:
+		pteroMovementSpeed = 0.5f;
+		break;
+	default:
+		break;
+	}
 }
 
 void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-
-	//std::cout << camera.position.x << ", " << camera.position.z << std::endl;
+	Inventory::instance()->Update(dt);
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -222,19 +253,158 @@ void Scene2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('X') && camera.position.z >= 19.0f)
 	{
-		if (hungry && pteroStage != P_EGG) {
+		// hungry + Meat
+		if (hungry && pteroStage != P_EGG && Inventory::instance()->items[ITEMS_MEAT] > 0) {
 			hungry = false;
-			std::cout << "Fed dino" << std::endl;
+			Inventory::instance()->items[ITEMS_MEAT]--;
 		}
-		if (pteroStage == P_EGG && !incubating) {
-			std::cout << "Incubating egg" << std::endl;
+		// egg + incubator
+		if (pteroStage == P_EGG && !incubating && Inventory::instance()->items[ITEMS_INCUBATOR] != 0) {
 			incubating = true;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 0;
 		}
-		std::cout << "Stage " << pteroStage << std::endl;
 	}
-	
-	rotateMain++;
-	
+
+	// ptero movement
+	int r = rand() % 200 + 1;
+	switch ((int)pteroDirection) {
+	case 180:	// front
+		switch (r) {
+		case 1: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		case 2: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		}
+		break;
+	case 90:		// right
+		switch (r) {
+		case 1: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// back
+		switch (r) {
+		case 1: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		default: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// left
+		switch (r) {
+		case 1: // right
+			pteroLocationX += pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX -= pteroMovementSpeed;
+			}
+			pteroDirection = 90.0f;
+			break;
+		case 2: // front
+			pteroLocationZ -= pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ += pteroMovementSpeed;
+			}
+			pteroDirection = 180.0f;
+			break;
+		case 3: // back
+			pteroLocationZ += pteroMovementSpeed;
+			if (pteroLocationZ >= 90.0f || pteroLocationZ <= 25.0f) {
+				pteroLocationZ -= pteroMovementSpeed;
+			}
+			pteroDirection = 0.0f;
+			break;
+		default: // left
+			pteroLocationX -= pteroMovementSpeed;
+			if (pteroLocationX >= 90.0f || pteroLocationX <= -90.0f) {
+				pteroLocationX += pteroMovementSpeed;
+			}
+			pteroDirection = 270.0f;
+			break;
+		}
+		break;
+	default:
+		pteroDirection = 180;
+		break;
+	}
+
+	objs[OBJ_DINOEGG].setPos(Vector3(pteroLocationX, 0, pteroLocationZ));
+	objs[OBJ_PTERO_BABY].setPos(Vector3(pteroLocationX, 5, pteroLocationZ));
+	objs[OBJ_PTERO_ADOLESCENT].setPos(Vector3(pteroLocationX, 10, pteroLocationZ));
+	objs[OBJ_PTERO_ADULT].setPos(Vector3(pteroLocationX, 15, pteroLocationZ));
 }
 
 void Scene2::Render()
@@ -312,8 +482,24 @@ void Scene2::Render()
 	case P_BABY:
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_PTERO_BABY].getPos().x, objs[OBJ_PTERO_BABY].getPos().y, objs[OBJ_PTERO_BABY].getPos().z);
-		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize(), objs[OBJ_PTERO_BABY].getSize());
+		RenderMesh(meshList[GEO_PTERO], godlights);
+		viewStack.PopMatrix();
+		break;
+	case P_ADOLESCENT:
+		viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_PTERO_ADOLESCENT].getPos().x, objs[OBJ_PTERO_ADOLESCENT].getPos().y, objs[OBJ_PTERO_ADOLESCENT].getPos().z);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize(), objs[OBJ_PTERO_ADOLESCENT].getSize());
+		RenderMesh(meshList[GEO_PTERO], godlights);
+		viewStack.PopMatrix();
+		break;
+	case P_ADULT:
+		viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_PTERO_ADULT].getPos().x, objs[OBJ_PTERO_ADULT].getPos().y, objs[OBJ_PTERO_ADULT].getPos().z);
+		viewStack.Rotate(pteroDirection, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize(), objs[OBJ_PTERO_ADULT].getSize());
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
@@ -325,7 +511,7 @@ void Scene2::Render()
 		break;
 	}
 
-	for (int i = 0; i <= 180; i += 10) {
+	for (int i = 0; i <= 200; i += 10) { // fence
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
 		viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
@@ -393,6 +579,30 @@ void Scene2::Render()
 	ah << framerate;
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+
+	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	std::ostringstream inv1;
+	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
+	std::ostringstream inv2;
+	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
+	std::ostringstream inv3;
+	inv3 << Inventory::instance()->items[ITEMS_MEAT];
+	std::ostringstream inv4;
+	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::string red = inv1.str();
+	std::string blu = inv2.str();
+	std::string met = inv3.str();
+	std::string trp = inv4.str();
+
+	if (Inventory::instance()->showInventory)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
+		RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
+		RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+	}
+	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
 
 void Scene2::Exit()
@@ -580,4 +790,24 @@ bool Scene2::collision(Vector3 c)
 	else {
 		return false;
 	}
+}
+
+void Scene2::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(sizex, sizey, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }

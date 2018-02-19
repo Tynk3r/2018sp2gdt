@@ -83,6 +83,10 @@ class Scene2 : public Scene
 		GEO_DINOEGG,
 		GEO_PTERO,
 		GEO_FENCE,
+		GEO_REDINV,
+		GEO_BLUINV,
+		GEO_TRAPINV,
+		GEO_INVINTERFACE,
 		
 		NUM_GEOMETRY,
 	};
@@ -92,6 +96,8 @@ class Scene2 : public Scene
 	{
 		OBJ_DINOEGG,
 		OBJ_PTERO_BABY,
+		OBJ_PTERO_ADOLESCENT, 
+		OBJ_PTERO_ADULT,
 		OBJ_FENCE,
 
 		NUM_OBJECTS,
@@ -128,11 +134,16 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool collision(Vector3);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float rotateMain = 0;
 
 	bool hungry = true;
 	bool incubating = false;
 	int pteroStage;
+	float pteroLocationX = 0;
+	float pteroLocationZ = 62.5;
+	float pteroDirection = 180.0f;
+	float pteroMovementSpeed = 0.0f;
 	
 	bool godlights = false;
 };

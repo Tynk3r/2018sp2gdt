@@ -25,7 +25,7 @@ void Scene3::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 20, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	//Keep this here//
 	//Should be done everytime scene 3 is loaded up//
@@ -180,7 +180,7 @@ void Scene3::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(0, 199, 0);
+	light[0].position.Set(0, 0, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 10;
 	light[0].kC = 1.f;
@@ -190,6 +190,18 @@ void Scene3::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(90));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	/*light[1].type = Light::LIGHT_SPOT;
+	light[1].position.Set(0, 0, 0);
+	light[1].color.Set(100, 100, 0);
+	light[1].power = 10;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(90));
+	light[1].cosInner = cos(Math::DegreeToRadian(90));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);*/
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -725,7 +737,7 @@ void Scene3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);*/
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
-	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set a trap", Color(1, 1, 1), 1.5, 33, 37);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<I> to show inventory", Color(1, 1, 1), 1.5, 33, 39);
 
 	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
