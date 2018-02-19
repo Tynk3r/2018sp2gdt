@@ -4,32 +4,35 @@ d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3
 d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(84): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(98): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(112): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(454): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(546): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(554): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(564): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(574): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(583): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(591): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(601): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(611): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(620): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(628): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(638): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(648): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(658): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(665): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(675): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(685): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(694): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(702): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(712): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(722): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(752): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(753): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(754): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(755): warning C4305: 'argument': truncation from 'double' to 'float'
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(935): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(936): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(466): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(558): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(566): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(576): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(586): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(595): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(603): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(613): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(623): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(632): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(640): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(650): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(660): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(670): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(677): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(687): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(697): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(706): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(714): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(724): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(734): warning C4800: 'Light *': forcing value to bool 'true' or 'false' (performance warning)
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(764): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(765): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(766): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(767): warning C4305: 'argument': truncation from 'double' to 'float'
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(947): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+d:\users\n507\desktop\poofsp2\studio project 2 solution\mygraphics\source\scene3.cpp(948): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  Application.cpp
   MyGraphics.vcxproj -> D:\Users\n507\Desktop\PoofSP2\Studio Project 2 Solution\Debug\MyGraphics.exe
   MyGraphics.vcxproj -> D:\Users\n507\Desktop\PoofSP2\Studio Project 2 Solution\Debug\MyGraphics.pdb (Full PDB)

@@ -103,7 +103,7 @@ class Scene3 : public Scene
 
 	enum OBJECTS
 	{
-		OBJ_XXX,
+		OBJ_X,
 
 		NUM_OBJECTS,
 	};
