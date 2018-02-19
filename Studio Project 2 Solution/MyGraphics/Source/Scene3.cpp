@@ -284,6 +284,8 @@ void Scene3::Init()
 	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
 	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INCUBATOR] = MeshBuilder::GenerateText("invTrap", 16, 16);
+	meshList[GEO_INV_INCUBATOR]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
@@ -749,19 +751,22 @@ void Scene3::Render()
 	inv3 << Inventory::instance()->items[ITEMS_MEAT];
 	std::ostringstream inv4;
 	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::ostringstream inv5;
+	inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
 	std::string red = inv1.str();
 	std::string blu = inv2.str();
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
+	std::string inc = inv5.str();
 
 	if (Inventory::instance()->showInventory)
 	{
-		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 10, 50, 10, 10);
-		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
-		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
-		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
-		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
-		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 40, 20, 20);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 4, 8.5, 13.5);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 4, 8.5, 11.5);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 4, 8.5, 9.5);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 4, 8.5, 7.9);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 4, 8.5, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
