@@ -83,6 +83,10 @@ class Scene2 : public Scene
 		GEO_DINOEGG,
 		GEO_PTERO,
 		GEO_FENCE,
+		GEO_REDINV,
+		GEO_BLUINV,
+		GEO_TRAPINV,
+		GEO_INVINTERFACE,
 		
 		NUM_GEOMETRY,
 	};
@@ -130,6 +134,7 @@ private:
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool collision(Vector3);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float rotateMain = 0;
 
 	bool hungry = true;

@@ -9,6 +9,7 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include "Inventory.h"
 
 
 Scene2::Scene2()
@@ -161,6 +162,17 @@ void Scene2::Init()
 
 	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
+	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
+	meshList[GEO_BLUINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_TRAPINV] = MeshBuilder::GenerateText("trpInv", 16, 16);
+	meshList[GEO_TRAPINV]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INVINTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INVINTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 	meshList[GEO_PTERO] = MeshBuilder::GenerateOBJ("objs2", "OBJ//pterodactyl.obj");
@@ -225,6 +237,7 @@ void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+	Inventory::instance()->Update(dt);
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -240,12 +253,15 @@ void Scene2::Update(double dt)
 	}
 	if (Application::IsKeyPressed('X') && camera.position.z >= 19.0f)
 	{
-		if (hungry && pteroStage != P_EGG) {
+		// hungry + Meat
+		if (hungry && pteroStage != P_EGG && Inventory::instance()->items[ITEMS_MEAT] > 0) {
 			hungry = false;
+			Inventory::instance()->items[ITEMS_MEAT]--;
 		}
-		if (pteroStage == P_EGG && !incubating) {
+		// egg + incubator
+		if (pteroStage == P_EGG && !incubating && Inventory::instance()->items[ITEMS_INCUBATOR] != 0) {
 			incubating = true;
-			std::cout << "Incubating egg" << std::endl;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 0;
 		}
 	}
 
@@ -563,6 +579,30 @@ void Scene2::Render()
 	ah << framerate;
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+
+	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	std::ostringstream inv1;
+	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
+	std::ostringstream inv2;
+	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
+	std::ostringstream inv3;
+	inv3 << Inventory::instance()->items[ITEMS_MEAT];
+	std::ostringstream inv4;
+	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::string red = inv1.str();
+	std::string blu = inv2.str();
+	std::string met = inv3.str();
+	std::string trp = inv4.str();
+
+	if (Inventory::instance()->showInventory)
+	{
+		RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
+		RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
+		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
+		RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+	}
+	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
 
 void Scene2::Exit()
@@ -750,4 +790,24 @@ bool Scene2::collision(Vector3 c)
 	else {
 		return false;
 	}
+}
+
+void Scene2::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(sizex, sizey, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }
