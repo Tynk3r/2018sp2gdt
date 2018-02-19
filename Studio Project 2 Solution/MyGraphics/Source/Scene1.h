@@ -12,6 +12,9 @@
 #include "Utility.h"
 #include "RingObject.h"
 #include "timer.h"
+
+#include <stdlib.h>
+#include <time.h>
 //#include <irrKlang.h>
 
 class Scene1 : public Scene
@@ -102,7 +105,6 @@ class Scene1 : public Scene
 		GEO_DINO,
 		GEO_TREE,
 		GEO_CLIFF,
-
 		GEO_TEXT,
 
 		NUM_GEOMETRY

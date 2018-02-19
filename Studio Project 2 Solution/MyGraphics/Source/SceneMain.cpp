@@ -85,10 +85,11 @@ void SceneMain::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
+	// Lightings
 	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 10, 0);
-	light[0].color.Set(1, 1, 1);
-	light[0].power = 10;
+	light[0].position.Set(0, 10, 3);
+	light[1].color.Set(0.898, 0.627, 0.125);
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -96,6 +97,30 @@ void SceneMain::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[1].type = Light::LIGHT_DIRECTIONAL;
+	light[1].position.Set(2, 2, 2);
+	light[1].color.Set(0.898, 0.627, 0.125);
+	light[1].power = 2;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[2].type = Light::LIGHT_DIRECTIONAL;
+	light[2].position.Set(-1, -1, -1);
+	light[2].color.Set(0.823, 0.466, 0.058);
+	light[2].power = 2;
+	light[2].kC = 1.f;
+	light[2].kL = 0.01f;
+	light[2].kQ = 0.001f;
+	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[2].cosInner = cos(Math::DegreeToRadian(30));
+	light[2].exponent = 3.f;
+	light[2].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -161,7 +186,15 @@ void SceneMain::Init()
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
+
+
+	//Set Collisions//
 	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
+	objs[OBJ_TREE1].setBox(Vector3(-30, -16, -1), 5);
+	objs[OBJ_TREE2].setBox(Vector3(0, -16, -30), 5);
+	objs[OBJ_TREE3].setBox(Vector3(30, -16, -1), 5);
 }
 
 void SceneMain::Update(double dt)
@@ -177,7 +210,7 @@ void SceneMain::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
 	}
-	else if (Application::IsKeyPressed('6'))
+	else if (camera.position.z >= 185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
 	}
@@ -261,6 +294,27 @@ void SceneMain::Render()
 
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
+
+	//Trees//
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
+	viewStack.Scale(objs[1].getSize(), objs[1].getSize(), objs[1].getSize());
+	viewStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
+	viewStack.Scale(objs[2].getSize(), objs[2].getSize(), objs[2].getSize());
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
+	viewStack.Scale(objs[3].getSize(), objs[3].getSize(), objs[3].getSize());
+	viewStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
 
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
