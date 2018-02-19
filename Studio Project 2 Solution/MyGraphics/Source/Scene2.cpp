@@ -179,12 +179,23 @@ void Scene2::Init()
 	meshList[GEO_PTERO]->textureID = LoadTGA("Image//pterodactyl.tga");
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
+	meshList[GEO_CAMPFIRE_BASE] = MeshBuilder::GenerateOBJ("objs4", "OBJ//campfireBase.obj");
+	meshList[GEO_CAMPFIRE_BASE]->textureID = LoadTGA("Image//campfireBase.tga");
+	meshList[GEO_CAMPFIRE_WOOD] = MeshBuilder::GenerateOBJ("objs5", "OBJ//campfireWood.obj");
+	meshList[GEO_CAMPFIRE_WOOD]->textureID = LoadTGA("Image//campfireWood.tga");
+	meshList[GEO_SKELETON] = MeshBuilder::GenerateOBJ("objs6", "OBJ//skeleton.obj");
+	meshList[GEO_SKELETON]->textureID = LoadTGA("Image//skeleton.tga");
+	meshList[GEO_INCUBATOR] = MeshBuilder::GenerateOBJ("objs7", "OBJ//incubator.obj");
+	meshList[GEO_INCUBATOR]->textureID = LoadTGA("Image//incubator.tga");
 
 	objs[OBJ_DINOEGG].setBox(Vector3(pteroLocationX, 0, pteroLocationZ), 10);
 	objs[OBJ_PTERO_BABY].setBox(Vector3(pteroLocationX, 5, pteroLocationZ), 10); 
 	objs[OBJ_PTERO_ADOLESCENT].setBox(Vector3(pteroLocationX, 10, pteroLocationZ), 25);
 	objs[OBJ_PTERO_ADULT].setBox(Vector3(pteroLocationX, 20, pteroLocationZ), 40);
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
+	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
+	objs[OBJ_SKELETON].setBox(Vector3(-70, 0, 70), 2);
+	objs[OBJ_INCUBATOR].setBox(Vector3(70, -1, 85), 7);
 
 	camera.SkyboxSize = 100.0f;
 
@@ -471,6 +482,7 @@ void Scene2::Render()
 	RenderSkybox(camera.SkyboxSize, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
+	// pterodactyl
 	switch (pteroStage) {
 	case P_EGG:
 		viewStack.PushMatrix();
@@ -510,20 +522,42 @@ void Scene2::Render()
 		viewStack.PopMatrix();
 		break;
 	}
-
-	for (int i = 0; i <= 200; i += 10) { // fence
+	// fences
+	for (int i = 0; i <= 200; i += 10) {
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
 		viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
 		RenderMesh(meshList[GEO_FENCE], godlights);
 		viewStack.PopMatrix();
 	}
+	//campfire
+	viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_CAMPFIRE].getPos().x, objs[OBJ_CAMPFIRE].getPos().y, objs[OBJ_CAMPFIRE].getPos().z);
+		viewStack.Rotate(0, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
+		RenderMesh(meshList[GEO_CAMPFIRE_BASE], godlights);
+		RenderMesh(meshList[GEO_CAMPFIRE_WOOD], godlights);
+	viewStack.PopMatrix();
+	//skeleton
+	viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_SKELETON].getPos().x, objs[OBJ_SKELETON].getPos().y, objs[OBJ_SKELETON].getPos().z);
+		viewStack.Rotate(32, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_SKELETON].getSizeX(), objs[OBJ_SKELETON].getSizeY(), objs[OBJ_SKELETON].getSizeZ());
+		RenderMesh(meshList[GEO_SKELETON], godlights);
+	viewStack.PopMatrix();
+	// incubator
+	viewStack.PushMatrix();
+		viewStack.Translate(objs[OBJ_INCUBATOR].getPos().x, objs[OBJ_INCUBATOR].getPos().y, objs[OBJ_INCUBATOR].getPos().z);
+		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.Scale(objs[OBJ_INCUBATOR].getSizeX(), objs[OBJ_INCUBATOR].getSizeY(), objs[OBJ_INCUBATOR].getSizeZ());
+		RenderMesh(meshList[GEO_INCUBATOR], godlights);
+	viewStack.PopMatrix();
 
 	/* sampel
 	viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
 		viewStack.Translate(0, 0, 0);
 		viewStack.Rotate(0, 0, 1, 0);
+		viewStack.Scale(1, 1, 1);
 		RenderMesh(meshList[], godlights);
 		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
 	viewStack.PopMatrix();
@@ -536,8 +570,13 @@ void Scene2::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "EGG INCUBATED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z >= 19.0f) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO INCUBATE EGG", Color(1, 0, 0), 2, 1, 29);
+		else if (camera.position.z > 0.0f) {
+			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO INCUBATE EGG", Color(1, 0, 0), 2, 1, 29);
+			}
+			else {
+				RenderTextOnScreen(meshList[GEO_TEXT], "OBTAIN INCUBATOR", Color(1, 0, 0), 2, 1, 29);
+			}
 		}
 		break;
 	case P_BABY:
@@ -546,8 +585,13 @@ void Scene2::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z >= 19.0f) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		else if (camera.position.z > 0.0f) {
+			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+			}
+			else {
+				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
+			}
 		}
 		break;
 	case P_ADOLESCENT:
@@ -556,8 +600,13 @@ void Scene2::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z >= 19.0f) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		else if (camera.position.z > 0.0f) {
+			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+			}
+			else {
+				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
+			}
 		}
 		break;
 	case P_ADULT:
@@ -566,12 +615,16 @@ void Scene2::Render()
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z >= 19.0f) {
-			RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+		else if (camera.position.z > 0.0f) {
+			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
+			}
+			else {
+				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
+			}
 		}
 		break;
 	default:
-		
 		break;
 	}
 

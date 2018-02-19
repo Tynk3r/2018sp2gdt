@@ -66,7 +66,6 @@ class Scene2 : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
-
 	};
 
 	enum GEOMETRY_TYPE
@@ -87,6 +86,10 @@ class Scene2 : public Scene
 		GEO_BLUINV,
 		GEO_TRAPINV,
 		GEO_INVINTERFACE,
+		GEO_CAMPFIRE_BASE,
+		GEO_CAMPFIRE_WOOD,
+		GEO_SKELETON,
+		GEO_INCUBATOR,
 		
 		NUM_GEOMETRY,
 	};
@@ -99,6 +102,9 @@ class Scene2 : public Scene
 		OBJ_PTERO_ADOLESCENT, 
 		OBJ_PTERO_ADULT,
 		OBJ_FENCE,
+		OBJ_CAMPFIRE,
+		OBJ_SKELETON,
+		OBJ_INCUBATOR,
 
 		NUM_OBJECTS,
 	};
