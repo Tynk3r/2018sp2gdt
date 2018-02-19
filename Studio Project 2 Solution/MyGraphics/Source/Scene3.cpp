@@ -25,7 +25,7 @@ void Scene3::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 20, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	//Keep this here//
 	//Should be done everytime scene 3 is loaded up//
@@ -180,7 +180,7 @@ void Scene3::Init()
 	glEnable(GL_DEPTH_TEST);
 
 	light[0].type = Light::LIGHT_SPOT;
-	light[0].position.Set(0, 199, 0);
+	light[0].position.Set(0, 0, 0);
 	light[0].color.Set(1, 1, 1);
 	light[0].power = 10;
 	light[0].kC = 1.f;
@@ -190,6 +190,18 @@ void Scene3::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(90));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	/*light[1].type = Light::LIGHT_SPOT;
+	light[1].position.Set(0, 0, 0);
+	light[1].color.Set(100, 100, 0);
+	light[1].power = 10;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(90));
+	light[1].cosInner = cos(Math::DegreeToRadian(90));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);*/
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -257,12 +269,14 @@ void Scene3::Init()
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
 
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
 	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
 	meshList[GEO_BLUINV]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_TRAPINV] = MeshBuilder::GenerateText("trpInv", 16, 16);
 	meshList[GEO_TRAPINV]->textureID = LoadTGA("Image//calibri.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
@@ -278,6 +292,7 @@ void Scene3::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+	Inventory::instance()->Update(dt);
 
 	if (Application::IsKeyPressed('6') || Application::IsKeyPressed('\b'))
 	{
@@ -298,10 +313,10 @@ void Scene3::Update(double dt)
 
 	if (Application::IsKeyPressed('V') && (camera.position.x <= 125.0f && camera.position.x >= 95.0f && camera.position.z <= 85.0f && camera.position.z >= 55.0f)) //Trap Interactions
 	{
-		if ((trappedBush1 == false) && (invTraps != 0)) //Setting a trap
+		if ((trappedBush1 == false) && (Inventory::instance()->items[ITEMS_TRAP] != 0)) //Setting a trap
 		{
 			trap1State = 1;
-			invTraps -= 1;
+			Inventory::instance()->items[ITEMS_TRAP] -= 1;
 			trappedBush1 = true;
 		}
 
@@ -309,7 +324,7 @@ void Scene3::Update(double dt)
 		{
 			trappedBush1 = false;
 			trap1State = 0;
-			meat += 2;
+			Inventory::instance()->items[ITEMS_MEAT] += 2;
 		}
 	}
 
@@ -327,18 +342,18 @@ void Scene3::Update(double dt)
 
 	if (Application::IsKeyPressed('V') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) //Trap Interactions
 		{
-			if ((trappedBush2 == false) && (invTraps != 0)) //Setting a trap
+			if ((trappedBush2 == false) && (Inventory::instance()->items[ITEMS_TRAP] != 0)) //Setting a trap
 			{
 				trappedBush2 = true;
 				trap2State = 1;
-				invTraps -= 1;
+				Inventory::instance()->items[ITEMS_TRAP] -= 1;
 			}
 
 			else if (trap2State == 2) //Collecting trapped animal
 			{
 				trappedBush2 = false;
 				trap2State = 0;
-				meat += 2;
+				Inventory::instance()->items[ITEMS_MEAT] += 2;
 			}
 		}
 
@@ -358,11 +373,11 @@ void Scene3::Update(double dt)
 		{
 			if (trappedBush3 == false) //Setting a trap
 			{
-				if (invTraps > 0) //Checks for traps in inv
+				if (Inventory::instance()->items[ITEMS_TRAP] > 0) //Checks for traps in inv
 				{
 					trappedBush3 = true;
 					trap3State = 1;
-					invTraps -= 1;
+					Inventory::instance()->items[ITEMS_TRAP] -= 1;
 				}
 			}
 
@@ -370,7 +385,7 @@ void Scene3::Update(double dt)
 			{
 				trappedBush3 = false;
 				trap3State = 0;
-				meat += 2;
+				Inventory::instance()->items[ITEMS_MEAT] += 2;
 			}
 		}
 
@@ -390,11 +405,11 @@ void Scene3::Update(double dt)
 		{
 			if (trappedBush4 == false) //Setting a trap
 			{
-				if (invTraps > 0) //Checks for traps in inv
+				if (Inventory::instance()->items[ITEMS_TRAP] > 0) //Checks for traps in inv
 				{
 					trappedBush4 = true;
 					trap4State = 1;
-					invTraps -= 1;
+					Inventory::instance()->items[ITEMS_TRAP] -= 1;
 				}
 			}
 
@@ -402,7 +417,7 @@ void Scene3::Update(double dt)
 			{
 				trappedBush4 = false;
 				trap4State = 0;
-				meat += 2;
+				Inventory::instance()->items[ITEMS_MEAT] += 2;
 			}
 		}
 
@@ -422,11 +437,11 @@ void Scene3::Update(double dt)
 	{
 		if (trappedBush5 == false) //Setting a trap
 		{
-			if (invTraps > 0) //Checks for traps in inv
+			if (Inventory::instance()->items[ITEMS_TRAP] > 0) //Checks for traps in inv
 			{
 				trappedBush5 = true;
 				trap5State = 1;
-				invTraps -= 1;
+				Inventory::instance()->items[ITEMS_TRAP] -= 1;
 			}
 		}
 
@@ -434,17 +449,8 @@ void Scene3::Update(double dt)
 		{
 			trappedBush5 = false;
 			trap5State = 0;
-			meat += 2;
+			Inventory::instance()->items[ITEMS_MEAT] += 2;
 		}
-	}
-
-	if (Application::IsKeyPressed('I'))
-	{
-		showInventory = true;
-	}
-	else
-	{
-		showInventory = false;
 	}
 }
 
@@ -453,8 +459,8 @@ void Scene3::getFruuts()
 	int gain = 0;
 	srand(time(NULL));
 	gain = rand() % 5 + 1;
-	redFruits += gain;
-	bluFruits += (5 - gain);
+	Inventory::instance()->items[ITEMS_REDFRUIT] += gain;
+	Inventory::instance()->items[ITEMS_BLUFRUIT] += (5 - gain);
 }
 
 void Scene3::Render()
@@ -730,23 +736,24 @@ void Scene3::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);*/
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
-	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set a trap", Color(1, 1, 1), 1.5, 33, 37);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<I> to show inventory", Color(1, 1, 1), 1.5, 33, 39);
 
+	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 	std::ostringstream inv1;
-	inv1 << redFruits;
+	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
 	std::ostringstream inv2;
-	inv2 << bluFruits;
+	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
 	std::ostringstream inv3;
-	inv3 << meat;
+	inv3 << Inventory::instance()->items[ITEMS_MEAT];
 	std::ostringstream inv4;
-	inv4 << invTraps;
+	inv4 << Inventory::instance()->items[ITEMS_TRAP];
 	std::string red = inv1.str();
 	std::string blu = inv2.str();
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
 
-	if (showInventory == true)
+	if (Inventory::instance()->showInventory)
 	{
 		RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
 		RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
@@ -754,6 +761,7 @@ void Scene3::Render()
 		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
 		RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
 	}
+	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
 
 void Scene3::Exit()

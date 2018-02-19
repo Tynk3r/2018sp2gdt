@@ -219,6 +219,7 @@ void Scene4::Update(double dt)
 	// TODO remove the above testing code
 
 	framerate = 1.0 / dt;
+
 	if (shopping == false)
 	{
 		camera.Update(dt);
@@ -306,7 +307,10 @@ void Scene4::Update(double dt)
 				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxY)
 				{
-					itemQuantity -= 1;
+					if (itemQuantity >= 1)
+					{
+						itemQuantity -= 1;
+					}
 				}
 				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxY)
@@ -316,8 +320,10 @@ void Scene4::Update(double dt)
 				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxY)
 				{
-					itemQuantity -= 10;
-
+					if (itemQuantity >= 10)
+					{
+						itemQuantity -= 10;
+					}
 				}
 				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxY)
@@ -327,42 +333,41 @@ void Scene4::Update(double dt)
 				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxY)
 				{
-					itemQuantity -= 100;
+					if (itemQuantity >= 100)
+					{
+						itemQuantity -= 100;
+					}
 				}
 			}
 
 			// Resolve the shopAction
 			if (shopAction == SHOP_BUY_FRUIT)
 			{
-				int currency = 0;
 				if (currency >= (shop.cost[SHOP_BUY_FRUIT] * itemQuantity))
 				{
-					currency - (shop.cost[SHOP_BUY_FRUIT] * itemQuantity);
+					currency -= (shop.cost[SHOP_BUY_FRUIT] * itemQuantity);
 					fruit += itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_BUY_MEAT)
 			{
-				int currency = 0;
 				if (currency >= (shop.cost[SHOP_BUY_MEAT] * itemQuantity))
 				{
-					currency - (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
+					currency -= (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
 					meat += itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_BUY_TRAP)
 			{
-				int currency = 0;
 				if (currency >= (shop.cost[SHOP_BUY_TRAP] * itemQuantity))
 				{
-					currency - (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
+					currency -= (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
 					trap += itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_SELL_FRUIT)
 			{
-				int currency = 0;
-				if (currency >= (shop.cost[SHOP_SELL_FRUIT] * itemQuantity))
+				if (fruit >= itemQuantity)
 				{
 					currency += (shop.cost[SHOP_SELL_FRUIT] * itemQuantity);
 					fruit -= itemQuantity;
@@ -370,8 +375,7 @@ void Scene4::Update(double dt)
 			}
 			if (shopAction == SHOP_SELL_MEAT)
 			{
-				int currency = 0;
-				if (currency >= (shop.cost[SHOP_SELL_MEAT] * itemQuantity))
+				if (meat >= itemQuantity)
 				{
 					currency += (shop.cost[SHOP_SELL_MEAT] * itemQuantity);
 					meat -= itemQuantity;
@@ -379,8 +383,7 @@ void Scene4::Update(double dt)
 			}
 			if (shopAction == SHOP_SELL_TRAP)
 			{
-				int currency = 0;
-				if (currency >= (shop.cost[SHOP_SELL_TRAP] * itemQuantity))
+				if (trap >= itemQuantity)
 				{
 					currency += (shop.cost[SHOP_SELL_TRAP] * itemQuantity);
 					trap -= itemQuantity;

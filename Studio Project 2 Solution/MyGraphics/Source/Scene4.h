@@ -13,6 +13,7 @@
 
 #include "NPC.h"
 #include "Shop.h"
+#include "Inventory.h"
 
 class Scene4 : public Scene
 {

@@ -88,12 +88,6 @@ void Object::setSize(float xSize, float ySize, float zSize)
 	halfSizeY = sizeY / 2;
 	halfSizeZ = sizeZ / 2;
 
-	/*minX = (position.x * sizeX) - halfSizeX;
-	maxX = (position.x * sizeX) + halfSizeX;
-	minY = (position.y * sizeY) - halfSizeY;
-	maxY = (position.y * sizeY) + halfSizeY;
-	minZ = (position.z * sizeZ) - halfSizeZ;
-	maxZ = (position.z * sizeZ) + halfSizeZ;*/
 	minX = position.x - halfSizeX;
 	maxX = position.x + halfSizeX;
 	minY = position.y - halfSizeY;
@@ -136,9 +130,9 @@ void Object::setBox(Vector3 pos, float xSize, float ySize, float zSize)
 	minX = position.x - halfSizeX;
 	maxX = position.x + halfSizeX;
 	minY = position.y - halfSizeY;
-	maxY =position.y + halfSizeY;
+	maxY = position.y + halfSizeY;
 	minZ = position.z - halfSizeZ;
-	maxZ =position.z + halfSizeZ;
+	maxZ = position.z + halfSizeZ;
 }
 
 Vector3 Object::getPos(void)
