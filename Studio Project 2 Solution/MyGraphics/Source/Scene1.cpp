@@ -20,7 +20,9 @@ Scene1::~Scene1()
 
 void Scene1::Init()
 {
-	currentRing = 0;
+	//Ptero = Scene2::currentPtero;
+
+	currentRing.setID(0);
 	points = 0;
 	ringpos = Vector3(0, -23, 0);
 	totalTime = 1500;
@@ -139,6 +141,18 @@ void Scene1::Init()
 	light[2].exponent = 3.f;
 	light[2].spotDirection.Set(0.f, 1.f, 0.f);
 
+	light[3].type = Light::LIGHT_POINT;
+	light[3].position.Set(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+	light[3].color.Set(1, 0.01, 1);
+	light[3].power = 10;
+	light[3].kC = 1.f;
+	light[3].kL = 0.01f;
+	light[3].kQ = 0.001f;
+	light[3].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[3].cosInner = cos(Math::DegreeToRadian(30));
+	light[3].exponent = 3.f;
+	light[3].spotDirection.Set(0.f, 1.f, 0.f);
+
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -208,8 +222,11 @@ void Scene1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("hoop",Color(1,0,0),4,5);
-	meshList[GEO_SMALLRING] = MeshBuilder::GenerateRing("lastone", Color(0, 0, 1), 2, 4);
+	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("hoop", "OBJ//ring.obj");
+	meshList[GEO_RING]->textureID = LoadTGA("Image//top.tga");
+
+	meshList[GEO_SMALLRING] = MeshBuilder::GenerateOBJ("last hoop", "OBJ//ring.obj");
+	meshList[GEO_SMALLRING]->textureID = LoadTGA("Image//bottom.tga");
 
 	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
 	meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
@@ -248,7 +265,7 @@ void Scene1::Update(double dt)
 
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing == 21)
+	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing.getID() == 21)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
@@ -266,10 +283,12 @@ void Scene1::Update(double dt)
 	}
 	if (Application::IsKeyPressed('R')) // Reset Points
 	{
-		currentRing = 0;
+		currentRing.setID(0);
 		points = 0;
 		totalTime = 1500;
 	}
+
+	light[3].position.Set(objs[currentRing.getID()].getPos().x, objs[currentRing.getID()].getPos().y, objs[currentRing.getID()].getPos().z);
 
 	collideRing(camera.position);
 	if (collideRing(camera.position) > -1)
@@ -379,7 +398,7 @@ void Scene1::Render()
 	//Render Ring
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
-		if (currentRing == i)
+		if (currentRing.getID() == i)
 		{
 			viewStack.PushMatrix();
 			viewStack.Scale(1, 1, 1);
@@ -389,7 +408,7 @@ void Scene1::Render()
 			viewStack.PopMatrix();
 		}
 	}
-	if (currentRing == 20)
+	if (currentRing.getID() == 20)
 	{
 		viewStack.PushMatrix();
 		viewStack.Scale(1, 1, 1);
@@ -429,7 +448,7 @@ void Scene1::Render()
 	std::string str3 = eh.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "Points:" + str3, Color(0, 0, 1), 2, 1, 3);
 	std::ostringstream uh;
-	uh << currentRing;
+	uh << currentRing.getID();
 	std::string str4 = uh.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring:" + str4, Color(1, 0, 1), 2, 1, 4);
 	std::ostringstream mh;
@@ -449,7 +468,7 @@ void Scene1::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You ran out of time!", Color(1, 0.1, 0.1), 3, 5, 9);
 	}
-	if (currentRing == 21)
+	if (currentRing.getID() == 21)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
 	}
@@ -687,18 +706,18 @@ void Scene1::HandleRingCollide(int id)
 {
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
-		if (currentRing == i)
+		if (currentRing.getID() == i)
 		{
 			if (id == objs[i].getID())
 			{
 				points += 10;
-				currentRing++;
+				currentRing.setID(i+1);
 			}
 		}
 	}
 	if (id == 20)
 	{
 		points += 50;
-		currentRing = 21;
+		currentRing.setID(21);
 	}
 }

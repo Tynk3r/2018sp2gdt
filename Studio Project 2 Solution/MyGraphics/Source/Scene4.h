@@ -105,13 +105,21 @@ class Scene4 : public Scene
 		GEO_KUBELWAGEN,
 		GEO_BUSH,
 		GEO_DEER,
-		GEO_TEXT,
 
+		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+		GEO_INV_REDFRUIT,
+		GEO_INV_BLUFRUIT,
+		GEO_INV_MEAT,
+		GEO_INV_TRAP,
+		GEO_INV_INCUBATOR,
+		GEO_INV_INTERFACE,
+		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 		GEO_PLACEHOLDER_NPC,
 		GEO_PLACEHOLDER_TEXT_BOX1,
 		GEO_PLACEHOLDER_TEXT_BOX2,
 
+		GEO_TEXT,
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];
@@ -158,16 +166,10 @@ private:
 	bool godlights = false;
 
 	// For shop
-	bool shopping = false;				// If the player is in the process of shopping (Switch to mouse controls)
 	bool clicked = false;
-	int clickedDelay = 0;			// Prevent the double click buy/sell
-	int itemQuantity = 0;			// The quantity of a item that the player wants to buy/sell
-	SHOP_ACTION shopAction = SHOP_EXIT;	// The action that the player wants, buy/sell. exit = do nothing
-
-	//TODO replace this with actual currency
-	int currency = 100;	// Temp player currency
-	int fruit = 10;	// Temp player fruits
-	int meat = 10;	// Temp player meat
-	int trap = 10;	// Temp player traps
+	bool shopping = false;								// If the player is in the process of shopping (Switch to mouse controls)
+	int clickedDelay = 0;								// Prevent the double click buy/sell
+	int itemQuantity = 0;								// The quantity of a item that the player wants to buy/sell
+	SHOP_ACTION shopAction = SHOP_EXIT;					// The action that the player wants, buy/sell. exit = do nothing
 };
 #endif

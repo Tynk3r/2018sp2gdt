@@ -263,20 +263,8 @@ void Scene3::Init()
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_EXPLAINTEXT] = MeshBuilder::GenerateText("foragingInstruction", 16, 16);
 	meshList[GEO_EXPLAINTEXT]->textureID = LoadTGA("Image//calibri.tga");
-
-	meshList[GEO_INVINTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	meshList[GEO_INVINTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
-
-	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
-	meshList[GEO_REDINV] = MeshBuilder::GenerateText("redInv", 16, 16);
-	meshList[GEO_REDINV]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_BLUINV] = MeshBuilder::GenerateText("bluInv", 16, 16);
-	meshList[GEO_BLUINV]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TRAPINV] = MeshBuilder::GenerateText("trpInv", 16, 16);
-	meshList[GEO_TRAPINV]->textureID = LoadTGA("Image//calibri.tga");
-	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
@@ -284,8 +272,23 @@ void Scene3::Init()
 	meshList[GEO_BUSH] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempBush.obj");
 	meshList[GEO_BUSH]->textureID = LoadTGA("Image//bush.tga");
 
-	meshList[GEO_FRUITRED] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
-	meshList[GEO_FRUITRED]->textureID = LoadTGA("Image//fruitRed.tga");
+	meshList[GEO_REDFRUIT] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
+	meshList[GEO_REDFRUIT]->textureID = LoadTGA("Image//fruitRed.tga");
+
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
+	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_BLUFRUIT] = MeshBuilder::GenerateText("invBluFruit", 16, 16);
+	meshList[GEO_INV_BLUFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_MEAT] = MeshBuilder::GenerateText("invMeat", 16, 16);
+	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
+	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INCUBATOR] = MeshBuilder::GenerateText("invTrap", 16, 16);
+	meshList[GEO_INV_INCUBATOR]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 }
 
 void Scene3::Update(double dt)
@@ -557,7 +560,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(110, 30, 70);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_FRUITRED], light);
+		RenderMesh(meshList[GEO_REDFRUIT], light);
 		viewStack.PopMatrix();
 	}
 
@@ -594,7 +597,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(-30, 30, 50);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_FRUITRED], light);
+		RenderMesh(meshList[GEO_REDFRUIT], light);
 		viewStack.PopMatrix();
 	}
 
@@ -631,7 +634,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(150, 30, -90);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_FRUITRED], light);
+		RenderMesh(meshList[GEO_REDFRUIT], light);
 		viewStack.PopMatrix();
 	}
 
@@ -668,7 +671,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(80, 30, -150);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_FRUITRED], light);
+		RenderMesh(meshList[GEO_REDFRUIT], light);
 		viewStack.PopMatrix();
 	}
 
@@ -705,7 +708,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(-70, 30, -100);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_FRUITRED], light);
+		RenderMesh(meshList[GEO_REDFRUIT], light);
 		viewStack.PopMatrix();
 	}
 
@@ -748,18 +751,22 @@ void Scene3::Render()
 	inv3 << Inventory::instance()->items[ITEMS_MEAT];
 	std::ostringstream inv4;
 	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::ostringstream inv5;
+	inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
 	std::string red = inv1.str();
 	std::string blu = inv2.str();
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
+	std::string inc = inv5.str();
 
 	if (Inventory::instance()->showInventory)
 	{
-		RenderMeshOnScreen(meshList[GEO_INVINTERFACE], 10, 50, 10, 10);
-		RenderTextOnScreen(meshList[GEO_REDINV], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
-		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
-		RenderTextOnScreen(meshList[GEO_BLUINV], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
-		RenderTextOnScreen(meshList[GEO_TRAPINV], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 40, 20, 20);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 4, 8.5, 13.5);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 4, 8.5, 11.5);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 4, 8.5, 9.5);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 4, 8.5, 7.9);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 4, 8.5, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }

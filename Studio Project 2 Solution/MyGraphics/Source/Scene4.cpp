@@ -201,6 +201,18 @@ void Scene4::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
+	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_BLUFRUIT] = MeshBuilder::GenerateText("invBluFruit", 16, 16);
+	meshList[GEO_INV_BLUFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_MEAT] = MeshBuilder::GenerateText("invMeat", 16, 16);
+	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
+	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
@@ -219,6 +231,7 @@ void Scene4::Update(double dt)
 	// TODO remove the above testing code
 
 	framerate = 1.0 / dt;
+	Inventory::instance()->Update(dt);
 
 	if (shopping == false)
 	{
@@ -264,10 +277,17 @@ void Scene4::Update(double dt)
 					camera.prevY = Application::GetCursorY();
 					clicked = true;
 				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_FRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_FRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_FRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_FRUIT].maxY)
+
+				// Assign the shopAction
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_REDFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_REDFRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_REDFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_REDFRUIT].maxY)
 				{
-					shopAction = SHOP_BUY_FRUIT;
+					shopAction = SHOP_BUY_REDFRUIT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_BLUFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_BLUFRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_BLUFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_BLUFRUIT].maxY)
+				{
+					shopAction = SHOP_BUY_BLUFRUIT;
 				}
 				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_MEAT].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_BUY_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_MEAT].maxY)
@@ -279,10 +299,20 @@ void Scene4::Update(double dt)
 				{
 					shopAction = SHOP_BUY_TRAP;
 				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_FRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_FRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_FRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_FRUIT].maxY)
+				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_INCUBATOR].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_INCUBATOR].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_BUY_INCUBATOR].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_INCUBATOR].maxY)
 				{
-					shopAction = SHOP_SELL_FRUIT;
+					shopAction = SHOP_BUY_INCUBATOR;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_REDFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_REDFRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_REDFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_REDFRUIT].maxY)
+				{
+					shopAction = SHOP_SELL_REDFRUIT;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_BLUFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_BLUFRUIT].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_BLUFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_BLUFRUIT].maxY)
+				{
+					shopAction = SHOP_SELL_BLUFRUIT;
 				}
 				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_MEAT].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_SELL_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_MEAT].maxY)
@@ -293,6 +323,11 @@ void Scene4::Update(double dt)
 					Application::GetCursorY() >= shop.coord[SHOP_SELL_TRAP].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_TRAP].maxY)
 				{
 					shopAction = SHOP_SELL_TRAP;
+				}
+				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_INCUBATOR].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_INCUBATOR].maxX &&
+					Application::GetCursorY() >= shop.coord[SHOP_SELL_INCUBATOR].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_INCUBATOR].maxY)
+				{
+					shopAction = SHOP_SELL_INCUBATOR;
 				}
 				if (Application::GetCursorX() >= shop.coord[SHOP_RESET_QUANTITY].minX && Application::GetCursorX() <= shop.coord[SHOP_RESET_QUANTITY].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_RESET_QUANTITY].minY && Application::GetCursorY() <= shop.coord[SHOP_RESET_QUANTITY].maxY)
@@ -341,65 +376,100 @@ void Scene4::Update(double dt)
 			}
 
 			// Resolve the shopAction
-			if (shopAction == SHOP_BUY_FRUIT)
+			if (shopAction == SHOP_BUY_REDFRUIT)
 			{
-				if (currency >= (shop.cost[SHOP_BUY_FRUIT] * itemQuantity))
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_REDFRUIT] * itemQuantity))
 				{
-					currency -= (shop.cost[SHOP_BUY_FRUIT] * itemQuantity);
-					fruit += itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_REDFRUIT] * itemQuantity);
+					Inventory::instance()->items[ITEMS_REDFRUIT] += itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_BUY_BLUFRUIT)
+			{
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_BLUFRUIT] * itemQuantity))
+				{
+					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_BLUFRUIT] * itemQuantity);
+					Inventory::instance()->items[ITEMS_BLUFRUIT] += itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_BUY_MEAT)
 			{
-				if (currency >= (shop.cost[SHOP_BUY_MEAT] * itemQuantity))
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_MEAT] * itemQuantity))
 				{
-					currency -= (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
-					meat += itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
+					Inventory::instance()->items[ITEMS_MEAT] += itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_BUY_TRAP)
 			{
-				if (currency >= (shop.cost[SHOP_BUY_TRAP] * itemQuantity))
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_TRAP] * itemQuantity))
 				{
-					currency -= (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
-					trap += itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
+					Inventory::instance()->items[ITEMS_TRAP] += itemQuantity;
 				}
 			}
-			if (shopAction == SHOP_SELL_FRUIT)
+			if (shopAction == SHOP_BUY_INCUBATOR)
 			{
-				if (fruit >= itemQuantity)
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_INCUBATOR] * itemQuantity))
 				{
-					currency += (shop.cost[SHOP_SELL_FRUIT] * itemQuantity);
-					fruit -= itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_INCUBATOR] * itemQuantity);
+					Inventory::instance()->items[ITEMS_INCUBATOR] += itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_SELL_REDFRUIT)
+			{
+				if (Inventory::instance()->items[ITEMS_REDFRUIT] >= itemQuantity)
+					{
+						Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_REDFRUIT] * itemQuantity);
+						Inventory::instance()->items[ITEMS_REDFRUIT] -= itemQuantity;
+					}
+				}
+			if (shopAction == SHOP_SELL_BLUFRUIT)
+			{
+				if (Inventory::instance()->items[ITEMS_BLUFRUIT] >= itemQuantity)
+				{
+					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_BLUFRUIT] * itemQuantity);
+					Inventory::instance()->items[ITEMS_BLUFRUIT] -= itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_SELL_MEAT)
 			{
-				if (meat >= itemQuantity)
+				if (Inventory::instance()->items[ITEMS_MEAT] >= itemQuantity)
 				{
-					currency += (shop.cost[SHOP_SELL_MEAT] * itemQuantity);
-					meat -= itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_MEAT] * itemQuantity);
+					Inventory::instance()->items[ITEMS_MEAT] -= itemQuantity;
 				}
 			}
 			if (shopAction == SHOP_SELL_TRAP)
 			{
-				if (trap >= itemQuantity)
+				if (Inventory::instance()->items[ITEMS_TRAP] >= itemQuantity)
 				{
-					currency += (shop.cost[SHOP_SELL_TRAP] * itemQuantity);
-					trap -= itemQuantity;
+					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_TRAP] * itemQuantity);
+					Inventory::instance()->items[ITEMS_TRAP] -= itemQuantity;
+				}
+			}
+			if (shopAction == SHOP_SELL_INCUBATOR)
+			{
+				if (Inventory::instance()->items[SHOP_SELL_INCUBATOR] >= itemQuantity)
+				{
+					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_INCUBATOR] * itemQuantity);
+					Inventory::instance()->items[ITEMS_INCUBATOR] -= itemQuantity;
 				}
 			}
 			shopAction = SHOP_EXIT;
 
 			// TODO remove the below testing code
 			////////start of testing code////////
-			std::cout << " Money :  " << currency << std::endl;
-			std::cout << " Fruit :  " << fruit << std::endl;
-			std::cout << " Meat	 : " << meat << std::endl;
-			std::cout << " Trap  : " << trap << std::endl;
-			std::cout << " Numb  : " << itemQuantity << std::endl;
+			std::cout << "Money    : " << Inventory::instance()->items[ITEMS_CURRENCY] << std::endl;
+			std::cout << "BluFruit : " << Inventory::instance()->items[ITEMS_BLUFRUIT] << std::endl;
+			std::cout << "RedFruit : " << Inventory::instance()->items[ITEMS_REDFRUIT] << std::endl;
+			std::cout << "Meat     : " << Inventory::instance()->items[ITEMS_MEAT] << std::endl;
+			std::cout << "Trap	   : " << Inventory::instance()->items[ITEMS_TRAP] << std::endl;
+			std::cout << "Incubator: " << Inventory::instance()->items[ITEMS_INCUBATOR] << std::endl;
+			std::cout << "Quantity : " << itemQuantity << std::endl;
 			////////end of testing code////////
 			// TODO remove the above testing code
+
 			clickedDelay = 0;
 		}
 		else
@@ -511,6 +581,31 @@ void Scene4::Render()
 	ah << framerate;
 	std::string str = ah.str(); 
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+
+	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	std::ostringstream inv1;
+	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
+	std::ostringstream inv2;
+	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
+	std::ostringstream inv3;
+	inv3 << Inventory::instance()->items[ITEMS_MEAT];
+	std::ostringstream inv4;
+	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::string red = inv1.str();
+	std::string blu = inv2.str();
+	std::string met = inv3.str();
+	std::string trp = inv4.str();
+
+	if (Inventory::instance()->showInventory)
+	{
+		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 10, 50, 10, 10);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+	}
+	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
 
 void Scene4::Exit()
@@ -693,28 +788,29 @@ void Scene4::RenderShopTextBox()
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 30, 1, 20);	// Right white area
 
 		viewStack.PushMatrix();
-		//RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + (x * 5), 15 + (i * 5), 2, 2); x is horizontal, i is vertical
-		for (int i = 0; i < 7; i++)
+
+		// The design of the boxes
+		int shopUI[7][7] =
 		{
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 15, 4, 2);
-		}
-		for (int i = 0; i < 4; i++)
+			0,0,0,0,0,1,0,
+			0,0,0,0,0,1,0,
+			1,1,1,1,1,1,0,
+			1,1,1,1,1,1,1,
+			1,1,1,1,1,1,0,
+			0,0,0,0,0,1,0,
+			1,0,0,0,0,1,0,
+		};
+
+		for (int row = 0; row < 7; row++)
 		{
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 20, 4, 2);
+			for (int col = 0; col < 7; col++)
+			{
+				if (shopUI[row][col] == 1)
+				{
+					RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (col * 10), 45 - (row * 5), 4, 2);
+				}
+			}
 		}
-		for (int i = 0; i < 4; i++)
-		{
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (i * 10), 15 + 10, 4, 2);
-		}
-		for (int i = 1; i < 3; i++)
-		{
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (3 * 10), 35 + (i * 5), 4, 2);
-		}
-		for (int i = 1; i < 3; i++)
-		{
-			RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (3 * 10), 25 - (i * 5), 4, 2);
-		}
-		//	RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 7 + 65, 15 + 15, 2, 2);
 		viewStack.PopMatrix();
 	viewStack.PopMatrix();
 }
