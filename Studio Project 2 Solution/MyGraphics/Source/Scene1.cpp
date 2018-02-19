@@ -153,6 +153,9 @@ void Scene1::Init()
 	light[3].exponent = 3.f;
 	light[3].spotDirection.Set(0.f, 1.f, 0.f);
 
+	//Global Lights
+	godlights = true;
+
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -222,17 +225,23 @@ void Scene1::Init()
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
+	//Minigame
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("hoop", "OBJ//ring.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image//top.tga");
 
 	meshList[GEO_SMALLRING] = MeshBuilder::GenerateOBJ("last hoop", "OBJ//ring.obj");
 	meshList[GEO_SMALLRING]->textureID = LoadTGA("Image//bottom.tga");
 
+	//Screen
 	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
 	meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
 
+	//Environment
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
+
+	meshList[GEO_CLIFF] = MeshBuilder::GenerateOBJ("Cliff", "OBJ//rock.obj");
+	meshList[GEO_CLIFF]->textureID = LoadTGA("Image//rock1.tga");
 
 	//Setup Ring Info 
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
@@ -420,15 +429,47 @@ void Scene1::Render()
 
 	//Render Environment//
 	//TREES//
-	for (int i = 0; i < 100; i++)
+	for (int i = 0; i < 15; i++)
 	{
-		viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
-		viewStack.Rotate(12.5*i, 0, 1, 0);
-		viewStack.Translate(4*i, -500, 5*i);
-		viewStack.Rotate(12.5*i, 0, 1, 0);
-		RenderMesh(meshList[GEO_TREE], godlights);
-		viewStack.PopMatrix();
+		for (int j = 1; j < 15; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-500 + (100 * i), -500, -500 + (80 * j));
+			viewStack.Scale(2, 2, 2);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+
+	for (int i = 0; i < 25; i++)
+	{
+		for (int j = 1; j < 25; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-465 + (80 * i), -500, -465 + (60 * j));
+			viewStack.Scale(1, 1, 1);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+
+	//CLIFFS//
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 1; j < 15; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-405 + (100 * i), -500, -405 + (100 * j));
+			viewStack.Scale(3, 3, 3);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_CLIFF], godlights);
+			viewStack.PopMatrix();
+		}
 	}
 
 	//Render Dino//

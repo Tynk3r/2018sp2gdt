@@ -178,7 +178,7 @@ private:
 	int points;
 	int totalTime;
 
-	bool godlights = false;
+	bool godlights;
 
 	RingObject currentRing;
 
