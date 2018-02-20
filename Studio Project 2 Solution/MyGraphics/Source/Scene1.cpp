@@ -278,13 +278,10 @@ void Scene1::Update(double dt)
 
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+
 	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing.getID() == 21)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
-	}
-	else if (Application::IsKeyPressed('7'))
-	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
 	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
@@ -395,8 +392,7 @@ void Scene1::Render()
 
 	//Render Skybox
 	RenderSkybox(camera.SkyboxSize, godlights);
-
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	/* sampel
 	viewStack.PushMatrix();
@@ -534,7 +530,7 @@ void Scene1::Render()
 	std::ostringstream mh;
 	mh << collideRing(camera.position);
 	std::string str5 = mh.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "collideRing(pos): " + str4, Color(0, 1, 1), 2, 1, 5);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "collideRing(pos): " + str4, Color(0, 1, 1), 2, 1, 5);
 	std::ostringstream th;
 	th << totalTime;
 	std::string str6 = th.str();

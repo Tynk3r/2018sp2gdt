@@ -452,7 +452,7 @@ void Scene2::Render()
 	}
 
 	RenderSkybox(camera.SkyboxSize, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {

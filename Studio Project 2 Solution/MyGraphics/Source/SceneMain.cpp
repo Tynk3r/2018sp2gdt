@@ -317,7 +317,7 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	//Trees//
 	viewStack.PushMatrix();
