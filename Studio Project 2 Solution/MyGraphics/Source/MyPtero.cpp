@@ -7,9 +7,9 @@ MyPtero::MyPtero()
 	pteroStage = P_EGG;
 	pteroDirection = 180.0f;
 	pteroMovementSpeed = 0.0f;
-	pteroSize = 10;
+	pteroSize = 1;
 
-	this->setPos(Vector3(0,0,0));
+	this->setPos(Vector3(0,0,62.5));
 	this->setBox(this->getPos(), pteroSize);
 
 	//Actual position setting expected in Scene

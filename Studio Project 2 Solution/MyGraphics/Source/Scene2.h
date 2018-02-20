@@ -11,8 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 #include "Object.h"
-
-
+#include "MyPtero.h"
 
 class Scene2 : public Scene
 {
@@ -109,12 +108,12 @@ class Scene2 : public Scene
 		NUM_OBJECTS,
 	};
 
-	enum PTERO_STATE {
-		P_EGG = 0,
-		P_BABY,
-		P_ADOLESCENT,
-		P_ADULT,
-	};
+	//enum PTERO_STATE {
+	//	P_EGG = 0,
+	//	P_BABY,
+	//	P_ADOLESCENT,
+	//	P_ADULT,
+	//};
 
 public:
 	Scene2();
@@ -133,6 +132,7 @@ private:
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 	Object objs[NUM_OBJECTS];
+	MyPtero pteroDefault;
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -143,13 +143,8 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float rotateMain = 0;
 
-	bool hungry = true;
-	bool incubating = false;
-	int pteroStage;
 	float pteroLocationX = 0;
 	float pteroLocationZ = 62.5;
-	float pteroDirection = 180.0f;
-	float pteroMovementSpeed = 0.0f;
 	
 	bool godlights = false;
 };

@@ -6,19 +6,6 @@
 class MyPtero : public Object
 {
 private:
-	enum PTERO_STATE {
-		P_EGG = 0,
-		P_BABY,
-		P_ADOLESCENT,
-		P_ADULT,
-	};
-
-	int pteroStage;
-
-	float pteroDirection;
-	float pteroMovementSpeed;
-	float pteroSize;
-
 	float FlightSpeed;
 	float FlightSteerSpeed;
 	float FlightStability;
@@ -29,9 +16,21 @@ public:
 	MyPtero(float spd, float steer, float stab, float stam, float size); //For new pteros
 	~MyPtero();
 
+	enum PTERO_STATE {
+		P_EGG = 0,
+		P_BABY,
+		P_ADOLESCENT,
+		P_ADULT,
+	};
+
 	//For Breeding/Raising
-	bool hungry;
-	bool incubating;
+	bool hungry = true;
+	bool incubating = false;
+
+	int pteroStage;
+	float pteroDirection;
+	float pteroMovementSpeed;
+	float pteroSize;
 
 	//For Flying
 	float getSpeed(void);
