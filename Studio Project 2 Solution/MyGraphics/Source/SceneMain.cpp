@@ -167,7 +167,12 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	if (MyPtero::instance()->pteroStage == MyPtero::P_EGG) {
+		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront2.tga");
+	}
+	else {
+		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	}
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
