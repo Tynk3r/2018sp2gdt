@@ -3,6 +3,7 @@
 
 #include "Camera.h"
 #include "SceneManager.h"
+#include "MyPtero.h"
 
 class CameraFPV : public Camera
 {

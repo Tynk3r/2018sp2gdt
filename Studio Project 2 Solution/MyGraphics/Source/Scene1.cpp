@@ -12,6 +12,11 @@
 
 Scene1::Scene1()
 {
+	//Temp//
+	MyPtero::instance()->setFlightSpeed(50.0f);
+	MyPtero::instance()->setFlightSteerSpeed(1.0f);
+	MyPtero::instance()->setFlightStability(1.0f);
+	MyPtero::instance()->setFlightStamina(0.f);
 }
 
 Scene1::~Scene1()
@@ -20,8 +25,6 @@ Scene1::~Scene1()
 
 void Scene1::Init()
 {
-	//Ptero = SceneManager::instance()->SC_SceneList[SceneManager::SCENEID_2]->pteroDefault;
-
 	currentRing.setID(0);
 	points = 0;
 	ringpos = Vector3(0, -23, 0);
@@ -31,7 +34,7 @@ void Scene1::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(20, 100, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(20, 180, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
