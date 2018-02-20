@@ -271,6 +271,7 @@ void Scene3::Init()
 	meshList[GEO_REDFRUIT]->textureID = LoadTGA("Image//fruitRed.tga");
 
 	meshList[GEO_WHEELBARROW] = MeshBuilder::GenerateOBJ("wheelbarrow", "OBJ//wheelBarrow.obj");
+	meshList[GEO_WHEELBARROW]->textureID = LoadTGA("Image//wheelBarrow.tga");
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -717,7 +718,7 @@ void Scene3::Render()
 	viewStack.Translate(20, 9, 0);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(72, 0, 1, 0);
-	RenderMesh(meshList[GEO_WHEELBARROW], light);
+	RenderMesh(meshList[GEO_WHEELBARROW], false);
 	viewStack.PopMatrix();
 	
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
