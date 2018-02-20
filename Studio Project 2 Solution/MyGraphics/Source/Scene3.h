@@ -100,6 +100,7 @@ class Scene3 : public Scene
 		GEO_INV_MEAT,
 		GEO_INV_TRAP,
 		GEO_INV_INCUBATOR,
+		GEO_INV_CURRENCY,
 		GEO_INV_INTERFACE,
 		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		
