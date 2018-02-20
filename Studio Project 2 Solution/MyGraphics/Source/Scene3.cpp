@@ -27,8 +27,8 @@ void Scene3::Init()
 
 	camera.Init(Vector3(0, 20, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
 
-	// Keep this here // 
-	// Should be done everytime scene 3 is loaded up // 
+																		// Keep this here // 
+																		// Should be done everytime scene 3 is loaded up // 
 	bush1.harvestedBush = false; // Sets all bush to be harvestable upon startup
 	bush1.harvestCheck = false;  // Check for single-time Harvest
 
@@ -260,7 +260,7 @@ void Scene3::Init()
 	meshList[GEO_EXPLAINTEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
-	
+
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
 
@@ -330,7 +330,7 @@ void Scene3::Update(double dt)
 			trap1State = TRAP_NONE;
 			Inventory::instance()->items[ITEMS_MEAT] += 2;
 		}
-		else if (trap1State == TRAP_TRAPPED && ((Inventory::instance()->items[ITEMS_MEAT] + 2)  == 998)) // Collecting trapped animal but capped at 999
+		else if (trap1State == TRAP_TRAPPED && ((Inventory::instance()->items[ITEMS_MEAT] + 2) == 998)) // Collecting trapped animal but capped at 999
 		{
 			trappedBush1 = false;
 			trap1State = TRAP_NONE;
@@ -485,31 +485,40 @@ void Scene3::Update(double dt)
 
 bool Scene3::getFruuts()
 {
+	bool gotFruits = false;
 	int gain = 0;
 	gain = rand() % 5 + 1;
 
 	if ((Inventory::instance()->items[ITEMS_REDFRUIT] + gain) >= 999 && (Inventory::instance()->items[ITEMS_REDFRUIT] != 999)) // Capped at 999
 	{
 		Inventory::instance()->items[ITEMS_REDFRUIT] = 999;
-		return true;
+		gotFruits = true;
 	}
 	else if ((Inventory::instance()->items[ITEMS_REDFRUIT] + gain) < 999)
 	{
 		Inventory::instance()->items[ITEMS_REDFRUIT] += gain;
-		return true;
+		gotFruits = true;
 	}
-	
+
 	if ((Inventory::instance()->items[ITEMS_BLUFRUIT] + (5 - gain)) >= 999 && (Inventory::instance()->items[ITEMS_BLUFRUIT] != 999)) // Capped at 999
 	{
 		Inventory::instance()->items[ITEMS_BLUFRUIT] = 999;
-		return true;
+		gotFruits = true;
 	}
 	else if ((Inventory::instance()->items[ITEMS_BLUFRUIT] + gain) < 999)
 	{
 		Inventory::instance()->items[ITEMS_BLUFRUIT] += (5 - gain);
+		gotFruits = true;
+	}
+
+	if (gotFruits)
+	{
 		return true;
 	}
-	return false;
+	else
+	{
+		return false;
+	}
 }
 
 void Scene3::Render()
@@ -603,7 +612,7 @@ void Scene3::Render()
 		viewStack.PopMatrix();
 	}
 
-	 else if (trap1State == TRAP_TRAPPED) // Trap w/ Animal
+	else if (trap1State == TRAP_TRAPPED) // Trap w/ Animal
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(90, 0, 70);
@@ -767,7 +776,7 @@ void Scene3::Render()
 	viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], false);
 	viewStack.PopMatrix();
-	
+
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
