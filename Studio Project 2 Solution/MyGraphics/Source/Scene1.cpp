@@ -249,6 +249,9 @@ void Scene1::Init()
 	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("Border", "OBJ//border.obj");
 	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
 
+	meshList[GEO_CLOUD] = MeshBuilder::GenerateOBJ("Border", "OBJ//cloud.obj");
+	meshList[GEO_CLOUD]->textureID = LoadTGA("Image//top.tga");
+
 	//Setup Ring Info 
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
 	{
@@ -434,6 +437,33 @@ void Scene1::Render()
 	}
 
 	//Render Environment//
+	//CLOUDS//
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 1; j < 6; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-500 + (100 * i), 300, -500 + (100 * j));
+			viewStack.Scale(2, 2, 2);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_CLOUD], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 1; j < 6; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-500 + (120 * i), 290, -500 + (120 * j));
+			viewStack.Scale(3, 3, 3);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_CLOUD], godlights);
+			viewStack.PopMatrix();
+		}
+	}
 	//TREES//
 	for (int i = 0; i < 15; i++)
 	{
