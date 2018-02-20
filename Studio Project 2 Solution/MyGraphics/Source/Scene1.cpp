@@ -12,11 +12,6 @@
 
 Scene1::Scene1()
 {
-	//Temp//
-	MyPtero::instance()->setFlightSpeed(50.0f);
-	MyPtero::instance()->setFlightSteerSpeed(1.0f);
-	MyPtero::instance()->setFlightStability(1.0f);
-	MyPtero::instance()->setFlightStamina(0.f);
 }
 
 Scene1::~Scene1()
