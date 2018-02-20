@@ -6,15 +6,19 @@
 class MyPtero : public Object
 {
 private:
+	static MyPtero *Ptero_instance;
+	MyPtero();
+
 	float FlightSpeed;
 	float FlightSteerSpeed;
 	float FlightStability;
 	float FlightStamina;
 
 public:
-	MyPtero(); //For default ptero
-	MyPtero(float spd, float steer, float stab, float stam, float size); //For new pteros
-	~MyPtero();
+	static MyPtero* instance(void);
+
+//	MyPtero();
+//	~MyPtero();
 
 	enum PTERO_STATE {
 		P_EGG = 0,
@@ -32,11 +36,16 @@ public:
 	float pteroMovementSpeed;
 	float pteroSize;
 
+	void setFlightSpeed(float);
+	void setFlightSteerSpeed(float);
+	void setFlightStability(float);
+	void setFlightStamina(float);
+
 	//For Flying
-	float getSpeed(void);
-	float getSteerSpeed(void);
-	float getStability(void);
-	float getStamina(void);
+	float getSpeed(void); //How fast ptero can fly
+	float getSteerSpeed(void); //How fast ptero can turn in air
+	float getStability(void); //How fast the ptero pitches downwards on its own
+	float getStamina(void); //How long you can hold down shift for speed boost
 	
 };
 

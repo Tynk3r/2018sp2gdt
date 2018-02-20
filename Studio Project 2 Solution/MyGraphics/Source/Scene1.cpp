@@ -20,7 +20,7 @@ Scene1::~Scene1()
 
 void Scene1::Init()
 {
-	//Ptero = Scene2::currentPtero;
+	//Ptero = SceneManager::instance()->SC_SceneList[SceneManager::SCENEID_2]->pteroDefault;
 
 	currentRing.setID(0);
 	points = 0;

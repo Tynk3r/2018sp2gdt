@@ -123,6 +123,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -132,7 +133,6 @@ private:
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 	Object objs[NUM_OBJECTS];
-	MyPtero pteroDefault;
 
 	Light light[3];
 	void RenderMesh(Mesh *mesh, bool enableLight);

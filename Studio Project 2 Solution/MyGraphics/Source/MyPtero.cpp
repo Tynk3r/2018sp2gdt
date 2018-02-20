@@ -1,5 +1,7 @@
 #include "MyPtero.h"
 
+MyPtero * MyPtero::Ptero_instance = nullptr;
+
 MyPtero::MyPtero()
 {
 	hungry = true;
@@ -16,30 +18,13 @@ MyPtero::MyPtero()
 	//Collision expected to be updated in Scene
 }
 
-MyPtero::MyPtero(float spd, float steer, float stab, float stam, float size)
+MyPtero* MyPtero::instance(void)
 {
-	hungry = true;
-	incubating = false;
-	pteroStage = P_EGG;
-	pteroDirection = 180.0f;
-	pteroMovementSpeed = 0.0f;
-	pteroSize = size;
-
-	FlightSpeed = spd;
-	FlightSteerSpeed = steer;
-	FlightStability = stab;
-	FlightStamina = stam;
-
-	this->setPos(Vector3(0, 0, 0));
-	this->setBox(this->getPos(), pteroSize);
-
-	//Actual position setting expected in Scene
-	//Collision expected to be updated in Scene
-}
-
-
-MyPtero::~MyPtero()
-{
+	if (MyPtero::Ptero_instance == nullptr)
+	{
+		MyPtero::Ptero_instance = new MyPtero();
+	}
+	return MyPtero::Ptero_instance;
 }
 
 // Getters for Scene1 pointer;
