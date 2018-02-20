@@ -135,6 +135,6 @@ private:
 	bool collision(Vector3);
 	float rotateMain = 0;
 	
-	bool godlights = false;
+	bool godlights = true;
 };
 #endif

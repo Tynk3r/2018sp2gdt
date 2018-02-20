@@ -167,7 +167,12 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	if (MyPtero::instance()->pteroStage == MyPtero::P_EGG) {
+		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront2.tga");
+	}
+	else {
+		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
+	}
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -220,8 +225,8 @@ void SceneMain::Update(double dt)
 	camera.Update(dt);
 	Inventory::instance()->Update(dt);
 
-	// door for scene 4
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	// door for scenes
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
@@ -312,7 +317,7 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	//Trees//
 	viewStack.PushMatrix();
@@ -398,6 +403,11 @@ void SceneMain::Render()
 	ah << framerate;
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Your Pterodactyl can't fly yet!", Color(1, 0.1, 0.1), 2.3, 4, 11);
+	}
 }
 
 void SceneMain::Exit()
