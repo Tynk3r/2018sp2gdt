@@ -209,6 +209,10 @@ void Scene4::Init()
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+
+	meshList[GEO_SHOP_INTERFACE] = MeshBuilder::Generate2DQuad("shopInterface", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_SHOP_INTERFACE]->textureID = LoadTGA("Image//shopInterface.tga");
+
 }
 
 void Scene4::Update(double dt)
@@ -252,6 +256,13 @@ void Scene4::Update(double dt)
 		{
 			if (Application::IsKeyPressed(VK_LBUTTON))
 			{
+				// TODO remove the below testing code
+				////////start of testing code////////
+				std::cout << " x " << Application::GetCursorX() << std::endl;
+				std::cout << " y " << Application::GetCursorY() << std::endl;
+				////////end of testing code////////
+				// TODO remove the above testing code
+
 				if (Application::GetCursorX() >= shop.coord[SHOP_EXIT].minX && Application::GetCursorX() <= shop.coord[SHOP_EXIT].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_EXIT].minY && Application::GetCursorY() <= shop.coord[SHOP_EXIT].maxY)
 				{
@@ -564,7 +575,7 @@ void Scene4::Render()
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
 
-	if (Inventory::instance()->showInventory)
+	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
 		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
@@ -750,37 +761,7 @@ void Scene4::RenderTextBox()
 void Scene4::RenderShopTextBox()
 {
 	viewStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 30, 80, 20); // Middle black area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 11, 80, 1);	// Bottom white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 50, 80, 1);	// Top white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 30, 1, 20);	// Left white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 30, 1, 20);	// Right white area
-
-		viewStack.PushMatrix();
-
-		// The design of the boxes
-		int shopUI[7][7] =
-		{
-			0,0,0,0,0,1,0,
-			0,0,0,0,0,1,0,
-			1,1,1,1,1,1,0,
-			1,1,1,1,1,1,1,
-			1,1,1,1,1,1,0,
-			0,0,0,0,0,1,0,
-			1,0,0,0,0,1,0,
-		};
-
-		for (int row = 0; row < 7; row++)
-		{
-			for (int col = 0; col < 7; col++)
-			{
-				if (shopUI[row][col] == 1)
-				{
-					RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 10 + (col * 10), 45 - (row * 5), 4, 2);
-				}
-			}
-		}
-		viewStack.PopMatrix();
+		RenderMeshOnScreen(meshList[GEO_SHOP_INTERFACE], 40, 30, 40, 20);
 	viewStack.PopMatrix();
 }
 

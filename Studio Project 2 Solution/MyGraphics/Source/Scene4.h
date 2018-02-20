@@ -96,15 +96,6 @@ class Scene4 : public Scene
 		GEO_BOTTOM,
 		GEO_FRONT,
 		GEO_BACK,
-		GEO_TREE_BRANCH,
-		GEO_LOG,
-		GEO_CAMPFIRE_UNLIT,
-		GEO_SHOE,
-		GEO_TREE_LEAVES,
-		GEO_TREE_TRUNK,
-		GEO_KUBELWAGEN,
-		GEO_BUSH,
-		GEO_DEER,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -119,6 +110,8 @@ class Scene4 : public Scene
 		GEO_PLACEHOLDER_NPC,
 		GEO_PLACEHOLDER_TEXT_BOX1,
 		GEO_PLACEHOLDER_TEXT_BOX2,
+
+		GEO_SHOP_INTERFACE,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,
