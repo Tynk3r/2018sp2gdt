@@ -66,18 +66,6 @@ void Scene2::Init()
 	m_parameters[U_LIGHT1_COSINNER] = glGetUniformLocation(m_programID, "lights[1].cosInner");
 	m_parameters[U_LIGHT1_EXPONENT] = glGetUniformLocation(m_programID, "lights[1].exponent");
 
-	m_parameters[U_LIGHT2_POSITION] = glGetUniformLocation(m_programID, "lights[2].position_cameraspace");
-	m_parameters[U_LIGHT2_COLOR] = glGetUniformLocation(m_programID, "lights[2].color");
-	m_parameters[U_LIGHT2_POWER] = glGetUniformLocation(m_programID, "lights[2].power");
-	m_parameters[U_LIGHT2_KC] = glGetUniformLocation(m_programID, "lights[2].kC");
-	m_parameters[U_LIGHT2_KL] = glGetUniformLocation(m_programID, "lights[2].kL");
-	m_parameters[U_LIGHT2_KQ] = glGetUniformLocation(m_programID, "lights[2].kQ");
-	m_parameters[U_LIGHT2_TYPE] = glGetUniformLocation(m_programID, "lights[2].type");
-	m_parameters[U_LIGHT2_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[2].spotDirection");
-	m_parameters[U_LIGHT2_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[2].cosCutoff");
-	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
-	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
-
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -89,10 +77,10 @@ void Scene2::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 10, 0);
+	light[0].type = Light::LIGHT_DIRECTIONAL;
+	light[0].position.Set(2, 2, 2);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 10;
+	light[0].power = 2;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -100,6 +88,18 @@ void Scene2::Init()
 	light[0].cosInner = cos(Math::DegreeToRadian(30));
 	light[0].exponent = 3.f;
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[1].type = Light::LIGHT_DIRECTIONAL;
+	light[1].position.Set(-1, -1, -1);
+	light[1].color.Set(1, 1, 1);
+	light[1].power = 2;
+	light[1].kC = 1.f;
+	light[1].kL = 0.01f;
+	light[1].kQ = 0.001f;
+	light[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[1].cosInner = cos(Math::DegreeToRadian(30));
+	light[1].exponent = 3.f;
+	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
@@ -122,17 +122,7 @@ void Scene2::Init()
 	glUniform1f(m_parameters[U_LIGHT1_COSINNER], light[1].cosInner);
 	glUniform1f(m_parameters[U_LIGHT1_EXPONENT], light[1].exponent);
 
-	glUniform1i(m_parameters[U_LIGHT2_TYPE], light[2].type);
-	glUniform3fv(m_parameters[U_LIGHT2_COLOR], 1, &light[2].color.r);
-	glUniform1f(m_parameters[U_LIGHT2_POWER], light[2].power);
-	glUniform1f(m_parameters[U_LIGHT2_KC], light[2].kC);
-	glUniform1f(m_parameters[U_LIGHT2_KL], light[2].kL);
-	glUniform1f(m_parameters[U_LIGHT2_KQ], light[2].kQ);
-	glUniform1f(m_parameters[U_LIGHT2_COSCUTOFF], light[2].cosCutoff);
-	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
-	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
-
-	glUniform1i(m_parameters[U_NUMLIGHTS], 3);
+	glUniform1i(m_parameters[U_NUMLIGHTS], 2);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -273,13 +263,13 @@ void Scene2::Update(double dt)
 			Inventory::instance()->items[ITEMS_MEAT]--;
 		}
 		// egg + incubator
-		if (MyPtero::instance()->pteroStage == MyPtero::P_EGG && !MyPtero::instance()->incubating && Inventory::instance()->items[ITEMS_INCUBATOR] != 0) {
+		if (MyPtero::instance()->pteroStage == MyPtero::P_EGG && !MyPtero::instance()->incubating && Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
 			MyPtero::instance()->incubating = true;
-			Inventory::instance()->items[ITEMS_INCUBATOR] = 0;
+			Inventory::instance()->items[ITEMS_INCUBATOR]--;
 		}
 	}
 	// reset ptero
-	if (Application::IsKeyPressed('X') && camera.position.x > 0.0f && camera.position.z < 0.0f) {
+	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0f) {
 		MyPtero::instance()->newPtero();
 	}
 
@@ -445,7 +435,6 @@ void Scene2::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-
 	if (light[1].type == Light::LIGHT_DIRECTIONAL) {
 		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
@@ -462,27 +451,8 @@ void Scene2::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	if (light[2].type == Light::LIGHT_DIRECTIONAL)
-	{
-		Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
-		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightDirection_cameraspace.x);
-	}
-	else if (light[2].type == Light::LIGHT_SPOT)
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
-		Vector3 spotDirection_cameraspace = viewStack.Top() * light[2].spotDirection;
-		glUniform3fv(m_parameters[U_LIGHT2_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
-	}
-	else
-	{
-		Position lightPosition_cameraspace = viewStack.Top() * light[2].position;
-		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
-	}
-
 	RenderSkybox(camera.SkyboxSize, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {
@@ -572,7 +542,6 @@ void Scene2::Render()
 	default:
 		break;
 	}
-	
 	viewStack.PushMatrix();
 		viewStack.Translate(40, 25, -99.9);
 		viewStack.Rotate(0, 0, 1, 0);
@@ -596,7 +565,24 @@ void Scene2::Render()
 		viewStack.Translate(0.5, -1, 0);
 		RenderText(meshList[GEO_TEXT], sg, Color(1, 0, 0));
 	viewStack.PopMatrix();
-
+	// reset button
+	if (camera.position.x > 25.0f && camera.position.z < -25.0f) {
+		viewStack.PushMatrix();
+			viewStack.Translate(99.9, 15, -70);
+			viewStack.Rotate(-90, 0, 1, 0);
+			viewStack.Scale(2, 2, 2);
+			viewStack.PushMatrix();
+				viewStack.Translate(0, -0.5, 0);
+				viewStack.Scale(11, 2, 1);
+				RenderMesh(meshList[GEO_QUAD], godlights);
+			viewStack.PopMatrix();
+			viewStack.Translate(-9.25, 0, 0);
+			viewStack.Scale(0.9, 1, 1);
+			RenderText(meshList[GEO_TEXT], "       PRESS X", Color(1, 0, 0));
+			viewStack.Translate(1, -1, 0);
+			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(1, 0, 0));
+		viewStack.PopMatrix();
+	}
 	/* sampel
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 0, 0);
