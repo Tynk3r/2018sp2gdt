@@ -110,6 +110,7 @@ class Scene1 : public Scene
 		GEO_TREE,
 		GEO_CLIFF,
 		GEO_BORDER,
+		GEO_CLOUD,
 		GEO_TEXT,
 
 		NUM_GEOMETRY
