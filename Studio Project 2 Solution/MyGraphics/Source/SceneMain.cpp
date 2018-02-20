@@ -195,12 +195,31 @@ void SceneMain::Init()
 	objs[OBJ_TREE1].setBox(Vector3(-30, -16, -1), 5);
 	objs[OBJ_TREE2].setBox(Vector3(0, -16, -30), 5);
 	objs[OBJ_TREE3].setBox(Vector3(30, -16, -1), 5);
+
+	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
+	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_BLUFRUIT] = MeshBuilder::GenerateText("invBluFruit", 16, 16);
+	meshList[GEO_INV_BLUFRUIT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_MEAT] = MeshBuilder::GenerateText("invMeat", 16, 16);
+	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
+	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INCUBATOR] = MeshBuilder::GenerateText("invIncubator", 16, 16);
+	meshList[GEO_INV_INCUBATOR]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_CURRENCY] = MeshBuilder::GenerateText("invCurrency", 16, 16);
+	meshList[GEO_INV_CURRENCY]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
+	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
+	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 }
 
 void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
+	Inventory::instance()->Update(dt);
+
 	// door for scene 4
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -343,15 +362,37 @@ void SceneMain::Render()
 		
 		viewStack.PopMatrix();
 
-	/* sampel
-	viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
-		RenderMesh(meshList[], godlights);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
-	viewStack.PopMatrix();
-	*/
+		///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+		std::ostringstream inv1;
+		inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
+		std::ostringstream inv2;
+		inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
+		std::ostringstream inv3;
+		inv3 << Inventory::instance()->items[ITEMS_MEAT];
+		std::ostringstream inv4;
+		inv4 << Inventory::instance()->items[ITEMS_TRAP];
+		std::ostringstream inv5;
+		inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
+		std::ostringstream inv6;
+		inv6 << Inventory::instance()->items[ITEMS_CURRENCY];
+		std::string red = inv1.str();
+		std::string blu = inv2.str();
+		std::string met = inv3.str();
+		std::string trp = inv4.str();
+		std::string inc = inv5.str();
+		std::string cur = inv6.str();
+
+		if (Inventory::instance()->showInventory)
+		{
+			RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
+			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
+			RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
+			RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
+			RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
+			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
+			RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
+		}
+		///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 
 	std::ostringstream ah;
 	ah << framerate;
@@ -521,6 +562,26 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 
+	glEnable(GL_DEPTH_TEST);
+}
+
+void SceneMain::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate(x, y, 0);
+	modelStack.Scale(sizex, sizey, 1);
+	RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
 

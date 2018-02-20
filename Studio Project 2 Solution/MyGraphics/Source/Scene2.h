@@ -81,15 +81,21 @@ class Scene2 : public Scene
 		GEO_DINOEGG,
 		GEO_PTERO,
 		GEO_FENCE,
-		GEO_REDINV,
-		GEO_BLUINV,
-		GEO_TRAPINV,
-		GEO_INVINTERFACE,
 		GEO_CAMPFIRE_BASE,
 		GEO_CAMPFIRE_WOOD,
 		GEO_SKELETON,
 		GEO_INCUBATOR,
 		
+		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+		GEO_INV_REDFRUIT,
+		GEO_INV_BLUFRUIT,
+		GEO_INV_MEAT,
+		GEO_INV_TRAP,
+		GEO_INV_INCUBATOR,
+		GEO_INV_CURRENCY,
+		GEO_INV_INTERFACE,
+		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];

@@ -12,6 +12,7 @@
 #include "Utility.h"
 #include "Object.h"
 
+#include "Inventory.h"
 
 
 class SceneMain : public Scene
@@ -83,6 +84,16 @@ class SceneMain : public Scene
 		GEO_DINOEGG,
 		GEO_TREE,
 		
+		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+		GEO_INV_REDFRUIT,
+		GEO_INV_BLUFRUIT,
+		GEO_INV_MEAT,
+		GEO_INV_TRAP,
+		GEO_INV_INCUBATOR,
+		GEO_INV_CURRENCY,
+		GEO_INV_INTERFACE,
+		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];
@@ -120,6 +131,7 @@ private:
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	bool collision(Vector3);
 	float rotateMain = 0;
 	

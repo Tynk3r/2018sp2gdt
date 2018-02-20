@@ -198,6 +198,10 @@ void Scene4::Init()
 	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
 	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_INCUBATOR] = MeshBuilder::GenerateText("invIncubator", 16, 16);
+	meshList[GEO_INV_INCUBATOR]->textureID = LoadTGA("Image//calibri.tga");
+	meshList[GEO_INV_CURRENCY] = MeshBuilder::GenerateText("invCurrency", 16, 16);
+	meshList[GEO_INV_CURRENCY]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
@@ -531,16 +535,6 @@ void Scene4::Render()
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
-	/* sampel
-	viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
-		RenderMesh(meshList[], godlights);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
-	viewStack.PopMatrix();
-	*/
-
 	viewStack.PushMatrix();
 		RenderNPC();
 	viewStack.PopMatrix();
@@ -559,19 +553,26 @@ void Scene4::Render()
 	inv3 << Inventory::instance()->items[ITEMS_MEAT];
 	std::ostringstream inv4;
 	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::ostringstream inv5;
+	inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
+	std::ostringstream inv6;
+	inv6 << Inventory::instance()->items[ITEMS_CURRENCY];
 	std::string red = inv1.str();
 	std::string blu = inv2.str();
 	std::string met = inv3.str();
 	std::string trp = inv4.str();
+	std::string inc = inv5.str();
+	std::string cur = inv6.str();
 
 	if (Inventory::instance()->showInventory)
 	{
-		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 10, 50, 10, 10);
-		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 4, 2.7, 14.3);
-		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 4, 2.7, 13);
-		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 4, 2.7, 11.9);
-		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
-		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + trp, Color(1, 1, 1), 4, 2.7, 10.7);
+		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
+		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }

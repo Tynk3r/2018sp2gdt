@@ -526,23 +526,6 @@ void Scene3::Render()
 	RenderSkybox(200.0f, godlights);
 	RenderMesh(meshList[GEO_AXES], false);
 
-	/* sampel
-	viewStack.PushMatrix();
-		viewStack.Scale(1, 1, 1);
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
-		RenderMesh(meshList[], godlights);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
-	viewStack.PopMatrix();
-	*/
-
-	/*
-	viewStack.PushMatrix();
-	viewStack.Scale(3, 3, 3);
-	RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
-	viewStack.PopMatrix();
-	*/
-
 	//BUSH 1//
 	viewStack.PushMatrix();
 	viewStack.Translate(110, 0, 70);
@@ -727,12 +710,7 @@ void Scene3::Render()
 		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
 		viewStack.PopMatrix();
 	}
-
-	//GENERATE TEXT ON SCREEN//
-	/*std::ostringstream ah;
-	ah << framerate;
-	std::string str = ah.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);*/
+	
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
