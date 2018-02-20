@@ -112,6 +112,7 @@ class Scene4 : public Scene
 		GEO_PLACEHOLDER_TEXT_BOX2,
 
 		GEO_SHOP_INTERFACE,
+		GEO_SHOP_AMOUNT,
 
 		GEO_TEXT,
 		NUM_GEOMETRY,
@@ -166,7 +167,6 @@ private:
 	bool clicked = false;
 	bool shopping = false;				// If the player is in the process of shopping (Switch to mouse controls)
 	int clickedDelay = 0;				// Prevent the double click buy/sell
-	int itemQuantity = 0;				// The quantity of a item that the player wants to buy/sell
-	SHOP_ACTION shopAction = SHOP_EXIT;	// The action that the player wants, buy/sell. exit = do nothing
+	int itemAmount = 0;					// The quantity of a item that the player wants to buy/sell
 };
 #endif

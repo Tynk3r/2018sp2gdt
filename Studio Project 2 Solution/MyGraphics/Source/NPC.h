@@ -36,15 +36,12 @@ public:
 	static const int sizeOfTextMove = 20;
 
 	Object NPCS[numberOfNPCs];
-	MOVE_DIRECTION moveDirX[numberOfNPCs];
-	MOVE_DIRECTION moveDirZ[numberOfNPCs];
+	int moveDirX[numberOfNPCs];
+	int moveDirZ[numberOfNPCs];
 	bool canMove[numberOfNPCs];
 	int moveAmt[numberOfNPCs][2];
 
-	// Get the coord of the requested NPC type using the NPC_TYPE
-	Vector3 GetCoord(NPC_TYPE);
-
-	// Get the coord of the requested NPC type using an integer
+	// Get the coord of the requested NPC type
 	Vector3 GetCoord(int);
 
 	// Update all NPCs

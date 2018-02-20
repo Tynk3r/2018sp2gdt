@@ -116,6 +116,14 @@ class Scene3 : public Scene
 		NUM_OBJECTS,
 	};
 
+	enum TRAP_STATE
+	{
+		TRAP_NONE,
+		TRAP_PLACED,
+		TRAP_TRAPPED,
+		NUM_TRAP_STATE,
+	};
+
 	Mesh* meshList[NUM_GEOMETRY];
 
 public:
@@ -169,7 +177,7 @@ private:
 	bool collision(Vector3);
 	float rotateMain = 0;
 
-	void getFruuts();
+	bool getFruuts();
 
 	bool godlights = false;
 };

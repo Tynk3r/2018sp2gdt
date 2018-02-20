@@ -213,6 +213,8 @@ void Scene4::Init()
 	meshList[GEO_SHOP_INTERFACE] = MeshBuilder::Generate2DQuad("shopInterface", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_SHOP_INTERFACE]->textureID = LoadTGA("Image//shopInterface.tga");
 
+	meshList[GEO_SHOP_AMOUNT] = MeshBuilder::GenerateText("shopAmount", 16, 16);
+	meshList[GEO_SHOP_AMOUNT]->textureID = LoadTGA("Image//calibri.tga");
 }
 
 void Scene4::Update(double dt)
@@ -252,17 +254,10 @@ void Scene4::Update(double dt)
 	if (shopping == true)
 	{
 		Application::SetCursorVisible(true);
-		if (clickedDelay == 20)
+		if (clickedDelay == 11)
 		{
 			if (Application::IsKeyPressed(VK_LBUTTON))
 			{
-				// TODO remove the below testing code
-				////////start of testing code////////
-				std::cout << " x " << Application::GetCursorX() << std::endl;
-				std::cout << " y " << Application::GetCursorY() << std::endl;
-				////////end of testing code////////
-				// TODO remove the above testing code
-
 				if (Application::GetCursorX() >= shop.coord[SHOP_EXIT].minX && Application::GetCursorX() <= shop.coord[SHOP_EXIT].maxX &&
 					Application::GetCursorY() >= shop.coord[SHOP_EXIT].minY && Application::GetCursorY() <= shop.coord[SHOP_EXIT].maxY)
 				{
@@ -273,187 +268,165 @@ void Scene4::Update(double dt)
 					clicked = true;
 				}
 
-				// Assign the shopAction
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_REDFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_REDFRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_REDFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_REDFRUIT].maxY)
+				// Resolve amount changes
+				for (int i = (SHOP_AMOUNT_START + 1); i <= SHOP_AMOUNT_END; i++)
 				{
-					shopAction = SHOP_BUY_REDFRUIT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_BLUFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_BLUFRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_BLUFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_BLUFRUIT].maxY)
-				{
-					shopAction = SHOP_BUY_BLUFRUIT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_MEAT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_MEAT].maxY)
-				{
-					shopAction = SHOP_BUY_MEAT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_TRAP].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_TRAP].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_TRAP].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_TRAP].maxY)
-				{
-					shopAction = SHOP_BUY_TRAP;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_BUY_INCUBATOR].minX && Application::GetCursorX() <= shop.coord[SHOP_BUY_INCUBATOR].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_BUY_INCUBATOR].minY && Application::GetCursorY() <= shop.coord[SHOP_BUY_INCUBATOR].maxY)
-				{
-					shopAction = SHOP_BUY_INCUBATOR;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_REDFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_REDFRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_REDFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_REDFRUIT].maxY)
-				{
-					shopAction = SHOP_SELL_REDFRUIT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_BLUFRUIT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_BLUFRUIT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_BLUFRUIT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_BLUFRUIT].maxY)
-				{
-					shopAction = SHOP_SELL_BLUFRUIT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_MEAT].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_MEAT].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_MEAT].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_MEAT].maxY)
-				{
-					shopAction = SHOP_SELL_MEAT;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_TRAP].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_TRAP].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_TRAP].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_TRAP].maxY)
-				{
-					shopAction = SHOP_SELL_TRAP;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_SELL_INCUBATOR].minX && Application::GetCursorX() <= shop.coord[SHOP_SELL_INCUBATOR].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_SELL_INCUBATOR].minY && Application::GetCursorY() <= shop.coord[SHOP_SELL_INCUBATOR].maxY)
-				{
-					shopAction = SHOP_SELL_INCUBATOR;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_RESET_QUANTITY].minX && Application::GetCursorX() <= shop.coord[SHOP_RESET_QUANTITY].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_RESET_QUANTITY].minY && Application::GetCursorY() <= shop.coord[SHOP_RESET_QUANTITY].maxY)
-				{
-					itemQuantity = 0;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_1].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_1].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_1].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_1].maxY)
-				{
-					itemQuantity += 1;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_1].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_1].maxY)
-				{
-					if (itemQuantity >= 1)
+					if (Application::GetCursorX() >= shop.coord[i].minX && Application::GetCursorX() <= shop.coord[i].maxX &&
+						Application::GetCursorY() >= shop.coord[i].minY && Application::GetCursorY() <= shop.coord[i].maxY)
 					{
-						itemQuantity -= 1;
+						switch (i)
+						{
+						case SHOP_RESET_AMOUNT:
+							itemAmount = 0;
+							break;
+						case SHOP_INCREASE_AMOUNT_1:
+							if (itemAmount <= 998)
+							{
+								itemAmount += 1;
+							}
+							else
+							{
+								itemAmount = 999;
+							}
+							break;
+						case SHOP_DECREASE_AMOUNT_1:
+							if (itemAmount >= 1)
+							{
+								itemAmount -= 1;
+							}
+							else
+							{
+								itemAmount = 0;
+							}
+							break;
+						case SHOP_INCREASE_AMOUNT_10:
+							if (itemAmount <= 989)
+							{
+								itemAmount += 10;
+							}
+							else
+							{
+								itemAmount = 999;
+							}
+							break;
+						case SHOP_DECREASE_AMOUNT_10:
+							if (itemAmount >= 10)
+							{
+								itemAmount -= 10;
+							}
+							else
+							{
+								itemAmount = 0;
+							}
+							break;
+						case SHOP_INCREASE_AMOUNT_100:
+							if (itemAmount <= 899)
+							{
+								itemAmount += 100;
+							}
+							else
+							{
+								itemAmount = 999;
+							}
+							break;
+						case SHOP_DECREASE_AMOUNT_100:
+							if (itemAmount >= 100)
+							{
+								itemAmount -= 100;
+							}
+							else
+							{
+								itemAmount = 0;
+							}
+							break;
+						default:
+							break;
+						}
 					}
 				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_10].maxY)
-				{
-					itemQuantity += 10;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_10].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_10].maxY)
-				{
-					if (itemQuantity >= 10)
-					{
-						itemQuantity -= 10;
-					}
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_INCREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_INCREASE_QUANTITY_100].maxY)
-				{
-					itemQuantity += 100;
-				}
-				if (Application::GetCursorX() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minX && Application::GetCursorX() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxX &&
-					Application::GetCursorY() >= shop.coord[SHOP_DECREASE_QUANTITY_100].minY && Application::GetCursorY() <= shop.coord[SHOP_DECREASE_QUANTITY_100].maxY)
-				{
-					if (itemQuantity >= 100)
-					{
-						itemQuantity -= 100;
-					}
-				}
-			}
 
-			// Resolve the shopAction
-			if (shopAction == SHOP_BUY_REDFRUIT)
-			{
-				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_REDFRUIT] * itemQuantity))
+				// Resolve the shopAction
+				for (int i = (SHOP_BUY_START + 1); i <= SHOP_BUY_END; i++)
 				{
-					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_REDFRUIT] * itemQuantity);
-					Inventory::instance()->items[ITEMS_REDFRUIT] += itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_BUY_BLUFRUIT)
-			{
-				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_BLUFRUIT] * itemQuantity))
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_BLUFRUIT] * itemQuantity);
-					Inventory::instance()->items[ITEMS_BLUFRUIT] += itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_BUY_MEAT)
-			{
-				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_MEAT] * itemQuantity))
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_MEAT] * itemQuantity);
-					Inventory::instance()->items[ITEMS_MEAT] += itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_BUY_TRAP)
-			{
-				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_TRAP] * itemQuantity))
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_TRAP] * itemQuantity);
-					Inventory::instance()->items[ITEMS_TRAP] += itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_BUY_INCUBATOR)
-			{
-				if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[SHOP_BUY_INCUBATOR] * itemQuantity))
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[SHOP_BUY_INCUBATOR] * itemQuantity);
-					Inventory::instance()->items[ITEMS_INCUBATOR] += itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_SELL_REDFRUIT)
-			{
-				if (Inventory::instance()->items[ITEMS_REDFRUIT] >= itemQuantity)
+					if (Application::GetCursorX() >= shop.coord[i].minX && Application::GetCursorX() <= shop.coord[i].maxX &&
+						Application::GetCursorY() >= shop.coord[i].minY && Application::GetCursorY() <= shop.coord[i].maxY)
 					{
-						Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_REDFRUIT] * itemQuantity);
-						Inventory::instance()->items[ITEMS_REDFRUIT] -= itemQuantity;
+						int inventoryItemAffected;
+						switch (i)
+						{
+						case SHOP_BUY_REDFRUIT:
+							inventoryItemAffected = ITEMS_REDFRUIT;
+							break;
+						case SHOP_BUY_BLUFRUIT:
+							inventoryItemAffected = ITEMS_BLUFRUIT;
+							break;
+						case SHOP_BUY_MEAT:
+							inventoryItemAffected = ITEMS_MEAT;
+							break;
+						case SHOP_BUY_TRAP:
+							inventoryItemAffected = ITEMS_TRAP;
+							break;
+						case SHOP_BUY_INCUBATOR:
+							inventoryItemAffected = ITEMS_INCUBATOR;
+							break;
+						default:
+							break;
+						}
+						if ((Inventory::instance()->items[inventoryItemAffected] + itemAmount) >= 999)
+						{
+							int tempItemAmount = 999 - Inventory::instance()->items[inventoryItemAffected];
+							if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[i] * tempItemAmount))
+							{
+								Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[i] * tempItemAmount);
+								Inventory::instance()->items[inventoryItemAffected] += tempItemAmount;
+							}
+						}
+						else
+						{
+							if (Inventory::instance()->items[ITEMS_CURRENCY] >= (shop.cost[i] * itemAmount))
+							{
+								Inventory::instance()->items[ITEMS_CURRENCY] -= (shop.cost[i] * itemAmount);
+								Inventory::instance()->items[inventoryItemAffected] += itemAmount;
+							}
+						}
 					}
 				}
-			if (shopAction == SHOP_SELL_BLUFRUIT)
-			{
-				if (Inventory::instance()->items[ITEMS_BLUFRUIT] >= itemQuantity)
+				for (int i = (SHOP_SELL_START + 1); i <= SHOP_SELL_END; i++)
 				{
-					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_BLUFRUIT] * itemQuantity);
-					Inventory::instance()->items[ITEMS_BLUFRUIT] -= itemQuantity;
+					if (Application::GetCursorX() >= shop.coord[i].minX && Application::GetCursorX() <= shop.coord[i].maxX &&
+						Application::GetCursorY() >= shop.coord[i].minY && Application::GetCursorY() <= shop.coord[i].maxY) 
+					{
+						int inventoryItemAffected;
+						switch (i)
+						{
+						case SHOP_SELL_REDFRUIT:
+							inventoryItemAffected = ITEMS_REDFRUIT;
+							break;
+						case SHOP_SELL_BLUFRUIT:
+							inventoryItemAffected = ITEMS_BLUFRUIT;
+							break;
+						case SHOP_SELL_MEAT:
+							inventoryItemAffected = ITEMS_MEAT;
+							break;
+						case SHOP_SELL_TRAP:
+							inventoryItemAffected = ITEMS_TRAP;
+							break;
+						case SHOP_SELL_INCUBATOR:
+							inventoryItemAffected = ITEMS_INCUBATOR;
+							break;
+						default:
+							break;
+						}
+						if (Inventory::instance()->items[inventoryItemAffected] >= itemAmount)
+						{
+							Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[i] * itemAmount);
+							Inventory::instance()->items[inventoryItemAffected] -= itemAmount;
+						}
+					}
 				}
-			}
-			if (shopAction == SHOP_SELL_MEAT)
-			{
-				if (Inventory::instance()->items[ITEMS_MEAT] >= itemQuantity)
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_MEAT] * itemQuantity);
-					Inventory::instance()->items[ITEMS_MEAT] -= itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_SELL_TRAP)
-			{
-				if (Inventory::instance()->items[ITEMS_TRAP] >= itemQuantity)
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_TRAP] * itemQuantity);
-					Inventory::instance()->items[ITEMS_TRAP] -= itemQuantity;
-				}
-			}
-			if (shopAction == SHOP_SELL_INCUBATOR)
-			{
-				if (Inventory::instance()->items[SHOP_SELL_INCUBATOR] >= itemQuantity)
-				{
-					Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[SHOP_SELL_INCUBATOR] * itemQuantity);
-					Inventory::instance()->items[ITEMS_INCUBATOR] -= itemQuantity;
-				}
-			}
-			shopAction = SHOP_EXIT;
 
-			clickedDelay = 0;
+				clickedDelay = 0;
+			}
 		}
 		else
 		{
@@ -556,6 +529,10 @@ void Scene4::Render()
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
 
 	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	std::ostringstream shopAMOUNT;
+	shopAMOUNT << itemAmount;
+	std::string amt = shopAMOUNT.str();
+
 	std::ostringstream inv1;
 	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
 	std::ostringstream inv2;
@@ -584,6 +561,27 @@ void Scene4::Render()
 		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
 		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
 		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
+	}
+	else if (shopping == true)
+	{
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], red, Color(1, 0, 0), 3, 4.4, 15.1);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], blu, Color(0, 0, 1), 3, 4.4, 13.3);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], met, Color(0.7, 0.31, 0), 3, 8.9, 15.1);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], trp, Color(1, 1, 1), 3, 8.9, 13.3);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], inc, Color(0.7, 0.7, 0), 3, 13.2, 15.1);
+		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 13.2, 13.3);
+		if (itemAmount <= 9)
+		{
+			RenderTextOnScreen(meshList[GEO_SHOP_AMOUNT], amt, Color(1, 0, 0), 3, 20.4, 9.5);
+		}
+		else if (itemAmount <= 99)
+		{
+			RenderTextOnScreen(meshList[GEO_SHOP_AMOUNT], amt, Color(1, 0, 0), 3, 19.85, 9.5);
+		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_SHOP_AMOUNT], amt, Color(1, 0, 0), 3, 19.3, 9.5);
+		}
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }
@@ -676,7 +674,7 @@ void Scene4::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, -d); // change -d to 0 to bring floor up to foot level
+	modelStack.Translate(0, 0, 0); // change -d to 0 to bring floor up to foot level
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();

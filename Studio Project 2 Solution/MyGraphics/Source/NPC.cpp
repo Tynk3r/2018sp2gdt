@@ -16,11 +16,6 @@ NPC::NPC()
 	}
 }
 
-Vector3 NPC::GetCoord(NPC_TYPE type)
-{
-	return NPCS[type].getPos();
-}
-
 Vector3 NPC::GetCoord(int i)
 {
 	return NPCS[i].getPos();
