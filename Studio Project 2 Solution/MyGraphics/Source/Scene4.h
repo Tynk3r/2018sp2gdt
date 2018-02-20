@@ -145,8 +145,6 @@ private:
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
-	NPC npc;
-	SHOP shop;
 	int textBoxRender;
 
 	Light light[4];
@@ -165,11 +163,16 @@ private:
 
 	bool godlights = false;
 
+	// For NPCs
+	NPC npc;
+	int npcMoveDelay;
+
 	// For shop
+	SHOP shop;
 	bool clicked = false;
-	bool shopping = false;								// If the player is in the process of shopping (Switch to mouse controls)
-	int clickedDelay = 0;								// Prevent the double click buy/sell
-	int itemQuantity = 0;								// The quantity of a item that the player wants to buy/sell
-	SHOP_ACTION shopAction = SHOP_EXIT;					// The action that the player wants, buy/sell. exit = do nothing
+	bool shopping = false;				// If the player is in the process of shopping (Switch to mouse controls)
+	int clickedDelay = 0;				// Prevent the double click buy/sell
+	int itemQuantity = 0;				// The quantity of a item that the player wants to buy/sell
+	SHOP_ACTION shopAction = SHOP_EXIT;	// The action that the player wants, buy/sell. exit = do nothing
 };
 #endif

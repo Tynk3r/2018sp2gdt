@@ -12,7 +12,6 @@
 #include "Utility.h"
 #include "RingObject.h"
 #include "timer.h"
-#include "MyPtero.h"
 #include "Scene2.h"
 
 #include <stdlib.h>
@@ -186,7 +185,5 @@ private:
 	Vector3 ringpos;
 
 	StopWatch timer;
-
-	MyPtero* Ptero;
 };
 #endif

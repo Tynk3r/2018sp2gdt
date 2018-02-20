@@ -22,18 +22,6 @@ void Scene4::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	// TODO remove the below testing code
-	////////start of testing code////////
-	std::cout << "Total : " << npc.numberOfNPCs << std::endl;
-	std::cout << "Weather : " << npc.getCoord(NPC_WEATHER) << std::endl;
-	std::cout << "Lore : " << npc.getCoord(NPC_LORE) << std::endl;
-	std::cout << "Hunting : " << npc.getCoord(NPC_HUNTING) << std::endl;
-	std::cout << "Raising : " << npc.getCoord(NPC_RAISING) << std::endl;
-	std::cout << "Racing : " << npc.getCoord(NPC_RACING) << std::endl;
-	////////end of testing code////////
-	// TODO remove the above testing code
-
-
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
@@ -220,18 +208,19 @@ void Scene4::Init()
 }
 
 void Scene4::Update(double dt)
-{	
-	// TODO remove the below testing code
-	////////start of testing code////////
-	/*
-	std::cout << "Position : " << camera.position << std::endl;
-	std::cout << "Target : " << camera.target << std::endl;
-	*/
-	////////end of testing code////////
-	// TODO remove the above testing code
-
+{
 	framerate = 1.0 / dt;
 	Inventory::instance()->Update(dt);
+
+	if (npcMoveDelay == 100)
+	{
+		npc.Update(dt);
+		npcMoveDelay = 0;
+	}
+	else
+	{
+		npcMoveDelay++;
+	}
 
 	if (shopping == false)
 	{
@@ -255,15 +244,6 @@ void Scene4::Update(double dt)
 	if (shopping == true)
 	{
 		Application::SetCursorVisible(true);
-
-		// TODO remove the below testing code
-		////////start of testing code////////
-		//std::cout << " x " << Application::GetCursorX() << std::endl;
-		//std::cout << " y " << Application::GetCursorY() << std::endl;
-		////////end of testing code////////
-		// TODO remove the above testing code
-
-		// Check what the player clicked on
 		if (clickedDelay == 20)
 		{
 			if (Application::IsKeyPressed(VK_LBUTTON))
@@ -457,18 +437,6 @@ void Scene4::Update(double dt)
 				}
 			}
 			shopAction = SHOP_EXIT;
-
-			// TODO remove the below testing code
-			////////start of testing code////////
-			std::cout << "Money    : " << Inventory::instance()->items[ITEMS_CURRENCY] << std::endl;
-			std::cout << "BluFruit : " << Inventory::instance()->items[ITEMS_BLUFRUIT] << std::endl;
-			std::cout << "RedFruit : " << Inventory::instance()->items[ITEMS_REDFRUIT] << std::endl;
-			std::cout << "Meat     : " << Inventory::instance()->items[ITEMS_MEAT] << std::endl;
-			std::cout << "Trap	   : " << Inventory::instance()->items[ITEMS_TRAP] << std::endl;
-			std::cout << "Incubator: " << Inventory::instance()->items[ITEMS_INCUBATOR] << std::endl;
-			std::cout << "Quantity : " << itemQuantity << std::endl;
-			////////end of testing code////////
-			// TODO remove the above testing code
 
 			clickedDelay = 0;
 		}
@@ -709,7 +677,7 @@ void Scene4::RenderNPC()
 	for (int i = 0; i < npc.numberOfNPCs; i++)
 	{
 		viewStack.PushMatrix();
-			viewStack.Translate(npc.getCoord(i).x, npc.getCoord(i).y, npc.getCoord(i).z);
+			viewStack.Translate(npc.GetCoord(i).x, npc.GetCoord(i).y, npc.GetCoord(i).z);
 			viewStack.PushMatrix();
 				viewStack.Scale(10, 40, 10);
 				RenderMesh(meshList[GEO_PLACEHOLDER_NPC], godlights);
@@ -910,7 +878,7 @@ bool Scene4::collision(Vector3 c)
 {
 	float ActualYpos = c.y - 20;
 
-	for (int i = 0; i < NPC_TOTAL; i++)
+	for (int i = 0; i < npc.numberOfNPCs; i++)
 	{
 		if (c.x >= npc.NPCS[i].minX && c.x <= npc.NPCS[i].maxX &&
 			c.z >= npc.NPCS[i].minZ && c.z <= npc.NPCS[i].maxZ &&
@@ -923,7 +891,8 @@ bool Scene4::collision(Vector3 c)
 	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f) {
 		return true;
 	}
-	else {
+	else 
+	{
 		return false;
 	}
 }
@@ -932,13 +901,18 @@ void Scene4::textCollision()
 {
 	float ActualYpos = camera.position.y - 20;
 
-	for (int i = 0; i < NPC_TOTAL; i++)
+	for (int i = 0; i < npc.numberOfNPCs; i++)
 	{
 		if (camera.position.x >= (npc.NPCS[i].minX - npc.sizeOfTextMove) && camera.position.x <= (npc.NPCS[i].maxX + npc.sizeOfTextMove) &&
 			camera.position.z >= (npc.NPCS[i].minZ - npc.sizeOfTextMove) && camera.position.z <= (npc.NPCS[i].maxZ + npc.sizeOfTextMove) &&
 			ActualYpos >= (npc.NPCS[i].minY - npc.sizeOfTextMove) && ActualYpos <= (npc.NPCS[i].maxY + npc.sizeOfTextMove))
 		{
-		textBoxRender = i;
+			textBoxRender = i;
+			npc.canMove[i] = false;
+		}
+		else
+		{
+			npc.canMove[i] = true;
 		}
 	}
 }

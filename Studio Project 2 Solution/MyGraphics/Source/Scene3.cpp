@@ -53,7 +53,6 @@ void Scene3::Init()
 	if (trap1State == 1)
 	{
 		int TRAPCARD;
-		srand(time(NULL));
 		TRAPCARD = rand() % 70 + 1;
 
 		if (TRAPCARD <= 70)
@@ -67,7 +66,6 @@ void Scene3::Init()
 	if (trap2State == 1)
 	{
 		int TRAPCARD;
-		srand(time(NULL));
 		TRAPCARD = rand() % 70 + 1;
 
 		if (TRAPCARD <= 70)
@@ -81,7 +79,6 @@ void Scene3::Init()
 	if (trap3State == 3)
 	{
 		int TRAPCARD;
-		srand(time(NULL));
 		TRAPCARD = rand() % 70 + 1;
 
 		if (TRAPCARD <= 70)
@@ -95,7 +92,6 @@ void Scene3::Init()
 	if (trap4State == 1)
 	{
 		int TRAPCARD;
-		srand(time(NULL));
 		TRAPCARD = rand() % 70 + 1;
 
 		if (TRAPCARD <= 70)
@@ -109,7 +105,6 @@ void Scene3::Init()
 	if (trap5State == 1)
 	{
 		int TRAPCARD;
-		srand(time(NULL));
 		TRAPCARD = rand() % 70 + 1;
 
 		if (TRAPCARD <= 70)
@@ -462,7 +457,6 @@ void Scene3::Update(double dt)
 void Scene3::getFruuts()
 {
 	int gain = 0;
-	srand(time(NULL));
 	gain = rand() % 5 + 1;
 	Inventory::instance()->items[ITEMS_REDFRUIT] += gain;
 	Inventory::instance()->items[ITEMS_BLUFRUIT] += (5 - gain);

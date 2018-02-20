@@ -60,6 +60,9 @@ int Application::WindowWidth = 2;
 int Application::WindowHeight = 2;
 void Application::Init()
 {
+	// Seed the random number generator
+	srand(time(NULL));
+
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
 	//Initialize GLFW
