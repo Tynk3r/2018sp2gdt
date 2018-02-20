@@ -39,10 +39,10 @@ public:
 	int cost[numberOfSHOPs]; // The selling/Buying value of each action
 
 	// Get the coord of the requested action using the SHOP_ACTION enum
-	Vector3 getCoord(SHOP_ACTION);
+	Vector3 GetCoord(SHOP_ACTION);
 
 	// Get the coord of the requested action using an integer
-	Vector3 getCoord(int);
+	Vector3 GetCoord(int);
 
 	SHOP();
 	~SHOP();

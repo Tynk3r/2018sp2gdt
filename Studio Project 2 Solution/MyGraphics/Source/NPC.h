@@ -17,6 +17,17 @@ enum NPC_TYPE
 	NPC_TOTAL,
 };
 
+// Direction of possible movement
+enum MOVE_DIRECTION
+{
+	MOVEDIR_POS,	// Can move in the positive direction
+	MOVEDIR_NEG,	// Can move in the negative direction
+	MOVEDIR_BOTH,	// Can move in both of the directions
+	MOVEDIR_NONE,	// Can move in none of the directions
+
+	MOVEDIR_TOTAL,
+};
+
 class NPC
 {
 public:
@@ -24,14 +35,20 @@ public:
 	static const int sizeOfBoxMove = 10;
 	static const int sizeOfTextMove = 20;
 
-
 	Object NPCS[numberOfNPCs];
-	
+	MOVE_DIRECTION moveDirX[numberOfNPCs];
+	MOVE_DIRECTION moveDirZ[numberOfNPCs];
+	bool canMove[numberOfNPCs];
+	int moveAmt[numberOfNPCs][2];
+
 	// Get the coord of the requested NPC type using the NPC_TYPE
-	Vector3 getCoord(NPC_TYPE);
+	Vector3 GetCoord(NPC_TYPE);
 
 	// Get the coord of the requested NPC type using an integer
-	Vector3 getCoord(int);
+	Vector3 GetCoord(int);
+
+	// Update all NPCs
+	void Update(double dt);
 
 	NPC();
 	~NPC();
