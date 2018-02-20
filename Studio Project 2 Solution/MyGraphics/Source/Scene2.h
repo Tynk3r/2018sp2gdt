@@ -11,8 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 #include "Object.h"
-
-
+#include "MyPtero.h"
 
 class Scene2 : public Scene
 {
@@ -66,7 +65,6 @@ class Scene2 : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
-
 	};
 
 	enum GEOMETRY_TYPE
@@ -87,6 +85,10 @@ class Scene2 : public Scene
 		GEO_BLUINV,
 		GEO_TRAPINV,
 		GEO_INVINTERFACE,
+		GEO_CAMPFIRE_BASE,
+		GEO_CAMPFIRE_WOOD,
+		GEO_SKELETON,
+		GEO_INCUBATOR,
 		
 		NUM_GEOMETRY,
 	};
@@ -99,16 +101,19 @@ class Scene2 : public Scene
 		OBJ_PTERO_ADOLESCENT, 
 		OBJ_PTERO_ADULT,
 		OBJ_FENCE,
+		OBJ_CAMPFIRE,
+		OBJ_SKELETON,
+		OBJ_INCUBATOR,
 
 		NUM_OBJECTS,
 	};
 
-	enum PTERO_STATE {
-		P_EGG = 0,
-		P_BABY,
-		P_ADOLESCENT,
-		P_ADULT,
-	};
+	//enum PTERO_STATE {
+	//	P_EGG = 0,
+	//	P_BABY,
+	//	P_ADOLESCENT,
+	//	P_ADULT,
+	//};
 
 public:
 	Scene2();
@@ -118,6 +123,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+
 private:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
@@ -137,13 +143,8 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float rotateMain = 0;
 
-	bool hungry = true;
-	bool incubating = false;
-	int pteroStage;
 	float pteroLocationX = 0;
 	float pteroLocationZ = 62.5;
-	float pteroDirection = 180.0f;
-	float pteroMovementSpeed = 0.0f;
 	
 	bool godlights = false;
 };

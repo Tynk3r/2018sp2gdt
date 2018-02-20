@@ -12,6 +12,8 @@
 #include "Utility.h"
 #include "RingObject.h"
 #include "timer.h"
+#include "MyPtero.h"
+#include "Scene2.h"
 
 #include <stdlib.h>
 #include <time.h>
@@ -28,6 +30,7 @@ class Scene1 : public Scene
 		U_MATERIAL_DIFFUSE,
 		U_MATERIAL_SPECULAR,
 		U_MATERIAL_SHININESS,
+
 		U_LIGHT0_POSITION,
 		U_LIGHT0_COLOR,
 		U_LIGHT0_POWER,
@@ -40,6 +43,7 @@ class Scene1 : public Scene
 		U_LIGHT0_COSCUTOFF,
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
+
 		U_LIGHT1_POSITION,
 		U_LIGHT1_COLOR,
 		U_LIGHT1_POWER,
@@ -51,6 +55,7 @@ class Scene1 : public Scene
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
+
 		U_LIGHT2_POSITION,
 		U_LIGHT2_COLOR,
 		U_LIGHT2_POWER,
@@ -105,6 +110,7 @@ class Scene1 : public Scene
 		GEO_DINO,
 		GEO_TREE,
 		GEO_CLIFF,
+		GEO_BORDER,
 		GEO_TEXT,
 
 		NUM_GEOMETRY
@@ -170,14 +176,17 @@ private:
 	bool collision(Vector3);
 
 	int collideRing(Vector3);
-
-	bool godlights = false;
-
-	int currentRing;
 	int points;
 	int totalTime;
 
+	bool godlights;
+
+	RingObject currentRing;
+
 	Vector3 ringpos;
+
 	StopWatch timer;
+
+	MyPtero* Ptero;
 };
 #endif
