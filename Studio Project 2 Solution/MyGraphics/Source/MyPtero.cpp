@@ -9,6 +9,7 @@ MyPtero::MyPtero()
 	pteroStage = P_EGG;
 	pteroDirection = 180.0f;
 	pteroMovementSpeed = 0.0f;
+	pteroSpeedModifier = 1.0f;
 	pteroSize = 1;
 
 	this->setPos(Vector3(0,0,62.5));
@@ -61,4 +62,21 @@ void MyPtero::setFlightStability(float stab)
 void MyPtero::setFlightStamina(float stam)
 {
 	this->FlightStamina = stam;
+}
+
+void MyPtero::newPtero(void)
+{
+	srand(time(NULL));
+	float r = ((float)(rand() % 21) + (float)10) / (float)10; // 1.0-3.0
+	float s = ((float)(rand() % 31) + (float)10) / (float)10; // 1.0-4.0
+
+	hungry = true;
+	incubating = false;
+	pteroStage = P_EGG;
+	pteroDirection = 180.0f;
+	pteroMovementSpeed = 0.0f;
+	pteroSpeedModifier = s;
+	pteroSize = r;
+	pteroLocationX = 0;
+	pteroLocationZ = 62.5;
 }

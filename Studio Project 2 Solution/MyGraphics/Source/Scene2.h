@@ -102,10 +102,6 @@ class Scene2 : public Scene
 
 	enum OBJECTS
 	{
-		OBJ_DINOEGG,
-		OBJ_PTERO_BABY,
-		OBJ_PTERO_ADOLESCENT, 
-		OBJ_PTERO_ADULT,
 		OBJ_FENCE,
 		OBJ_CAMPFIRE,
 		OBJ_SKELETON,
@@ -113,13 +109,6 @@ class Scene2 : public Scene
 
 		NUM_OBJECTS,
 	};
-
-	//enum PTERO_STATE {
-	//	P_EGG = 0,
-	//	P_BABY,
-	//	P_ADOLESCENT,
-	//	P_ADULT,
-	//};
 
 public:
 	Scene2();
@@ -148,10 +137,7 @@ private:
 	bool collision(Vector3);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	float rotateMain = 0;
-
-	float pteroLocationX = 0;
-	float pteroLocationZ = 62.5;
 	
-	bool godlights = false;
+	bool godlights = true;
 };
 #endif
