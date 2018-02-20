@@ -270,6 +270,8 @@ void Scene3::Init()
 	meshList[GEO_REDFRUIT] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempFruit.obj");
 	meshList[GEO_REDFRUIT]->textureID = LoadTGA("Image//fruitRed.tga");
 
+	meshList[GEO_WHEELBARROW] = MeshBuilder::GenerateOBJ("wheelbarrow", "OBJ//wheelBarrow.obj");
+
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
 	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
@@ -710,6 +712,13 @@ void Scene3::Render()
 		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
 		viewStack.PopMatrix();
 	}
+
+	viewStack.PushMatrix();
+	viewStack.Translate(20, 9, 0);
+	viewStack.Scale(15, 15, 15);
+	viewStack.Rotate(72, 0, 1, 0);
+	RenderMesh(meshList[GEO_WHEELBARROW], light);
+	viewStack.PopMatrix();
 	
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
