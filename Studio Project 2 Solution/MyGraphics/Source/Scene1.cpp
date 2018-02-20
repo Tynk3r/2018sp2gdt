@@ -107,7 +107,7 @@ void Scene1::Init()
 
 	light[0].type = Light::LIGHT_POINT;
 	light[0].position.Set(0, 10, 3);
-	light[1].color.Set(0.898, 0.627, 0.125);
+	light[0].color.Set(0.898, 0.627, 0.125);
 	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
@@ -242,6 +242,9 @@ void Scene1::Init()
 
 	meshList[GEO_CLIFF] = MeshBuilder::GenerateOBJ("Cliff", "OBJ//rock.obj");
 	meshList[GEO_CLIFF]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("Border", "OBJ//border.obj");
+	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
 
 	//Setup Ring Info 
 	for (int i = 0; i < NUM_OBJECTS-1; i++)
@@ -458,19 +461,27 @@ void Scene1::Render()
 	}
 
 	//CLIFFS//
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 6; i++)
 	{
-		for (int j = 1; j < 15; j++)
+		for (int j = 1; j < 6; j++)
 		{
 			viewStack.PushMatrix();
 			//viewStack.Rotate(12.5*i, 0, 1, 0);
-			viewStack.Translate(-405 + (100 * i), -500, -405 + (100 * j));
+			viewStack.Translate(-490 + (180 * i), -500, -490 + (180 * j));
 			viewStack.Scale(3, 3, 3);
 			viewStack.Rotate(12.5*i, 0, 1, 0);
 			RenderMesh(meshList[GEO_CLIFF], godlights);
 			viewStack.PopMatrix();
 		}
 	}
+
+	//BORDER//
+	viewStack.PushMatrix();
+	viewStack.Translate(0,-500,0);
+	viewStack.Scale(40, 50, 40);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
 
 	//Render Dino//
 	RenderMeshOnScreen(meshList[GEO_DINO], 0.6, 0, 65, 60, (camera.horizMove)*0.5, camera.vertMove);
@@ -697,7 +708,7 @@ void Scene1::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float
 	modelStack.Rotate(-170, 0, 1, 0);
 	modelStack.Rotate(horideg, 0, 1, 0);
 	modelStack.Rotate(vertideg, 1, 0, 1);
-	RenderMesh(mesh, false); //UI should not have light
+	RenderMesh(mesh, godlights); //UI should not have light, but yes for my scene!
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
