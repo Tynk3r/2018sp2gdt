@@ -34,8 +34,12 @@ public:
 	int pteroStage;
 	float pteroDirection;
 	float pteroMovementSpeed;
+	float pteroSpeedModifier;
 	float pteroSize;
+	float pteroLocationX = 0;
+	float pteroLocationZ = 62.5;
 
+	void newPtero(void);
 	void setFlightSpeed(float);
 	void setFlightSteerSpeed(float);
 	void setFlightStability(float);
