@@ -27,7 +27,7 @@ MyPtero* MyPtero::instance(void)
 	return MyPtero::Ptero_instance;
 }
 
-// Getters for Scene1 pointer;
+// Getters for Scene1
 float MyPtero::getSpeed(void)
 {
 	return this->FlightSpeed;
@@ -43,4 +43,22 @@ float MyPtero::getStability(void)
 float MyPtero::getStamina(void)
 {
 	return this->FlightStamina;
+}
+
+// Setters for Scene2 
+void MyPtero::setFlightSpeed(float sped)
+{
+	this->FlightSpeed = sped;
+}
+void MyPtero::setFlightSteerSpeed(float ster)
+{
+	this->FlightSteerSpeed = ster;
+}
+void MyPtero::setFlightStability(float stab)
+{
+	this->FlightStability = stab;
+}
+void MyPtero::setFlightStamina(float stam)
+{
+	this->FlightStamina = stam;
 }
