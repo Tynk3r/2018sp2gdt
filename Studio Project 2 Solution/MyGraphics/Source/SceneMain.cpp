@@ -225,8 +225,8 @@ void SceneMain::Update(double dt)
 	camera.Update(dt);
 	Inventory::instance()->Update(dt);
 
-	// door for scene 4
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	// door for scenes
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 	}
@@ -403,6 +403,11 @@ void SceneMain::Render()
 	ah << framerate;
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Your Pterodactyl can't fly yet!", Color(1, 0.1, 0.1), 2.3, 4, 11);
+	}
 }
 
 void SceneMain::Exit()

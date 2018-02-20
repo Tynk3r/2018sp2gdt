@@ -122,8 +122,8 @@ void CameraFPV::Update(double dt)
 		//static const float CAMERA_SPEED = 1.0f;
 		//static float MOVEMENT_SPEED = 50.0f;
 		//NEW
-		static const float CAMERA_SPEED = MyPtero::instance()->getSteerSpeed();
-		static float MOVEMENT_SPEED = MyPtero::instance()->getSpeed();
+		static const float CAMERA_SPEED = 1.0f*MyPtero::instance()->pteroSpeedModifier;
+		static float MOVEMENT_SPEED = 30.0f*MyPtero::instance()->pteroSpeedModifier;
 
 		//Set Camera Variables
 		Vector3 view = (target - position).Normalized();
@@ -209,11 +209,11 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = MyPtero::instance()->getSpeed()+30.0f;
+			MOVEMENT_SPEED = (30.0f*MyPtero::instance()->pteroSpeedModifier)*2;
 		}
 		else
 		{
-			MOVEMENT_SPEED = MyPtero::instance()->getSpeed();
+			MOVEMENT_SPEED = 30.0f*MyPtero::instance()->pteroSpeedModifier;
 		}
 
 		//If not pressing Down, automatically pitch downwards
@@ -224,7 +224,7 @@ void CameraFPV::Update(double dt)
 				if (!Application::IsKeyPressed(VK_UP))
 				{
 					if (vertMove < 10)
-						vertMove += (double)(2.0*MyPtero::instance()->getStability());
+						vertMove += (double)(2.0*CAMERA_SPEED);
 				}
 			}
 			else
