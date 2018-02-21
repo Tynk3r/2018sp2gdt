@@ -5,49 +5,55 @@
 #include "LoadOBJ.h"
 
 bool LoadOBJ(
-	const char *file_path, 
-	std::vector<Position> & out_vertices, 
-	std::vector<TexCoord> & out_uvs, 
+	const char *file_path,
+	std::vector<Position> & out_vertices,
+	std::vector<TexCoord> & out_uvs,
 	std::vector<Vector3> & out_normals
 )
 {
-	//Fill up code from OBJ lecture notes
 	std::ifstream fileStream(file_path, std::ios::binary);
 	if (!fileStream.is_open())
 	{
 		std::cout << "Impossible to open " << file_path << ". Are you in the right directory ?\n";
 		return false;
 	}
+
 	std::vector<unsigned> vertexIndices, uvIndices, normalIndices;
 	std::vector<Position> temp_vertices;
 	std::vector<TexCoord> temp_uvs;
 	std::vector<Vector3> temp_normals;
 
-	while (!fileStream.eof()) {
+	while (!fileStream.eof())
+	{
 		char buf[256];
 		fileStream.getline(buf, 256);
-		if (strncmp("v ", buf, 2) == 0) { //process vertex position
+		if (strncmp("v ", buf, 2) == 0)
+		{
 			Position vertex;
 			sscanf_s((buf + 2), "%f%f%f", &vertex.x, &vertex.y, &vertex.z);
 			temp_vertices.push_back(vertex);
 		}
-		else if (strncmp("vt ", buf, 3) == 0) { //process texcoord
-			TexCoord uv;
-			sscanf_s((buf + 3), "%f%f", &uv.v, &uv.u);
-			temp_uvs.push_back(uv);
+		else if (strncmp("vt ", buf, 3) == 0)
+		{
+			TexCoord tc;
+			sscanf_s((buf + 2), "%f%f", &tc.u, &tc.v);
+			temp_uvs.push_back(tc);
 		}
-		else if (strncmp("vn ", buf, 3) == 0) { //process normal
-			Vector3 norm;
-			sscanf_s((buf + 3), "%f%f%f", &norm.x, &norm.y, &norm.z);
-			temp_normals.push_back(norm);
+		else if (strncmp("vn ", buf, 3) == 0)
+		{
+			Vector3 normal;
+			sscanf_s((buf + 2), "%f%f%f", &normal.x, &normal.y, &normal.z);
+			temp_normals.push_back(normal);
 		}
-		else if (strncmp("f ", buf, 2) == 0) { //process face
+		else if (strncmp("f ", buf, 2) == 0)
+		{
 			unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
 			int matches = sscanf_s((buf + 2), "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",
-			&vertexIndex[0], &uvIndex[0], &normalIndex[0],
-			&vertexIndex[1], &uvIndex[1], &normalIndex[1],
-			&vertexIndex[2], &uvIndex[2], &normalIndex[2],
-			&vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+				&vertexIndex[0], &uvIndex[0], &normalIndex[0],
+				&vertexIndex[1], &uvIndex[1], &normalIndex[1],
+				&vertexIndex[2], &uvIndex[2], &normalIndex[2],
+				&vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+
 			if (matches == 9) //triangle
 			{
 				vertexIndices.push_back(vertexIndex[0]);
@@ -60,7 +66,7 @@ bool LoadOBJ(
 				normalIndices.push_back(normalIndex[1]);
 				normalIndices.push_back(normalIndex[2]);
 			}
-			else if (matches == 12) //quadz
+			else if (matches == 12) //quad
 			{
 				vertexIndices.push_back(vertexIndex[0]);
 				vertexIndices.push_back(vertexIndex[1]);
@@ -90,7 +96,9 @@ bool LoadOBJ(
 			}
 		}
 	}
-	fileStream.close(); // close file
+	fileStream.close();
+
+	// For each vertex of each triangle
 	for (unsigned i = 0; i < vertexIndices.size(); ++i)
 	{
 		// Get the indices of its attributes
@@ -109,27 +117,25 @@ bool LoadOBJ(
 		out_normals.push_back(normal);
 	}
 
-
-
 	return true;
 }
 
-struct PackedVertex{
+struct PackedVertex {
 	Position position;
 	TexCoord uv;
 	Vector3 normal;
-	bool operator<(const PackedVertex that) const{
+	bool operator<(const PackedVertex that) const {
 		return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
 	};
 };
 
-bool getSimilarVertexIndex_fast( 
-	PackedVertex & packed, 
+bool getSimilarVertexIndex_fast(
+	PackedVertex & packed,
 	std::map<PackedVertex, unsigned short> & VertexToOutIndex,
 	unsigned short & result
-){
+) {
 	std::map<PackedVertex, unsigned short>::iterator it = VertexToOutIndex.find(packed);
-	if(it == VertexToOutIndex.end())
+	if (it == VertexToOutIndex.end())
 	{
 		return false;
 	}
@@ -149,25 +155,25 @@ void IndexVBO(
 	std::vector<Vertex> & out_vertices
 )
 {
-	std::map<PackedVertex,unsigned short> VertexToOutIndex;
+	std::map<PackedVertex, unsigned short> VertexToOutIndex;
 
 	// For each input vertex
-	for(unsigned int i = 0; i < in_vertices.size(); ++i) 
+	for (unsigned int i = 0; i < in_vertices.size(); ++i)
 	{
 
-		PackedVertex packed = {in_vertices[i], in_uvs[i], in_normals[i]};
+		PackedVertex packed = { in_vertices[i], in_uvs[i], in_normals[i] };
 
 		// Try to find a similar vertex in out_XXXX
 		unsigned short index;
-		bool found = getSimilarVertexIndex_fast( packed, VertexToOutIndex, index);
+		bool found = getSimilarVertexIndex_fast(packed, VertexToOutIndex, index);
 
-		if ( found )
-		{ 
+		if (found)
+		{
 			// A similar vertex is already in the VBO, use it instead !
-			out_indices.push_back( index );
+			out_indices.push_back(index);
 		}
 		else
-		{ 
+		{
 			// If not, it needs to be added in the output data.
 			Vertex v;
 			v.pos.Set(in_vertices[i].x, in_vertices[i].y, in_vertices[i].z);
@@ -176,8 +182,8 @@ void IndexVBO(
 			v.color.Set(1, 1, 1);
 			out_vertices.push_back(v);
 			unsigned newindex = (unsigned)out_vertices.size() - 1;
-			out_indices.push_back( newindex );
-			VertexToOutIndex[ packed ] = newindex;
+			out_indices.push_back(newindex);
+			VertexToOutIndex[packed] = newindex;
 		}
 	}
 }
