@@ -208,12 +208,12 @@ void SceneMain::Init()
 
 	//Set Object Positions//
 	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20);
-	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 5, 20, 5);
-	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 5, 20, 5);
-	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 5, 20, 5);
-	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 20);
-	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 20);
-	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 20);
+	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
+	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
+	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
+	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 50);
+	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 50);
+	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 50);
 	objs[OBJ_CAMPFIRE].setBox(Vector3(80, 0, 80), 0.1);
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
@@ -321,7 +321,7 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 	//Environment//
 	//Trees//
@@ -438,7 +438,7 @@ void SceneMain::Render()
 				viewStack.PushMatrix();
 					viewStack.Translate(4.5, -1, 0);
 					viewStack.Scale(8.5, 2, 2);
-					RenderMesh(meshList[GEO_QUAD], false);
+					RenderMesh(meshList[GEO_QUAD], godlights);
 				viewStack.PopMatrix();
 				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
 				viewStack.Translate(-3, -2, 0);
