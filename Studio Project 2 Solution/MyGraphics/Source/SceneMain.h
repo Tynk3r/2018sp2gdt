@@ -71,6 +71,7 @@ class SceneMain : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
+
 	};
 
 	enum GEOMETRY_TYPE
@@ -91,6 +92,8 @@ class SceneMain : public Scene
 		GEO_FIREBASE,
 		GEO_FIREWOOD,
 		GEO_BORDER,
+		GEO_EASTER1,
+		
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
 		GEO_INV_BLUFRUIT,
@@ -100,6 +103,7 @@ class SceneMain : public Scene
 		GEO_INV_CURRENCY,
 		GEO_INV_INTERFACE,
 		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];

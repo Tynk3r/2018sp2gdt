@@ -318,6 +318,7 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
+	RenderMesh(meshList[GEO_AXES], false);
 
 	//Environment//
 	//Trees//
@@ -407,15 +408,26 @@ void SceneMain::Render()
 			viewStack.PopMatrix();
 		}
 	}
+
+	//Easter Eggs//
+	viewStack.PushMatrix();
+	viewStack.Translate(-190, 10, -190);
+	viewStack.Scale(10, 10, 10);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_EASTER1], false);
+	viewStack.PopMatrix();
+
 	//End of Environment//
 
-	viewStack.PushMatrix();
+		viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
+
 		viewStack.PushMatrix();
 			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 			viewStack.Rotate(rotateMain, 0, 1, 0);
 			RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
+
 		viewStack.PushMatrix();
 			viewStack.Translate(-18, 35, 0);
 			viewStack.Scale(4, 4, 4);
