@@ -14,9 +14,6 @@ MyPtero::MyPtero()
 
 	this->setPos(Vector3(0,0,62.5));
 	this->setBox(this->getPos(), pteroSize);
-
-	//Actual position setting expected in Scene
-	//Collision expected to be updated in Scene
 }
 
 MyPtero* MyPtero::instance(void)

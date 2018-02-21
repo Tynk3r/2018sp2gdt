@@ -246,14 +246,6 @@ void Scene2::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	if (Application::IsKeyPressed('Q')) // turn on global light
-	{
-			godlights = false;
-	}
-	if (Application::IsKeyPressed('E')) // turn off global light
-	{
-			godlights = true;
-	}
 	// feed/incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
@@ -452,7 +444,6 @@ void Scene2::Render()
 	}
 
 	RenderSkybox(camera.SkyboxSize, godlights);
-	//RenderMesh(meshList[GEO_AXES], false);
 
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {
@@ -465,7 +456,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_BABY:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 5, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
@@ -473,7 +464,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADOLESCENT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 15, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
@@ -481,7 +472,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADULT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 20, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 25, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
@@ -583,15 +574,6 @@ void Scene2::Render()
 			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(1, 0, 0));
 		viewStack.PopMatrix();
 	}
-	/* sampel
-	viewStack.PushMatrix();
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
-		viewStack.Scale(1, 1, 1);
-		RenderMesh(meshList[], godlights);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
-	viewStack.PopMatrix();
-	*/
 
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:
