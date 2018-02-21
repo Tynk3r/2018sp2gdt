@@ -465,7 +465,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_BABY:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 5, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
@@ -473,7 +473,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADOLESCENT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 15, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
@@ -481,7 +481,7 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADULT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 20, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, 25, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
