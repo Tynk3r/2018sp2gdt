@@ -86,6 +86,11 @@ class SceneMain : public Scene
 		GEO_TEXT,
 		GEO_DINOEGG,
 		GEO_TREE,
+		GEO_FERN,
+		GEO_ROCK,
+		GEO_FIREBASE,
+		GEO_FIREWOOD,
+		GEO_BORDER,
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
 		GEO_INV_BLUFRUIT,
@@ -101,10 +106,14 @@ class SceneMain : public Scene
 
 	enum OBJECTS
 	{
-		OBJ_DINOEGG,
+		OBJ_DINOEGG = 0,
 		OBJ_TREE1,
 		OBJ_TREE2,
 		OBJ_TREE3,
+		OBJ_ROCK1,
+		OBJ_ROCK2,
+		OBJ_ROCK3,
+		OBJ_CAMPFIRE,
 
 		NUM_OBJECTS,
 	};
