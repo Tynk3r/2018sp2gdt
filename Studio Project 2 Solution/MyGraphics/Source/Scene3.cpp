@@ -771,9 +771,9 @@ void Scene3::Render()
 	}
 
 	viewStack.PushMatrix();
-	viewStack.Translate(20, 9, 0);
-	viewStack.Scale(15, 15, 15);
-	viewStack.Rotate(72, 0, 1, 0);
+	viewStack.Translate(0, 0, 0);
+	viewStack.Scale(1, 1, 1);
+	//viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], false);
 	viewStack.PopMatrix();
 
