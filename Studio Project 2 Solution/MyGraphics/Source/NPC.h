@@ -52,6 +52,7 @@ public:
 	int moveDirZ[NPC_TOTAL];							// Array containing possible movement in the Z axis for each NPC 
 	bool canMove[NPC_TOTAL];							// Array that determines if each NPC can move
 	int npcMoveDelay[NPC_TOTAL];						// Array containing the delay such that each NPC has to wait before moving
+	float npcFacingRotaion[NPC_TOTAL];					// Array containing the rotation of each NPC
 	int moveAmt[NPC_TOTAL][MOVEAXIS_TOTAL];				// Double array containing the MinMax movement amount for all the axis for each NPC
 	int npcDirectionDelay[NPC_TOTAL][MOVEAXIS_TOTAL];	// Dobule array containing the direction and the delay such that each NPC has to travel in a direction before it can switch
 
@@ -60,6 +61,7 @@ public:
 
 	// Update functions
 	void Update(double dt);
+	void RotationUpdate(int i, double angle);
 	void CheckForCollision(int i);
 	void CheckForMinMaxMovement(int i);
 

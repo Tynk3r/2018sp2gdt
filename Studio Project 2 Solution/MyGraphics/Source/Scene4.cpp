@@ -206,6 +206,11 @@ void Scene4::Init()
 	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
+	meshList[GEO_NPC_HUNTER] = MeshBuilder::GenerateOBJ("npc_hunter", "OBJ//NPC_Hunter.obj");
+	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Vendor.obj");
+//	meshList[GEO_NPC_HUNTER] = MeshBuilder::GenerateOBJ("npc_hunter", "OBJ//NPC_Hunter.obj");
+//	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//4bottom.tga");
+
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -680,13 +685,21 @@ void Scene4::RenderNPC()
 		viewStack.PushMatrix();
 			viewStack.Translate(npc.GetCoord(i).x, npc.GetCoord(i).y, npc.GetCoord(i).z);
 			viewStack.PushMatrix();
-				viewStack.Scale(10, 40, 10);
-				RenderMesh(meshList[GEO_PLACEHOLDER_NPC], godlights);
+				if (i == NPC_SHOP)
+				{
+					viewStack.Scale(8, 8, 8);
+					RenderMesh(meshList[GEO_NPC_SHOP], godlights);
+				}
+				else
+				{
+					viewStack.Rotate(npc.npcFacingRotaion[i], 0, 1, 0);
+					viewStack.Scale(8, 8, 8);
+					RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+				}
 			viewStack.PopMatrix();
 		viewStack.PopMatrix();
 	}
 	textCollision();
-
 
 	if (Application::IsKeyPressed('X') && textBoxRender == NPC_SHOP)
 	{

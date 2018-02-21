@@ -97,6 +97,9 @@ class Scene4 : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 
+		GEO_NPC_HUNTER,
+		GEO_NPC_SHOP,
+
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
 		GEO_INV_BLUFRUIT,
