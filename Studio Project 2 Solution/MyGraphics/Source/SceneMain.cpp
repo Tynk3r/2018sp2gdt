@@ -188,6 +188,9 @@ void SceneMain::Init()
 
 	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
+	meshList[GEO_EASTER1] = MeshBuilder::Generate2DQuad("easter1", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_EASTER1]->textureID = LoadTGA("Image//easter1.tga");
+
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
@@ -382,14 +385,14 @@ void SceneMain::Render()
 	//BORDER//
 	viewStack.PushMatrix();
 	viewStack.Translate(0,0,-10);
-	viewStack.Scale(17,20,17);
+	viewStack.Scale(20,30,20);
 	viewStack.Rotate(45, 0, 1, 0);
 	RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 	viewStack.Translate(0, 0, -10);
-	viewStack.Scale(20, 50, 20);
+	viewStack.Scale(23, 60, 23);
 	viewStack.Rotate(45, 0, 1, 0);
 	RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
