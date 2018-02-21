@@ -199,25 +199,13 @@ void NPC::RotationUpdate(int i, int angle)
 
 	double negAngle = 360 - posAngle;
 
-	if (posAngle < negAngle)
+	if (posAngle <= negAngle)
 	{
 		npcFacingRotaion[i] += 15;
 	}
-	else if (posAngle < negAngle)
-	{
-		npcFacingRotaion[i] -= 15;
-	}
 	else
 	{
-		int ranDir = (rand() % 2);
-		if (ranDir == 1)
-		{
-			npcFacingRotaion[i] += 15;
-		}
-		else
-		{
-			npcFacingRotaion[i] -= 15;
-		}
+		npcFacingRotaion[i] -= 15;
 	}
 }
 
