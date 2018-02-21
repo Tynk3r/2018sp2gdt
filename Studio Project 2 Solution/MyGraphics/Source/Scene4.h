@@ -158,9 +158,7 @@ private:
 
 	bool godlights = false;
 
-	// For NPCs
 	NPC npc;
-	int npcMoveDelay;
 
 	// For shop
 	SHOP shop;

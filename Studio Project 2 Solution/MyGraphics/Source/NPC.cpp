@@ -1,5 +1,7 @@
 #include "NPC.h"
 
+static const int moveDelayAmount = 2;	// Movement delay so movement is seamless
+
 NPC::NPC()
 {
 	NPCS[NPC_WEATHER].setBox(Vector3(60, 0, 80), sizeOfBoxMove);
@@ -9,10 +11,15 @@ NPC::NPC()
 	NPCS[NPC_RACING].setBox(Vector3(-100, 0, 40), sizeOfBoxMove);
 	NPCS[NPC_SHOP].setBox(Vector3(80, 0, -100), sizeOfBoxMove);
 
-	for (int i = 0; i < NPC_TOTAL; i++)
+	for (int i = 0; i < numberOfNPCs; i++)
 	{
 		moveDirX[i] = MOVEDIR_BOTH;
 		moveDirZ[i] = MOVEDIR_BOTH;
+		moveAmt[numberOfNPCs][MOVEAXIS_X] = 0;
+		moveAmt[numberOfNPCs][MOVEAXIS_Z] = 0;
+		npcMoveDelay[i] = 0;
+		npcDirectionDelay[i][MOVEAXIS_X] = 0;
+		npcDirectionDelay[i][MOVEAXIS_Z] = 0;
 	}
 }
 
@@ -23,142 +30,273 @@ Vector3 NPC::GetCoord(int i)
 
 void NPC::Update(double dt)
 {
-	int MOVEMENT_SPEED = 2;
-
-	// To check collision
 	for (int i = 0; i < numberOfNPCs; i++)
 	{
-		moveDirX[i] = MOVEDIR_BOTH;
-		moveDirZ[i] = MOVEDIR_BOTH;
-		for (int a = 0; a < numberOfNPCs; a++)
+		CheckForCollision(i);
+	}
+	// To move in the x and z direction
+	for (int i = 0; i < numberOfNPCs; i++)
+	{
+		CheckForMinMaxMovement(i);
+		if (npcMoveDelay[i] == moveDelayAmount)
 		{
-			if (a != i)
+			// Generate random number that determines positive, negative or no movement
+			int movement = ((rand() % 3) - 1);
+
+			// Set travel direction if not set
+			if ((npcDirectionDelay[i][MOVEAXIS_X] == 0) && (npcDirectionDelay[i][MOVEAXIS_Z] == 0))
 			{
-				if ((NPCS[i].maxX >= NPCS[a].minX) && (NPCS[i].maxX <= NPCS[a].maxX) &&
-					(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
+				// Generate random number that determines x or z axis
+				int axis = (rand() % MOVEAXIS_TOTAL);
+
+				// Generate random number that determines the movement amount required before switching
+				int switching = (rand() % 100);
+				if (switching >= 2)
 				{
-					if (moveDirX[i] == MOVEDIR_POS)
+					switching = 0;
+				}
+				else
+				{
+					switching = 5;
+				}
+
+				if (axis == MOVEAXIS_X)
+				{
+					if (movement > 0)
 					{
-						moveDirX[i] = MOVEDIR_NONE;
+						npcDirectionDelay[i][MOVEAXIS_X] = switching;
 					}
-					else if (moveDirX[i] == MOVEDIR_BOTH)
+					else if (movement < 0)
 					{
-						moveDirX[i] = MOVEDIR_NEG;
+						npcDirectionDelay[i][MOVEAXIS_X] = -switching;
 					}
 				}
-				else if ((NPCS[i].minX >= NPCS[a].minX) && (NPCS[i].minX <= NPCS[a].maxX) &&
-					(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
+				else if (axis == MOVEAXIS_Z)
 				{
-					if (moveDirX[i] == MOVEDIR_NEG)
+					if (movement > 0)
 					{
-						moveDirX[i] = MOVEDIR_NONE;
+						npcDirectionDelay[i][MOVEAXIS_Z] = switching;
 					}
-					else if (moveDirX[i] == MOVEDIR_BOTH)
+					else if (movement < 0)
 					{
-						moveDirX[i] = MOVEDIR_POS;
-					}
-				}
-				else if ((NPCS[i].maxZ >= NPCS[a].minZ) && (NPCS[i].maxZ <= NPCS[a].maxZ) &&
-					(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
-				{
-					if (moveDirZ[i] == MOVEDIR_POS)
-					{
-						moveDirZ[i] = MOVEDIR_NONE;
-					}
-					else if (moveDirZ[i] == MOVEDIR_BOTH)
-					{
-						moveDirZ[i] = MOVEDIR_NEG;
-					}
-				}
-				else if ((NPCS[i].minZ >= NPCS[a].minZ) && (NPCS[i].minZ <= NPCS[a].maxZ) &&
-					(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
-				{
-					if (moveDirZ[i] == MOVEDIR_NEG)
-					{
-						moveDirZ[i] = MOVEDIR_NONE;
-					}
-					else if (moveDirZ[i] == MOVEDIR_BOTH)
-					{
-						moveDirZ[i] = MOVEDIR_POS;
+						npcDirectionDelay[i][MOVEAXIS_Z] = -switching;
 					}
 				}
 
-				if (NPCS[i].getPos().x >= 130.0f)
-				{
-					if (moveDirX[i] == MOVEDIR_POS)
-					{
-						moveDirX[i] = MOVEDIR_NONE;
-					}
-					else if (moveDirX[i] == MOVEDIR_BOTH)
-					{
-						moveDirX[i] = MOVEDIR_NEG;
-					}
-				}
-				if (NPCS[i].getPos().x <= -130.0f)
-				{
-					if (moveDirX[i] == MOVEDIR_NEG)
-					{
-						moveDirX[i] = MOVEDIR_NONE;
-					}
-					else if (moveDirX[i] == MOVEDIR_BOTH)
-					{
-						moveDirX[i] = MOVEDIR_POS;
-					}
-				}
-				if (NPCS[i].getPos().z >= 150.0f)
-				{
+			}
 
-					if (moveDirZ[i] == MOVEDIR_POS)
+			// Setting final position vector
+
+			if (canMove[i] == true)
+			{
+				if (npcDirectionDelay[i][MOVEAXIS_X] > 0)
+				{
+					npcDirectionDelay[i][MOVEAXIS_X]--;
+					if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_POS))
 					{
-						moveDirZ[i] = MOVEDIR_NONE;
-					}
-					else if (moveDirZ[i] == MOVEDIR_BOTH)
-					{
-						moveDirZ[i] = MOVEDIR_NEG;
+						moveAmt[i][MOVEAXIS_X]++;
+						Vector3 finalPos = NPCS[i].getPos() + Vector3(movementSpeed, 0, 0);
+						NPCS[i].setBox(finalPos, sizeOfBoxMove);
+						npcMoveDelay[i] = 0;
 					}
 				}
-				if (NPCS[i].getPos().z <= -150.0f)
+				else if (npcDirectionDelay[i][MOVEAXIS_X] < 0)
 				{
-					if (moveDirZ[i] == MOVEDIR_NEG)
+					npcDirectionDelay[i][MOVEAXIS_X]++;
+					if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_NEG))
 					{
-						moveDirZ[i] = MOVEDIR_NONE;
+						moveAmt[i][MOVEAXIS_X]--;
+						Vector3 finalPos = NPCS[i].getPos() + Vector3(-movementSpeed, 0, 0);
+						NPCS[i].setBox(finalPos, sizeOfBoxMove);
+						npcMoveDelay[i] = 0;
 					}
-					else if (moveDirZ[i] == MOVEDIR_BOTH)
+				}
+				else if (npcDirectionDelay[i][MOVEAXIS_Z] > 0)
+				{
+					npcDirectionDelay[i][MOVEAXIS_Z]--;
+					if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_POS))
 					{
-						moveDirZ[i] = MOVEDIR_POS;
+						moveAmt[i][MOVEAXIS_Z]++;
+						Vector3 finalPos = NPCS[i].getPos() + Vector3(0, 0, movementSpeed);
+						NPCS[i].setBox(finalPos, sizeOfBoxMove);
+						npcMoveDelay[i] = 0;
+					}
+				}
+				else if (npcDirectionDelay[i][MOVEAXIS_Z] < 0)
+				{
+					npcDirectionDelay[i][MOVEAXIS_Z]++;
+					if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_NEG))
+					{
+						moveAmt[i][MOVEAXIS_Z]--;
+						Vector3 finalPos = NPCS[i].getPos() + Vector3(0, 0, -movementSpeed);
+						NPCS[i].setBox(finalPos, sizeOfBoxMove);
+						npcMoveDelay[i] = 0;
 					}
 				}
 			}
 		}
-	}
-
-	// To move in the x and z direction
-	for (int i = 0; i < NPC_TOTAL; i++)
-	{
-		int movement = (((rand() % 3) - 1) * MOVEMENT_SPEED);
-		Vector3 finalPos = NPCS[i].getPos() + Vector3(movement, 0, 0);
-		if (canMove[i] == true)
+		else
 		{
-			if ((moveDirX[i] == MOVEDIR_BOTH) ||
-				(moveDirX[i] == MOVEDIR_POS && movement > 0) ||
-				(moveDirX[i] == MOVEDIR_NEG && movement < 0))
+			npcMoveDelay[i]++;
+		}
+	}
+}
+
+void NPC::CheckForCollision(int i)
+{
+	// To check collision
+	moveDirX[i] = MOVEDIR_BOTH;
+	moveDirZ[i] = MOVEDIR_BOTH;
+	for (int a = 0; a < numberOfNPCs; a++)
+	{
+		if (a != i)
+		{
+			if ((NPCS[i].maxX >= NPCS[a].minX) && (NPCS[i].maxX <= NPCS[a].maxX) &&
+				(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
 			{
-				NPCS[i].setBox(finalPos, sizeOfBoxMove);
+				if (moveDirX[i] == MOVEDIR_POS)
+				{
+					moveDirX[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirX[i] == MOVEDIR_BOTH)
+				{
+					moveDirX[i] = MOVEDIR_NEG;
+				}
+			}
+			else if ((NPCS[i].minX >= NPCS[a].minX) && (NPCS[i].minX <= NPCS[a].maxX) &&
+				(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
+			{
+				if (moveDirX[i] == MOVEDIR_NEG)
+				{
+					moveDirX[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirX[i] == MOVEDIR_BOTH)
+				{
+					moveDirX[i] = MOVEDIR_POS;
+				}
+			}
+			else if ((NPCS[i].maxZ >= NPCS[a].minZ) && (NPCS[i].maxZ <= NPCS[a].maxZ) &&
+				(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
+			{
+				if (moveDirZ[i] == MOVEDIR_POS)
+				{
+					moveDirZ[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirZ[i] == MOVEDIR_BOTH)
+				{
+					moveDirZ[i] = MOVEDIR_NEG;
+				}
+			}
+			else if ((NPCS[i].minZ >= NPCS[a].minZ) && (NPCS[i].minZ <= NPCS[a].maxZ) &&
+				(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
+			{
+				if (moveDirZ[i] == MOVEDIR_NEG)
+				{
+					moveDirZ[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirZ[i] == MOVEDIR_BOTH)
+				{
+					moveDirZ[i] = MOVEDIR_POS;
+				}
 			}
 
-			movement = (((rand() % 3) - 1) * MOVEMENT_SPEED);
-			finalPos = NPCS[i].getPos() + Vector3(0, 0, movement);
-
-			if ((moveDirZ[i] == MOVEDIR_BOTH) ||
-				(moveDirZ[i] == MOVEDIR_POS && movement > 0) ||
-				(moveDirZ[i] == MOVEDIR_NEG && movement < 0))
+			if (NPCS[i].getPos().x >= 130.0f)
 			{
-				NPCS[i].setBox(finalPos, sizeOfBoxMove);
+				if (moveDirX[i] == MOVEDIR_POS)
+				{
+					moveDirX[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirX[i] == MOVEDIR_BOTH)
+				{
+					moveDirX[i] = MOVEDIR_NEG;
+				}
+			}
+			if (NPCS[i].getPos().x <= -130.0f)
+			{
+				if (moveDirX[i] == MOVEDIR_NEG)
+				{
+					moveDirX[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirX[i] == MOVEDIR_BOTH)
+				{
+					moveDirX[i] = MOVEDIR_POS;
+				}
+			}
+			if (NPCS[i].getPos().z >= 150.0f)
+			{
+
+				if (moveDirZ[i] == MOVEDIR_POS)
+				{
+					moveDirZ[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirZ[i] == MOVEDIR_BOTH)
+				{
+					moveDirZ[i] = MOVEDIR_NEG;
+				}
+			}
+			if (NPCS[i].getPos().z <= -150.0f)
+			{
+				if (moveDirZ[i] == MOVEDIR_NEG)
+				{
+					moveDirZ[i] = MOVEDIR_NONE;
+				}
+				else if (moveDirZ[i] == MOVEDIR_BOTH)
+				{
+					moveDirZ[i] = MOVEDIR_POS;
+				}
 			}
 		}
 	}
 }
 
+void NPC::CheckForMinMaxMovement(int i)
+{
+	if (moveAmt[i][MOVEAXIS_X] == maxMoveAmt)
+	{
+		if (moveDirX[i] == MOVEDIR_BOTH)
+		{
+			moveDirX[i] = MOVEDIR_NEG;
+		}
+		else if (moveDirX[i] == MOVEDIR_POS)
+		{
+			moveDirX[i] = MOVEDIR_NONE;
+		}
+	}
+	else if (moveAmt[i][MOVEAXIS_X] == minMoveAmt)
+	{
+		if (moveDirX[i] == MOVEDIR_BOTH)
+		{
+			moveDirX[i] = MOVEDIR_POS;
+		}
+		else if (moveDirX[i] == MOVEDIR_NEG)
+		{
+			moveDirX[i] = MOVEDIR_NONE;
+		}
+	}
+
+	if (moveAmt[i][MOVEAXIS_Z] == maxMoveAmt)
+	{
+		if (moveDirZ[i] == MOVEDIR_BOTH)
+		{
+			moveDirZ[i] = MOVEDIR_NEG;
+		}
+		else if (moveDirZ[i] == MOVEDIR_POS)
+		{
+			moveDirZ[i] = MOVEDIR_NONE;
+		}
+	}
+	else if (moveAmt[i][MOVEAXIS_Z] == minMoveAmt)
+	{
+		if (moveDirZ[i] == MOVEDIR_BOTH)
+		{
+			moveDirZ[i] = MOVEDIR_POS;
+		}
+		else if (moveDirZ[i] == MOVEDIR_NEG)
+		{
+			moveDirX[i] = MOVEDIR_NONE;
+		}
+	}
+}
 
 NPC::~NPC()
 {

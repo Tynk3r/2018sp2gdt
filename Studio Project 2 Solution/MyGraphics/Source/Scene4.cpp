@@ -221,16 +221,7 @@ void Scene4::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	Inventory::instance()->Update(dt);
-
-	if (npcMoveDelay == 100)
-	{
-		npc.Update(dt);
-		npcMoveDelay = 0;
-	}
-	else
-	{
-		npcMoveDelay++;
-	}
+	npc.Update(dt);
 
 	if (shopping == false)
 	{

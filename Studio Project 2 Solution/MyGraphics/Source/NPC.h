@@ -28,24 +28,41 @@ enum MOVE_DIRECTION
 	MOVEDIR_TOTAL,
 };
 
+// Axis of possible movement
+enum MOVE_AXIS
+{
+	MOVEAXIS_X,	// Movement in the X axis
+	MOVEAXIS_Z,	// Movement in the Z axis
+
+	MOVEAXIS_TOTAL,
+};
+
 class NPC
 {
 public:
-	const static int numberOfNPCs = NPC_TOTAL;
-	static const int sizeOfBoxMove = 10;
-	static const int sizeOfTextMove = 20;
+	static const int maxMoveAmt = 10;					// Maximum movement amount in a certain axis
+	static const int minMoveAmt = -10;					// Minimum movement amount in a certain axis
+	static const int movementSpeed = 2;					// Movement speed
+	static const int sizeOfBoxMove = 10;				// Size of box for movement collision
+	static const int sizeOfTextMove = 20;				// Size of box for text collision
+	static const int numberOfNPCs = NPC_TOTAL;			// Total number of NPCs
 
-	Object NPCS[numberOfNPCs];
-	int moveDirX[numberOfNPCs];
-	int moveDirZ[numberOfNPCs];
-	bool canMove[numberOfNPCs];
-	int moveAmt[numberOfNPCs][2];
+	Object NPCS[NPC_TOTAL];								// Array containing position and box data for each NPC
+	int moveDirX[NPC_TOTAL];							// Array containing possible movement in the X axis for each NPC
+	int moveDirZ[NPC_TOTAL];							// Array containing possible movement in the Z axis for each NPC 
+	bool canMove[NPC_TOTAL];							// Array that determines if each NPC can move
+	int npcMoveDelay[NPC_TOTAL];						// Array containing the delay such that each NPC has to wait before moving
+	int moveAmt[NPC_TOTAL][MOVEAXIS_TOTAL];				// Double array containing the MinMax movement amount for all the axis for each NPC
+	int npcDirectionDelay[NPC_TOTAL][MOVEAXIS_TOTAL];	// Dobule array containing the direction and the delay such that each NPC has to travel in a direction before it can switch
 
 	// Get the coord of the requested NPC type
 	Vector3 GetCoord(int);
 
-	// Update all NPCs
+	// Update functions
 	void Update(double dt);
+	void CheckForCollision(int i);
+	void CheckForMinMaxMovement(int i);
+
 
 	NPC();
 	~NPC();
