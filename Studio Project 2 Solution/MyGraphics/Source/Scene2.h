@@ -116,20 +116,18 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	double framerate;
+	bool godlights = true;
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 	Object objs[NUM_OBJECTS];
-
 	Light light[2];
+
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	bool collision(Vector3);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
-	float rotateMain = 0;
-	
-	bool godlights = true;
 };
 #endif

@@ -26,6 +26,7 @@ class SceneMain : public Scene
 		U_MATERIAL_DIFFUSE,
 		U_MATERIAL_SPECULAR,
 		U_MATERIAL_SHININESS,
+
 		U_LIGHT0_POSITION,
 		U_LIGHT0_COLOR,
 		U_LIGHT0_POWER,
@@ -38,6 +39,7 @@ class SceneMain : public Scene
 		U_LIGHT0_COSCUTOFF,
 		U_LIGHT0_COSINNER,
 		U_LIGHT0_EXPONENT,
+
 		U_LIGHT1_POSITION,
 		U_LIGHT1_COLOR,
 		U_LIGHT1_POWER,
@@ -49,6 +51,7 @@ class SceneMain : public Scene
 		U_LIGHT1_COSCUTOFF,
 		U_LIGHT1_COSINNER,
 		U_LIGHT1_EXPONENT,
+
 		U_LIGHT2_POSITION,
 		U_LIGHT2_COLOR,
 		U_LIGHT2_POWER,
@@ -60,6 +63,7 @@ class SceneMain : public Scene
 		U_LIGHT2_COSCUTOFF,
 		U_LIGHT2_COSINNER,
 		U_LIGHT2_EXPONENT,
+
 		U_NUMLIGHTS,
 		U_COLOR_TEXTURE_ENABLED,
 		U_COLOR_TEXTURE,
@@ -67,7 +71,6 @@ class SceneMain : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
-
 	};
 
 	enum GEOMETRY_TYPE
@@ -83,7 +86,6 @@ class SceneMain : public Scene
 		GEO_TEXT,
 		GEO_DINOEGG,
 		GEO_TREE,
-		
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
 		GEO_INV_BLUFRUIT,
@@ -93,7 +95,6 @@ class SceneMain : public Scene
 		GEO_INV_CURRENCY,
 		GEO_INV_INTERFACE,
 		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
-
 		NUM_GEOMETRY,
 	};
 	Mesh* meshList[NUM_GEOMETRY];
@@ -121,20 +122,19 @@ private:
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 	double framerate;
+	float rotateMain = 0;
+	bool godlights = true;
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
 	Object objs[NUM_OBJECTS];
-
 	Light light[3];
+
 	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox(float, bool);
 	void RenderText(Mesh* mesh, std::string text, Color color);
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	bool collision(Vector3);
-	float rotateMain = 0;
-	
-	bool godlights = true;
 };
 #endif

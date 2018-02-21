@@ -13,12 +13,8 @@ private:
 	float FlightSteerSpeed;
 	float FlightStability;
 	float FlightStamina;
-
 public:
 	static MyPtero* instance(void);
-
-//	MyPtero();
-//	~MyPtero();
 
 	enum PTERO_STATE {
 		P_EGG = 0,
@@ -50,7 +46,6 @@ public:
 	float getSteerSpeed(void); //How fast ptero can turn in air
 	float getStability(void); //How fast the ptero pitches downwards on its own
 	float getStamina(void); //How long you can hold down shift for speed boost
-	
 };
 
 #endif

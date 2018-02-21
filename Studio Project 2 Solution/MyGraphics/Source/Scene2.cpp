@@ -246,14 +246,6 @@ void Scene2::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	if (Application::IsKeyPressed('Q')) // turn on global light
-	{
-			godlights = false;
-	}
-	if (Application::IsKeyPressed('E')) // turn off global light
-	{
-			godlights = true;
-	}
 	// feed/incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
@@ -452,7 +444,6 @@ void Scene2::Render()
 	}
 
 	RenderSkybox(camera.SkyboxSize, godlights);
-	//RenderMesh(meshList[GEO_AXES], false);
 
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {
@@ -583,15 +574,6 @@ void Scene2::Render()
 			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(1, 0, 0));
 		viewStack.PopMatrix();
 	}
-	/* sampel
-	viewStack.PushMatrix();
-		viewStack.Translate(0, 0, 0);
-		viewStack.Rotate(0, 0, 1, 0);
-		viewStack.Scale(1, 1, 1);
-		RenderMesh(meshList[], godlights);
-		RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
-	viewStack.PopMatrix();
-	*/
 
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:

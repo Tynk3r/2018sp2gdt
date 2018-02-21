@@ -190,13 +190,11 @@ void SceneMain::Init()
 
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
-
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
-
-	//Set Collisions//
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
+	//Set Object Positions//
+	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20);
 	objs[OBJ_TREE1].setBox(Vector3(-30, -16, -1), 5);
 	objs[OBJ_TREE2].setBox(Vector3(0, -16, -30), 5);
 	objs[OBJ_TREE3].setBox(Vector3(30, -16, -1), 5);
@@ -225,7 +223,7 @@ void SceneMain::Update(double dt)
 	camera.Update(dt);
 	Inventory::instance()->Update(dt);
 
-	// door for scenes
+	// portals
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
@@ -242,17 +240,8 @@ void SceneMain::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
-	if (Application::IsKeyPressed('Q')) // turn on global light
-	{
-			godlights = false;
-	}
-	if (Application::IsKeyPressed('E')) // turn off global light
-	{
-			godlights = true;
-	}
 	
 	rotateMain++;
-	
 }
 
 void SceneMain::Render()
@@ -280,7 +269,6 @@ void SceneMain::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-
 	if (light[1].type == Light::LIGHT_DIRECTIONAL) {
 		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
@@ -296,7 +284,6 @@ void SceneMain::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-
 	if (light[2].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
@@ -317,7 +304,6 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	//RenderMesh(meshList[GEO_AXES], false);
 
 	//Trees//
 	viewStack.PushMatrix();
@@ -340,15 +326,13 @@ void SceneMain::Render()
 	RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
-		viewStack.PushMatrix();
+	viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
-
 		viewStack.PushMatrix();
 			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
 			viewStack.Rotate(rotateMain, 0, 1, 0);
 			RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
-
 		viewStack.PushMatrix();
 			viewStack.Translate(-18, 35, 0);
 			viewStack.Scale(4, 4, 4);
@@ -364,40 +348,39 @@ void SceneMain::Render()
 				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
 			viewStack.PopMatrix();
 		viewStack.PopMatrix();
-		
-		viewStack.PopMatrix();
+	viewStack.PopMatrix();
 
-		///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
-		std::ostringstream inv1;
-		inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
-		std::ostringstream inv2;
-		inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
-		std::ostringstream inv3;
-		inv3 << Inventory::instance()->items[ITEMS_MEAT];
-		std::ostringstream inv4;
-		inv4 << Inventory::instance()->items[ITEMS_TRAP];
-		std::ostringstream inv5;
-		inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
-		std::ostringstream inv6;
-		inv6 << Inventory::instance()->items[ITEMS_CURRENCY];
-		std::string red = inv1.str();
-		std::string blu = inv2.str();
-		std::string met = inv3.str();
-		std::string trp = inv4.str();
-		std::string inc = inv5.str();
-		std::string cur = inv6.str();
+	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	std::ostringstream inv1;
+	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
+	std::ostringstream inv2;
+	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
+	std::ostringstream inv3;
+	inv3 << Inventory::instance()->items[ITEMS_MEAT];
+	std::ostringstream inv4;
+	inv4 << Inventory::instance()->items[ITEMS_TRAP];
+	std::ostringstream inv5;
+	inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
+	std::ostringstream inv6;
+	inv6 << Inventory::instance()->items[ITEMS_CURRENCY];
+	std::string red = inv1.str();
+	std::string blu = inv2.str();
+	std::string met = inv3.str();
+	std::string trp = inv4.str();
+	std::string inc = inv5.str();
+	std::string cur = inv6.str();
 
-		if (Inventory::instance()->showInventory)
-		{
-			RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
-			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
-			RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
-			RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
-			RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
-			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
-			RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
-		}
-		///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	if (Inventory::instance()->showInventory)
+	{
+		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
+		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
+	}
+	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 
 	std::ostringstream ah;
 	ah << framerate;
