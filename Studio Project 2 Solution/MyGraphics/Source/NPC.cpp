@@ -1,6 +1,6 @@
 #include "NPC.h"
-
 static const int moveDelayAmount = 2;	// Movement delay so movement is seamless
+
 
 NPC::NPC()
 {
@@ -91,12 +91,11 @@ void NPC::Update(double dt)
 				}
 
 				// Setting final position vector
-
 				if (canMove[i] == true)
 				{
 					if (npcDirectionDelay[i][MOVEAXIS_X] > 0)
 					{
-						if (npcFacingRotaion[i] == 90)
+						if ((npcFacingRotaion[i] % 360) == 90)
 						{
 							npcDirectionDelay[i][MOVEAXIS_X]--;
 							if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_POS))
@@ -112,10 +111,9 @@ void NPC::Update(double dt)
 							RotationUpdate(i, 90);
 						}
 					}
-
-					if (npcDirectionDelay[i][MOVEAXIS_X] < 0)
+					else if (npcDirectionDelay[i][MOVEAXIS_X] < 0)
 					{
-						if (npcFacingRotaion[i] == 270)
+						if ((npcFacingRotaion[i] % 360) == 270)
 						{
 							npcDirectionDelay[i][MOVEAXIS_X]++;
 							if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_NEG))
@@ -131,10 +129,9 @@ void NPC::Update(double dt)
 							RotationUpdate(i, 270);
 						}
 					}
-					
-					if (npcDirectionDelay[i][MOVEAXIS_Z] > 0)
+					else if (npcDirectionDelay[i][MOVEAXIS_Z] > 0)
 					{
-						if (npcFacingRotaion[i] == 0)
+						if ((npcFacingRotaion[i] % 360) == 0)
 						{
 							npcDirectionDelay[i][MOVEAXIS_Z]--;
 							if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_POS))
@@ -150,10 +147,9 @@ void NPC::Update(double dt)
 							RotationUpdate(i, 0);
 						}
 					}
-
-					if (npcDirectionDelay[i][MOVEAXIS_Z] < 0)
+					else if (npcDirectionDelay[i][MOVEAXIS_Z] < 0)
 					{
-						if (npcFacingRotaion[i] == 180)
+						if ((npcFacingRotaion[i] % 360) == 180)
 						{
 							npcDirectionDelay[i][MOVEAXIS_Z]++;
 							if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_NEG))
@@ -179,33 +175,54 @@ void NPC::Update(double dt)
 	}
 }
 
-void NPC::RotationUpdate(int i, double angle)
+void NPC::RotationUpdate(int i, int angle)
 {
-	double posAngle = angle - npcFacingRotaion[i];
-	double negAngle = -(angle - 360 - npcFacingRotaion[i]);
-	if (posAngle <= negAngle)
+	for (;npcFacingRotaion[i] < 0;)
 	{
-		npcFacingRotaion[i] += 90;
-		if (npcFacingRotaion[i] >= 360)
-		{
-			npcFacingRotaion[i] -= 360;
-		}
+		npcFacingRotaion[i] += 360;
+	}
+	for (;npcFacingRotaion[i] > 360;)
+	{
+		npcFacingRotaion[i] -= 360;
+	}
 
+	double posAngle;
+
+	if (angle > npcFacingRotaion[i])
+	{
+		posAngle = angle - npcFacingRotaion[i];
 	}
 	else
 	{
-		npcFacingRotaion[i] -= 90;
-		if (npcFacingRotaion[i] < 0)
-		{
-			npcFacingRotaion[i] += 360;
-		}
+		posAngle = 360 + angle - npcFacingRotaion[i];
 	}
 
+	double negAngle = 360 - posAngle;
+
+	if (posAngle < negAngle)
+	{
+		npcFacingRotaion[i] += 15;
+	}
+	else if (posAngle < negAngle)
+	{
+		npcFacingRotaion[i] -= 15;
+	}
+	else
+	{
+		int ranDir = (rand() % 2);
+		if (ranDir == 1)
+		{
+			npcFacingRotaion[i] += 15;
+		}
+		else
+		{
+			npcFacingRotaion[i] -= 15;
+		}
+	}
 }
 
 void NPC::CheckForCollision(int i)
 {
-	// To check collision
 	moveDirX[i] = MOVEDIR_BOTH;
 	moveDirZ[i] = MOVEDIR_BOTH;
 	for (int a = 0; a < numberOfNPCs; a++)
