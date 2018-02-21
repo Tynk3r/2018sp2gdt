@@ -87,9 +87,9 @@ void SceneMain::Init()
 
 	// Lightings
 	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(0, 10, 3);
-	light[1].color.Set(0.898, 0.627, 0.125);
-	light[0].power = 1;
+	light[0].position.Set(80, 2, 80);
+	light[0].color.Set(0.9, 0.6, 0.125);
+	light[0].power = 6;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -194,12 +194,30 @@ void SceneMain::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
+	meshList[GEO_FIREBASE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//campfireBase.obj");
+	meshList[GEO_FIREBASE]->textureID = LoadTGA("Image//campfireBase.tga");
+
+	meshList[GEO_FIREWOOD] = MeshBuilder::GenerateOBJ("Tree", "OBJ//campfireWood.obj");
+	meshList[GEO_FIREWOOD]->textureID = LoadTGA("Image//campfireWood.tga");
+
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("Tree", "OBJ//rock.obj");
+	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("Tree", "OBJ//border.obj");
+	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("Tree", "OBJ//fern.obj");
+	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
 
 	//Set Collisions//
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20); // dinoegg
-	objs[OBJ_TREE1].setBox(Vector3(-30, -16, -1), 5);
-	objs[OBJ_TREE2].setBox(Vector3(0, -16, -30), 5);
-	objs[OBJ_TREE3].setBox(Vector3(30, -16, -1), 5);
+	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20);
+	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 5, 20, 5);
+	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 5, 20, 5);
+	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 5, 20, 5);
+	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 20);
+	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 20);
+	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 20);
+	objs[OBJ_CAMPFIRE].setBox(Vector3(80, 0, 80), 0.1);
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -317,28 +335,97 @@ void SceneMain::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	//RenderMesh(meshList[GEO_AXES], false);
+	RenderMesh(meshList[GEO_AXES], false);
 
+	//Environment//
 	//Trees//
 	viewStack.PushMatrix();
 	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
-	viewStack.Scale(objs[1].getSize(), objs[1].getSize(), objs[1].getSize());
+	viewStack.Scale(4, 4, 4);
 	viewStack.Rotate(270, 0, 1, 0);
 	RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 	viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
-	viewStack.Scale(objs[2].getSize(), objs[2].getSize(), objs[2].getSize());
+	viewStack.Scale(4, 4, 4);
 	RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 	viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
-	viewStack.Scale(objs[3].getSize(), objs[3].getSize(), objs[3].getSize());
+	viewStack.Scale(4, 4, 4);
 	viewStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
+
+	//Rocks//
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[5].getPos().x, objs[5].getPos().y, objs[5].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[6].getPos().x, objs[6].getPos().y, objs[6].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	//Campfire//
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
+	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_FIREBASE], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
+	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_FIREWOOD], godlights);
+	viewStack.PopMatrix();
+
+	//BORDER//
+	viewStack.PushMatrix();
+	viewStack.Translate(0,0,-10);
+	viewStack.Scale(17,20,17);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 0, -10);
+	viewStack.Scale(20, 50, 20);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
+
+	//Fern//
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 1; j < 6; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
+			viewStack.Scale(8, 8, 8);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_FERN], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+	//End of Environment//
 
 		viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);

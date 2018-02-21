@@ -526,7 +526,7 @@ void Scene1::Render()
 	std::ostringstream uh;
 	uh << currentRing.getID();
 	std::string str4 = uh.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring:" + str4, Color(1, 0, 1), 2, 1, 4);
+	//RenderTextOnScreen(meshList[GEO_TEXT], "Current Ring:" + str4, Color(1, 0, 1), 2, 1, 4);
 	std::ostringstream mh;
 	mh << collideRing(camera.position);
 	std::string str5 = mh.str();
