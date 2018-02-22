@@ -812,12 +812,12 @@ void Scene3::Render()
 	if (Inventory::instance()->showInventory)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
-		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
-		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
-		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
-		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], red, Color(1, 0, 0), 3, 10.9, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], blu, Color(0, 0, 1), 3, 10.9, 10);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], trp, Color(1, 1, 1), 3, 17.6, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
+		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 17.6, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
 }

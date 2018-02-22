@@ -418,13 +418,32 @@ void Scene4::Update(double dt)
 						}
 						if (Inventory::instance()->items[inventoryItemAffected] >= itemAmount)
 						{
+							shop.supply[i - SHOP_BUY_END] += itemAmount;
+							shop.Update();
 							Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[i] * itemAmount);
 							Inventory::instance()->items[inventoryItemAffected] -= itemAmount;
+
+							if (Inventory::instance()->items[ITEMS_CURRENCY] > 999)
+							{
+								Inventory::instance()->items[ITEMS_CURRENCY] = 999;
+							}
+						}
+						else
+						{
+							itemAmount = Inventory::instance()->items[inventoryItemAffected];
+
 							shop.supply[i - SHOP_BUY_END] += itemAmount;
+							shop.Update();
+							Inventory::instance()->items[ITEMS_CURRENCY] += (shop.cost[i] * itemAmount);
+							Inventory::instance()->items[inventoryItemAffected] -= itemAmount;
+
+							if (Inventory::instance()->items[ITEMS_CURRENCY] > 999)
+							{
+								Inventory::instance()->items[ITEMS_CURRENCY] = 999;
+							}
 						}
 					}
 				}
-
 				clickedDelay = 0;
 			}
 		}
@@ -532,20 +551,27 @@ void Scene4::Render()
 	shopAMOUNT << itemAmount;
 	std::string amt = shopAMOUNT.str();
 
+
+	int totalCostRedF = (shop.cost[SHOP_BUY_REDFRUIT] * itemAmount);
+	int totalCostBluF = (shop.cost[SHOP_BUY_BLUFRUIT] * itemAmount);
+	int totalCostTrap = (shop.cost[SHOP_BUY_MEAT] * itemAmount);
+	int totalCostMeat = (shop.cost[SHOP_BUY_TRAP] * itemAmount);
+	int totalCostIncu = (shop.cost[SHOP_BUY_INCUBATOR] * itemAmount);
+
 	std::ostringstream costRed;
-	costRed << shop.cost[SHOP_BUY_REDFRUIT];
+	costRed << totalCostRedF;
 	std::string c_red = costRed.str();
 	std::ostringstream costBlu;
-	costBlu << shop.cost[SHOP_BUY_BLUFRUIT];
+	costBlu << totalCostBluF;
 	std::string c_blu = costBlu.str();
 	std::ostringstream costMeat;
-	costMeat << shop.cost[SHOP_BUY_MEAT];
+	costMeat << totalCostTrap;
 	std::string c_meat = costMeat.str();
 	std::ostringstream costTrap;
-	costTrap << shop.cost[SHOP_BUY_TRAP];
+	costTrap << totalCostMeat;
 	std::string c_trap = costTrap.str();
 	std::ostringstream costIncubator;
-	costIncubator << shop.cost[SHOP_BUY_INCUBATOR];
+	costIncubator << totalCostIncu;
 	std::string c_incubator = costIncubator.str();
 
 	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
@@ -571,12 +597,12 @@ void Scene4::Render()
 	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
-		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], ":" + red, Color(1, 0, 0), 3, 10.9, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], ":" + blu, Color(0, 0, 1), 3, 10.9, 10);
-		RenderTextOnScreen(meshList[GEO_INV_MEAT], ":" + met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
-		RenderTextOnScreen(meshList[GEO_INV_TRAP], ":" + trp, Color(1, 1, 1), 3, 17.6, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], ":" + inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
-		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], ":" + cur, Color(0, 0, 0), 3, 17.6, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], red, Color(1, 0, 0), 3, 10.9, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], blu, Color(0, 0, 1), 3, 10.9, 10);
+		RenderTextOnScreen(meshList[GEO_INV_MEAT], met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
+		RenderTextOnScreen(meshList[GEO_INV_TRAP], trp, Color(1, 1, 1), 3, 17.6, 14.7);
+		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
+		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 17.6, 5.9);
 	}
 	else if (shopping == true)
 	{
@@ -601,72 +627,94 @@ void Scene4::Render()
 			RenderTextOnScreen(meshList[GEO_SHOP_AMOUNT], amt, Color(1, 0, 0), 3, 19.3, 9.5);
 		}
 
-		if (shop.cost[SHOP_BUY_REDFRUIT] <= 9)
+		if (totalCostRedF <= 9)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], c_red, Color(1, 0, 0), 2, 5.3, 10);
 		}
-		else if (shop.cost[SHOP_BUY_REDFRUIT] <= 99)
+		else if (totalCostRedF <= 99)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], c_red, Color(1, 0, 0), 2, 4.8, 10);
 		}
-		else
+		else if (totalCostRedF <= 999)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], c_red, Color(1, 0, 0), 2, 4.3, 10);
 		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], "SOLD OUT", Color(1, 0, 0), 1, 6.9, 20);
+		}
 
-		if (shop.cost[SHOP_BUY_BLUFRUIT] <= 9)
+		if (totalCostBluF <= 9)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], c_blu, Color(0, 0, 1), 2, 10.3, 10);
 		}
-		else if (shop.cost[SHOP_BUY_BLUFRUIT] <= 99)
+		else if (totalCostBluF <= 99)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], c_blu, Color(0, 0, 1), 2, 9.8, 10);
 		}
-		else
+		else if (totalCostBluF <= 999)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], c_blu, Color(0, 0, 1), 2, 9.3, 10);
 		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], "SOLD OUT", Color(0, 0, 1), 1, 16.9, 20);
+		}
 
-		if (shop.cost[SHOP_BUY_MEAT] <= 9)
+		if (totalCostMeat <= 9)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_MEAT], c_meat, Color(0.7, 0.31, 0), 2, 15.3, 10);
 		}
-		else if (shop.cost[SHOP_BUY_MEAT] <= 99)
+		else if (totalCostMeat <= 99)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_MEAT], c_meat, Color(0.7, 0.31, 0), 2, 14.8, 10);
 		}
-		else
+
+		else if (totalCostMeat <= 999)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_MEAT], c_meat, Color(0.7, 0.31, 0), 2, 14.3, 10);
 		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_INV_MEAT], "SOLD OUT", Color(0.7, 0.31, 0), 1, 26.9, 20);
+		}
 
-		if (shop.cost[SHOP_BUY_TRAP] <= 9)
+		if (totalCostTrap <= 9)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_TRAP], c_trap, Color(1, 1, 1), 2, 20.3, 10);
 		}
-		else if (shop.cost[SHOP_BUY_TRAP] <= 99)
+		else if (totalCostTrap <= 99)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_TRAP], c_trap, Color(1, 1, 1), 2, 19.8, 10);
 		}
-		else
+		else if (totalCostTrap <= 999)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_TRAP], c_trap, Color(1, 1, 1), 2, 19.3, 10);
 		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_INV_TRAP], "SOLD OUT", Color(1, 1, 1), 1, 36.9, 20);
+		}
 
-		if (shop.cost[SHOP_BUY_INCUBATOR] <= 9)
+		if (totalCostIncu <= 9)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], c_incubator, Color(0.7, 0.7, 0), 2, 25.3, 10);
 		}
-		else if (shop.cost[SHOP_BUY_INCUBATOR] <= 99)
+		else if (totalCostIncu <= 99)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], c_incubator, Color(0.7, 0.7, 0), 2, 24.8, 10);
 		}
-		else
+		else if (totalCostIncu <= 999)
 		{
 			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], c_incubator, Color(0.7, 0.7, 0), 2, 24.3, 10);
 		}
+		else
+		{
+			RenderTextOnScreen(meshList[GEO_INV_TRAP], "SOLD OUT", Color(0.7, 0.7, 0), 1, 46.9, 20);
+		}
 	}
 }
+
 
 void Scene4::Exit()
 {
