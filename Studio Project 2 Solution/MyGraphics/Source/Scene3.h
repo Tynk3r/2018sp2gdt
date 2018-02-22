@@ -111,7 +111,7 @@ class Scene3 : public Scene
 
 	enum OBJECTS
 	{
-		OBJ_X,
+		OBJ_WHEELBARROW,
 
 		NUM_OBJECTS,
 	};

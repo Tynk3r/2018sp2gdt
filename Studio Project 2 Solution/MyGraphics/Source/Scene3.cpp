@@ -21,7 +21,7 @@ Scene3::~Scene3()
 }
 
 void Scene3::Init()
-{
+{	
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
@@ -291,6 +291,8 @@ void Scene3::Init()
 	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+
+	objs[OBJ_WHEELBARROW].setBox(Vector3(95, 0, 0), 40, 10, 20);
 }
 
 void Scene3::Update(double dt)
@@ -778,7 +780,7 @@ void Scene3::Render()
 	}
 
 	viewStack.PushMatrix();
-	viewStack.Translate(0, 8, 0);
+	viewStack.Translate(100, 8, 0);
 	viewStack.Scale(15, 15, 15);
 	//viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], false);
