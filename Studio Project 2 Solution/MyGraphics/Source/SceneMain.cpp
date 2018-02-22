@@ -244,7 +244,7 @@ void SceneMain::Update(double dt)
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
 		//1/2 chance for either race track
-		/*int track = rand() % 3 + 1;
+		int track = rand() % 3 + 1;
 		if (track == 1)
 		{
 			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
@@ -252,9 +252,9 @@ void SceneMain::Update(double dt)
 		else
 		{
 			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
-		}*/
+		}
 		//Developer Test
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
+		//SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
 	}
 	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{

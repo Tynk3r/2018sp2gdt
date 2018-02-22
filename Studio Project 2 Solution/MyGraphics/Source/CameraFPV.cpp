@@ -128,7 +128,7 @@ void CameraFPV::Update(double dt)
 		//static float MOVEMENT_SPEED = 50.0f;
 		//NEW
 		static const float CAMERA_SPEED = 1.0f;
-		static float MOVEMENT_SPEED = 30.0f*MyPtero::instance()->pteroSpeedModifier;
+		static float MOVEMENT_SPEED = 30.0f;
 
 		//Set Camera Variables
 		Vector3 view = (target - position).Normalized();
@@ -214,7 +214,7 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = (30.0f*MyPtero::instance()->pteroSpeedModifier)*2;
+			MOVEMENT_SPEED = 30.0f;
 		}
 		else
 		{

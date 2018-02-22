@@ -22,7 +22,7 @@ void Scene1_5::Init()
 {
 	points = 0;
 	goalpos = Vector3(0, 100, 490);
-	totalTime = 1500;
+	totalTime = 1000;
 	timer.startTimer();
 
 	framerate = 0.0f;
