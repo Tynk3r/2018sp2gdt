@@ -15,6 +15,10 @@
 #include "Shop.h"
 #include "Inventory.h"
 
+
+#include <iostream>
+#include <fstream>
+
 class Scene4 : public Scene
 {
 	enum UNIFORM_TYPE
@@ -155,13 +159,13 @@ private:
 	bool collision(Vector3);
 	void textCollision();
 
+	NPC npc;
 	void RenderNPC();
 	void RenderTextBox();
 	void RenderShopTextBox();
+	void loadText(int npc_type, std::string text[3]);
 
 	bool godlights = false;
-
-	NPC npc;
 
 	// For shop
 	SHOP shop;
