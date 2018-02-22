@@ -28,6 +28,7 @@ void CameraFPV::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void CameraFPV::Update(double dt)
 {
+	//////////////////            WALKING CAMERA              //////////////////////
 	if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_MAIN ||
 		SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_2 ||
 		SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_3 ||
@@ -116,13 +117,17 @@ void CameraFPV::Update(double dt)
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
 	}
-	else if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_1) {
+
+	//////////////////            FLYING CAMERA              //////////////////////
+	else if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_1 || 
+			 SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_1_5) 
+	{
 		//Set Camera Speed for Scene1
 		//OLD
 		//static const float CAMERA_SPEED = 1.0f;
 		//static float MOVEMENT_SPEED = 50.0f;
 		//NEW
-		static const float CAMERA_SPEED = 1.0f*MyPtero::instance()->pteroSpeedModifier;
+		static const float CAMERA_SPEED = 1.0f;
 		static float MOVEMENT_SPEED = 30.0f*MyPtero::instance()->pteroSpeedModifier;
 
 		//Set Camera Variables
@@ -238,6 +243,8 @@ void CameraFPV::Update(double dt)
 			Reset();
 		}
 	}
+
+	//////////////////            DEFAULT CAMERA              //////////////////////
 	else {
 		static const float CAMERA_SPEED = 4.0f;
 		static float MOVEMENT_SPEED = 30.0f;
@@ -317,7 +324,7 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = 60.0f;
+			MOVEMENT_SPEED = 80.0f;
 		}
 		else
 		{
