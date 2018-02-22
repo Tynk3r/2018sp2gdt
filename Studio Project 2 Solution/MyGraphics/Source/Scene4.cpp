@@ -8,6 +8,9 @@
 #include "LoadTGA.h"
 #include <string>
 #include <sstream>
+#include <iostream>
+#include <fstream>
+
 
 Scene4::Scene4()
 {
@@ -19,8 +22,6 @@ Scene4::~Scene4()
 
 void Scene4::Init()
 {
-	Inventory::instance()->items[ITEMS_BLUFRUIT] = 900;
-
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
@@ -839,40 +840,73 @@ void Scene4::RenderNPC()
 	{
 		shopping = true;
 	}
+
+	std::string text[3];
+
 	if (textBoxRender == NPC_WEATHER)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_WEATHER, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	if (textBoxRender == NPC_LORE)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_LORE, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	if (textBoxRender == NPC_HUNTING)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_HUNTING, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	if (textBoxRender == NPC_RAISING)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_RAISING, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	if (textBoxRender == NPC_RACING)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_RACING, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	if (shopping == false && textBoxRender == NPC_SHOP)
 	{
 		viewStack.PushMatrix();
-		RenderTextBox();
+			RenderTextBox();
+
+			loadText(NPC_SHOP, text);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
 		viewStack.PopMatrix();
 	}
 	else if (shopping == true && textBoxRender == NPC_SHOP)
@@ -882,6 +916,42 @@ void Scene4::RenderNPC()
 		viewStack.PopMatrix();
 	}
 }
+
+void Scene4::loadText(int npc_type, std::string text[3])
+{
+	std::ifstream reading;
+	std::string rawdata;
+	switch (npc_type)
+	{
+	case NPC_WEATHER:
+		reading.open("Text/npc_weather_1.txt");
+		break;
+	case NPC_LORE:
+		reading.open("Text/npc_lore_1.txt");
+		break;
+	case NPC_HUNTING:
+		reading.open("Text/npc_hunting_1.txt");
+		break;
+	case NPC_RAISING:
+		reading.open("Text/npc_raising_1.txt");
+		break;
+	case NPC_RACING:
+		reading.open("Text/npc_racing_1.txt");
+		break;
+	case NPC_SHOP:
+		reading.open("Text/npc_shop_1.txt");
+		break;
+	default:
+		break;
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		getline(reading, rawdata);
+		text[i] = rawdata;
+	}
+	reading.close();
+}
+
 
 void Scene4::RenderTextBox()
 {
