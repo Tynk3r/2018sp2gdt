@@ -20,7 +20,7 @@ Scene1_5::~Scene1_5()
 
 void Scene1_5::Init()
 {
-	points = 0;
+	reachedGoal = false;
 	goalpos = Vector3(0, 100, 490);
 	totalTime = 1000;
 	timer.startTimer();

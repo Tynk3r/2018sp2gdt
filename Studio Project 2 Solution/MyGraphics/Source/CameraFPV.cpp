@@ -129,6 +129,7 @@ void CameraFPV::Update(double dt)
 		//NEW
 		static const float CAMERA_SPEED = 1.0f;
 		static float MOVEMENT_SPEED = 30.0f;
+		static float BASE_SPEED = 30.0f;
 
 		//Set Camera Variables
 		Vector3 view = (target - position).Normalized();
@@ -214,11 +215,25 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = 30.0f;
+			switch (MyPtero::instance()->pteroStage) {
+			case MyPtero::P_BABY:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75)*1.5;
+			case MyPtero::P_ADOLESCENT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*1.5;
+			case MyPtero::P_ADULT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25)*1.5;
+			}
 		}
 		else
 		{
-			MOVEMENT_SPEED = 30.0f*MyPtero::instance()->pteroSpeedModifier;
+			switch (MyPtero::instance()->pteroStage) {
+			case MyPtero::P_BABY:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75);
+			case MyPtero::P_ADOLESCENT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier);
+			case MyPtero::P_ADULT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25);
+			}
 		}
 
 		//If not pressing Down, automatically pitch downwards
