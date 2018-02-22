@@ -262,7 +262,9 @@ void Scene3::Init()
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
 
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
+	meshList[GEO_TRAPDEFAULT]->textureID = LoadTGA("Image//scene3Trap.tga");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
+	meshList[GEO_TRAPCAUGHT]->textureID = LoadTGA("Image//scene3Trapped.tga");
 
 	meshList[GEO_BUSH] = MeshBuilder::GenerateOBJ("Bush", "OBJ//tempBush.obj");
 	meshList[GEO_BUSH]->textureID = LoadTGA("Image//bush.tga");
@@ -296,6 +298,11 @@ void Scene3::Update(double dt)
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 	Inventory::instance()->Update(dt);
+
+	if (Application::IsKeyPressed('P'))
+	{
+		Inventory::instance()->items[ITEMS_TRAP] += 1;
+	}
 
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -771,8 +778,8 @@ void Scene3::Render()
 	}
 
 	viewStack.PushMatrix();
-	viewStack.Translate(0, 0, 0);
-	viewStack.Scale(1, 1, 1);
+	viewStack.Translate(0, 8, 0);
+	viewStack.Scale(15, 15, 15);
 	//viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], false);
 	viewStack.PopMatrix();
