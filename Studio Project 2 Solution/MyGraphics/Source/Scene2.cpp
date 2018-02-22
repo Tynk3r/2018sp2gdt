@@ -15,6 +15,7 @@
 Scene2::Scene2()
 {
 	MyPtero::instance()->pteroStage = MyPtero::P_BABY;
+	MyPtero::instance()->pteroType = MyPtero::T_GREEN;
 }
 
 Scene2::~Scene2()
@@ -170,9 +171,21 @@ void Scene2::Init()
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 	meshList[GEO_PTERO] = MeshBuilder::GenerateOBJ("objs2", "OBJ//pterodactyl.obj");
-	meshList[GEO_PTERO]->textureID = LoadTGA("Image//pterodactyl.tga");
+	switch (MyPtero::instance()->pteroType) {
+	case MyPtero::T_GREEN:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//greendino.tga");
+		break;
+	case MyPtero::T_RED:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//REDdino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//REDdino.tga");
+		break;
+	case MyPtero::T_PURPLE:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//PURPLEdino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//PURPLEdino.tga");
+		break;
+	}
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 	meshList[GEO_CAMPFIRE_BASE] = MeshBuilder::GenerateOBJ("objs4", "OBJ//campfireBase.obj");
@@ -261,8 +274,23 @@ void Scene2::Update(double dt)
 		}
 	}
 	// reset ptero
-	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0f) {
+	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0 && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
+		Inventory::instance()->items[ITEMS_CURRENCY] -= 25;
 		MyPtero::instance()->newPtero();
+		switch (MyPtero::instance()->pteroType) {
+		case MyPtero::T_GREEN:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//greendino.tga");
+			break;
+		case MyPtero::T_RED:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//REDdino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//REDdino.tga");
+			break;
+		case MyPtero::T_PURPLE:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//PURPLEdino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//PURPLEdino.tga");
+			break;
+		}
 	}
 
 	// ptero movement
@@ -557,7 +585,7 @@ void Scene2::Render()
 		RenderText(meshList[GEO_TEXT], sg, Color(1, 0, 0));
 	viewStack.PopMatrix();
 	// reset button
-	if (camera.position.x > 25.0f && camera.position.z < -25.0f) {
+	if (camera.position.x > 25.0f && camera.position.z < -25.0f && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
 		viewStack.PushMatrix();
 			viewStack.Translate(99.9, 15, -70);
 			viewStack.Rotate(-90, 0, 1, 0);
