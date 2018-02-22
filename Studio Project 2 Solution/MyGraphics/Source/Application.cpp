@@ -16,6 +16,7 @@
 #include "Scene2.h"
 #include "Scene3.h"
 #include "Scene4.h"
+#include "Scene1_5.h"
 #include "SceneManager.h"
 
 GLFWwindow* m_window;
@@ -108,6 +109,7 @@ void Application::Init()
 	SceneManager::instance()->AddScene(new Scene2());
 	SceneManager::instance()->AddScene(new Scene3());
 	SceneManager::instance()->AddScene(new Scene4());
+	SceneManager::instance()->AddScene(new Scene1_5());
 }
 
 void Application::Run()

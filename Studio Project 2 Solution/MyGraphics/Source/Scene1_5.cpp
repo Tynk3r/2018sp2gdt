@@ -1,4 +1,4 @@
-#include "SceneMain.h"
+#include "Scene1_5.h"
 #include "GL\glew.h"
 
 #include "shader.hpp"
@@ -10,20 +10,25 @@
 #include <sstream>
 
 
-SceneMain::SceneMain()
+Scene1_5::Scene1_5()
 {
 }
 
-SceneMain::~SceneMain()
+Scene1_5::~Scene1_5()
 {
 }
 
-void SceneMain::Init()
+void Scene1_5::Init()
 {
+	points = 0;
+	goalpos = Vector3(0, 100, 490);
+	totalTime = 1500;
+	timer.startTimer();
+
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 100, -490), Vector3(goalpos.x, goalpos.y, goalpos.z), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -74,6 +79,18 @@ void SceneMain::Init()
 	m_parameters[U_LIGHT2_COSINNER] = glGetUniformLocation(m_programID, "lights[2].cosInner");
 	m_parameters[U_LIGHT2_EXPONENT] = glGetUniformLocation(m_programID, "lights[2].exponent");
 
+	m_parameters[U_LIGHT3_POSITION] = glGetUniformLocation(m_programID, "lights[3].position_cameraspace");
+	m_parameters[U_LIGHT3_COLOR] = glGetUniformLocation(m_programID, "lights[3].color");
+	m_parameters[U_LIGHT3_POWER] = glGetUniformLocation(m_programID, "lights[3].power");
+	m_parameters[U_LIGHT3_KC] = glGetUniformLocation(m_programID, "lights[3].kC");
+	m_parameters[U_LIGHT3_KL] = glGetUniformLocation(m_programID, "lights[3].kL");
+	m_parameters[U_LIGHT3_KQ] = glGetUniformLocation(m_programID, "lights[3].kQ");
+	m_parameters[U_LIGHT3_TYPE] = glGetUniformLocation(m_programID, "lights[3].type");
+	m_parameters[U_LIGHT3_SPOTDIRECTION] = glGetUniformLocation(m_programID, "lights[3].spotDirection");
+	m_parameters[U_LIGHT3_COSCUTOFF] = glGetUniformLocation(m_programID, "lights[3].cosCutoff");
+	m_parameters[U_LIGHT3_COSINNER] = glGetUniformLocation(m_programID, "lights[3].cosInner");
+	m_parameters[U_LIGHT3_EXPONENT] = glGetUniformLocation(m_programID, "lights[3].exponent");
+
 	m_parameters[U_NUMLIGHTS] = glGetUniformLocation(m_programID, "numLights");
 	m_parameters[U_COLOR_TEXTURE_ENABLED] = glGetUniformLocation(m_programID, "colorTextureEnabled");
 	m_parameters[U_COLOR_TEXTURE] = glGetUniformLocation(m_programID, "colorTexture");
@@ -85,11 +102,10 @@ void SceneMain::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	// Lightings
 	light[0].type = Light::LIGHT_POINT;
-	light[0].position.Set(80, 2, 80);
-	light[0].color.Set(0.9, 0.6, 0.125);
-	light[0].power = 6;
+	light[0].position.Set(0, 10, 3);
+	light[0].color.Set(0.898, 0.627, 0.125);
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -122,6 +138,21 @@ void SceneMain::Init()
 	light[2].exponent = 3.f;
 	light[2].spotDirection.Set(0.f, 1.f, 0.f);
 
+	light[3].type = Light::LIGHT_POINT;
+	light[3].position.Set(objs[OBJ_GOAL].getPos().x, objs[OBJ_GOAL].getPos().y, objs[OBJ_GOAL].getPos().z);
+	light[3].color.Set(1, 0.01, 1);
+	light[3].power = 2;
+	light[3].kC = 1.f;
+	light[3].kL = 0.01f;
+	light[3].kQ = 0.001f;
+	light[3].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[3].cosInner = cos(Math::DegreeToRadian(30));
+	light[3].exponent = 3.f;
+	light[3].spotDirection.Set(0.f, 1.f, 0.f);
+
+	//Global Lights
+	godlights = true;
+
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
@@ -153,7 +184,17 @@ void SceneMain::Init()
 	glUniform1f(m_parameters[U_LIGHT2_COSINNER], light[2].cosInner);
 	glUniform1f(m_parameters[U_LIGHT2_EXPONENT], light[2].exponent);
 
-	glUniform1i(m_parameters[U_NUMLIGHTS], 3);
+	glUniform1i(m_parameters[U_LIGHT3_TYPE], light[3].type);
+	glUniform3fv(m_parameters[U_LIGHT3_COLOR], 1, &light[3].color.r);
+	glUniform1f(m_parameters[U_LIGHT3_POWER], light[3].power);
+	glUniform1f(m_parameters[U_LIGHT3_KC], light[3].kC);
+	glUniform1f(m_parameters[U_LIGHT3_KL], light[3].kL);
+	glUniform1f(m_parameters[U_LIGHT3_KQ], light[3].kQ);
+	glUniform1f(m_parameters[U_LIGHT3_COSCUTOFF], light[3].cosCutoff);
+	glUniform1f(m_parameters[U_LIGHT3_COSINNER], light[3].cosInner);
+	glUniform1f(m_parameters[U_LIGHT3_EXPONENT], light[3].exponent);
+
+	glUniform1i(m_parameters[U_NUMLIGHTS], 4);
 
 	// Enable blending
 	glEnable(GL_BLEND);
@@ -167,112 +208,103 @@ void SceneMain::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	if (MyPtero::instance()->pteroStage == MyPtero::P_EGG) {
-		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront2.tga");
-	}
-	else {
-		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
-	}
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
-	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	//Minigame
+	meshList[GEO_GOAL] = MeshBuilder::GenerateOBJ("last hoop", "OBJ//ring.obj");
+	meshList[GEO_GOAL]->textureID = LoadTGA("Image//bottom.tga");
 
-	meshList[GEO_EASTER1] = MeshBuilder::Generate2DQuad("easter1", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_EASTER1]->textureID = LoadTGA("Image//easter1.tga");
+	//Screen
+	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
+	meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
 
-	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
+	//Environment
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
-	meshList[GEO_FIREBASE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//campfireBase.obj");
-	meshList[GEO_FIREBASE]->textureID = LoadTGA("Image//campfireBase.tga");
-	meshList[GEO_FIREWOOD] = MeshBuilder::GenerateOBJ("Tree", "OBJ//campfireWood.obj");
-	meshList[GEO_FIREWOOD]->textureID = LoadTGA("Image//campfireWood.tga");
-	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("Tree", "OBJ//rock.obj");
-	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock1.tga");
-	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("Tree", "OBJ//border.obj");
+
+	meshList[GEO_CLIFF] = MeshBuilder::GenerateOBJ("Cliff", "OBJ//rock.obj");
+	meshList[GEO_CLIFF]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("Border", "OBJ//border.obj");
 	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
-	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("Tree", "OBJ//fern.obj");
-	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
 
-	//Set Object Positions//
-	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20);
-	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
-	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
-	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
-	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 50);
-	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 50);
-	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 50);
-	objs[OBJ_CAMPFIRE].setBox(Vector3(80, 0, 80), 0.1);
+	meshList[GEO_CLOUD] = MeshBuilder::GenerateOBJ("Border", "OBJ//cloud.obj");
+	meshList[GEO_CLOUD]->textureID = LoadTGA("Image//top.tga");
 
-	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
-	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
-	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_BLUFRUIT] = MeshBuilder::GenerateText("invBluFruit", 16, 16);
-	meshList[GEO_INV_BLUFRUIT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_MEAT] = MeshBuilder::GenerateText("invMeat", 16, 16);
-	meshList[GEO_INV_MEAT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_TRAP] = MeshBuilder::GenerateText("invTrap", 16, 16);
-	meshList[GEO_INV_TRAP]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_INCUBATOR] = MeshBuilder::GenerateText("invIncubator", 16, 16);
-	meshList[GEO_INV_INCUBATOR]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_CURRENCY] = MeshBuilder::GenerateText("invCurrency", 16, 16);
-	meshList[GEO_INV_CURRENCY]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_INV_INTERFACE] = MeshBuilder::Generate2DQuad("InvInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
-	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
-	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
+	//Setup Goal Info 
+	//Set Collision
+	objs[OBJ_GOAL].setBox(Vector3(goalpos.x, goalpos.y, goalpos.z), 20,20,2);
+
+	for (int i = 0; i < OBJ_CLOUD11; i++)
+	{
+		objs[i].setBox(Vector3(100 - (20 * i), goalpos.y + 10, 100 - (20 * i)), 15);
+	}
+
+	for (int i = OBJ_CLOUD11; i < OBJ_GOAL; i++)
+	{
+		objs[i].setBox(Vector3(100 - (20 * i), goalpos.y - 10, 100 - (20 * i)), 15);
+	}
+
+
+	camera.horizMove = 0.0;
+	camera.vertMove = 0.0;
+	camera.SkyboxSize = 500.0f;
 }
 
-void SceneMain::Update(double dt)
+void Scene1_5::Update(double dt)
 {
+	//Developer Tools
+	if (Application::IsKeyPressed('1'))
+	{
+		glEnable(GL_CULL_FACE);
+	}
+	if (Application::IsKeyPressed('2'))
+	{
+		glDisable(GL_CULL_FACE);
+	}
+
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
 
-	// portals
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
+	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || reachedGoal)
 	{
-		//1/2 chance for either race track
-		/*int track = rand() % 3 + 1;
-		if (track == 1)
-		{
-			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
-		}
-		else
-		{
-			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
-		}*/
-		//Developer Test
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
+		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	if (Application::IsKeyPressed('Q')) // turn on global light
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
+		godlights = false;
 	}
-	else if (camera.position.z >= 185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	if (Application::IsKeyPressed('E')) // turn off global light
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
+		godlights = true;
 	}
-	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	if (Application::IsKeyPressed('R')) // Reset Points
 	{
-		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+		points = 0;
+		totalTime = 1500;
 	}
-	
-	rotateMain++;
+
+	light[3].position.Set(objs[OBJ_GOAL].getPos().x, objs[OBJ_GOAL].getPos().y, objs[OBJ_GOAL].getPos().z);
+
+	collideRing(camera.position);
+	totalTime -= timer.getElapsedTime();
+
+	std::cout << (camera.horizMove) * 10 << std::endl;
 }
 
-void SceneMain::Render()
+void Scene1_5::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	viewStack.LoadIdentity();
@@ -297,6 +329,7 @@ void SceneMain::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
+
 	if (light[1].type == Light::LIGHT_DIRECTIONAL) {
 		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
@@ -312,6 +345,7 @@ void SceneMain::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
+
 	if (light[2].type == Light::LIGHT_DIRECTIONAL)
 	{
 		Vector3 lightDir(light[2].position.x, light[2].position.y, light[2].position.z);
@@ -331,183 +365,165 @@ void SceneMain::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox(200.0f, godlights);
+	if (light[3].type == Light::LIGHT_DIRECTIONAL)
+	{
+		Vector3 lightDir(light[3].position.x, light[3].position.y, light[3].position.z);
+		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightDirection_cameraspace.x);
+	}
+	else if (light[3].type == Light::LIGHT_SPOT)
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+		Vector3 spotDirection_cameraspace = viewStack.Top() * light[3].spotDirection;
+		glUniform3fv(m_parameters[U_LIGHT3_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
+	}
+	else
+	{
+		Position lightPosition_cameraspace = viewStack.Top() * light[3].position;
+		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
+	}
+
+	//Render Skybox
+	RenderSkybox(camera.SkyboxSize, godlights);
 	//RenderMesh(meshList[GEO_AXES], false);
 
-	//Environment//
-	//Trees//
+	/* sampel
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[GEO_TREE], godlights);
-	viewStack.PopMatrix();
-
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	RenderMesh(meshList[GEO_TREE], godlights);
-	viewStack.PopMatrix();
-
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_TREE], godlights);
-	viewStack.PopMatrix();
-
-	//Rocks//
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
-	viewStack.Scale(4, 4, 4);
+	viewStack.Scale(1, 1, 1);
+	viewStack.Translate(0, 0, 0);
 	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_ROCK], godlights);
+	RenderMesh(meshList[], godlights);
+	RenderText(meshList[GEO_TEXT], "test", Color(1, 0, 0));
 	viewStack.PopMatrix();
+	*/
 
+	//Render Goal Ring
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[5].getPos().x, objs[5].getPos().y, objs[5].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.Translate(objs[OBJ_GOAL].getPos().x, objs[OBJ_GOAL].getPos().y, objs[OBJ_GOAL].getPos().z);
+	viewStack.Scale(2,2,2);
+	viewStack.Rotate(90, 1, 0, 0);
+	RenderMesh(meshList[GEO_GOAL], godlights);
 	viewStack.PopMatrix();
 
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[6].getPos().x, objs[6].getPos().y, objs[6].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_ROCK], godlights);
-	viewStack.PopMatrix();
+	//Render Environment//
+	//CLOUDS//
+	for (int i = OBJ_CLOUD0; i < OBJ_CLOUD6; i++)
+	{
+		for (int j = OBJ_CLOUD6; j < OBJ_CLOUD11; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(objs[i].getPos().x, objs[i].getPos().y, objs[i].getPos().z);
+			viewStack.Scale(2, 2, 2);
+			viewStack.Rotate(0, 0, 1, 0);
+			RenderMesh(meshList[GEO_CLOUD], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+	for (int i = OBJ_CLOUD11; i < OBJ_CLOUD16; i++)
+	{
+		for (int j = OBJ_CLOUD16; j < OBJ_GOAL; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(objs[i].getPos().x, objs[i].getPos().y, objs[i].getPos().z);
+			viewStack.Scale(2, 2, 2);
+			viewStack.Rotate(0, 0, 1, 0);
+			RenderMesh(meshList[GEO_CLOUD], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+	//TREES//
+	for (int i = 0; i < 15; i++)
+	{
+		for (int j = 1; j < 15; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-500 + (100 * i), -500, -500 + (80 * j));
+			viewStack.Scale(2, 2, 2);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+		}
+	}
 
-	//Campfire//
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
-	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_FIREBASE], godlights);
-	viewStack.PopMatrix();
+	for (int i = 0; i < 25; i++)
+	{
+		for (int j = 1; j < 25; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-465 + (80 * i), -500, -465 + (60 * j));
+			viewStack.Scale(1, 1, 1);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+		}
+	}
 
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
-	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_FIREWOOD], godlights);
-	viewStack.PopMatrix();
-
-	//BORDER//
-	viewStack.PushMatrix();
-	viewStack.Translate(0,0,-10);
-	viewStack.Scale(20,30,20);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
-	viewStack.PopMatrix();
-
-	viewStack.PushMatrix();
-	viewStack.Translate(0, 0, -10);
-	viewStack.Scale(23, 60, 23);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
-	viewStack.PopMatrix();
-
-	//Fern//
+	//CLIFFS//
 	for (int i = 0; i < 6; i++)
 	{
 		for (int j = 1; j < 6; j++)
 		{
 			viewStack.PushMatrix();
 			//viewStack.Rotate(12.5*i, 0, 1, 0);
-			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
-			viewStack.Scale(8, 8, 8);
+			viewStack.Translate(-490 + (180 * i), -500, -490 + (180 * j));
+			viewStack.Scale(3, 3, 3);
 			viewStack.Rotate(12.5*i, 0, 1, 0);
-			RenderMesh(meshList[GEO_FERN], godlights);
+			RenderMesh(meshList[GEO_CLIFF], godlights);
 			viewStack.PopMatrix();
 		}
 	}
 
-	//Easter Eggs//
+	//BORDER//
 	viewStack.PushMatrix();
-	viewStack.Translate(-190, 10, -190);
-	viewStack.Scale(10, 10, 10);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_EASTER1], false);
+	viewStack.Translate(0, -500, 0);
+	viewStack.Scale(80, 140, 80);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
-	//End of Environment//
+	//Render Dino//
+	RenderMeshOnScreen(meshList[GEO_DINO], 0.6, 0, 65, 60, (camera.horizMove)*0.5, camera.vertMove);
 
-		viewStack.PushMatrix();
-		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
-
-		viewStack.PushMatrix();
-			viewStack.Scale(objs[0].getSize(), objs[0].getSize(), objs[0].getSize());
-			viewStack.Rotate(rotateMain, 0, 1, 0);
-			RenderMesh(meshList[GEO_DINOEGG], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-			viewStack.Translate(-18, 35, 0);
-			viewStack.Scale(4, 4, 4);
-			viewStack.PushMatrix();
-				viewStack.PushMatrix();
-					viewStack.Translate(4.5, -1, 0);
-					viewStack.Scale(8.5, 2, 2);
-					RenderMesh(meshList[GEO_QUAD], godlights);
-				viewStack.PopMatrix();
-				RenderText(meshList[GEO_TEXT], "WELCOME TO", Color(0, 1, 0));
-				viewStack.Translate(-3, -2, 0);
-				viewStack.Scale(2, 2, 2);
-				RenderText(meshList[GEO_TEXT], "PTEROPETS", Color(1, 0, 0));
-			viewStack.PopMatrix();
-		viewStack.PopMatrix();
-	viewStack.PopMatrix();
-
-	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
-	std::ostringstream inv1;
-	inv1 << Inventory::instance()->items[ITEMS_REDFRUIT];
-	std::ostringstream inv2;
-	inv2 << Inventory::instance()->items[ITEMS_BLUFRUIT];
-	std::ostringstream inv3;
-	inv3 << Inventory::instance()->items[ITEMS_MEAT];
-	std::ostringstream inv4;
-	inv4 << Inventory::instance()->items[ITEMS_TRAP];
-	std::ostringstream inv5;
-	inv5 << Inventory::instance()->items[ITEMS_INCUBATOR];
-	std::ostringstream inv6;
-	inv6 << Inventory::instance()->items[ITEMS_CURRENCY];
-	std::string red = inv1.str();
-	std::string blu = inv2.str();
-	std::string met = inv3.str();
-	std::string trp = inv4.str();
-	std::string inc = inv5.str();
-	std::string cur = inv6.str();
-
-	if (Inventory::instance()->showInventory)
-	{
-		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
-		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], red, Color(1, 0, 0), 3, 10.9, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_BLUFRUIT], blu, Color(0, 0, 1), 3, 10.9, 10);
-		RenderTextOnScreen(meshList[GEO_INV_MEAT], met, Color(0.7, 0.31, 0), 3, 10.9, 5.9);
-		RenderTextOnScreen(meshList[GEO_INV_TRAP], trp, Color(1, 1, 1), 3, 17.6, 14.7);
-		RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], inc, Color(0.7, 0.7, 0), 3, 17.6, 10);
-		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 17.6, 5.9);
-	}
-	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
-
+	//Render Important Text//
 	std::ostringstream ah;
 	ah << framerate;
 	std::string str = ah.str();
-	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
+	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 1, 1);
+	std::ostringstream oh;
+	oh << camera.position.y;
+	std::string str2 = oh.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Altitude:" + str2, Color(1, 0, 0), 2, 1, 2);
+	std::ostringstream th;
+	th << totalTime;
+	std::string str6 = th.str();
+	RenderTextOnScreen(meshList[GEO_TEXT], "Time : " + str6, Color(1, 1, 0), 2, 1, 3);
 
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG)
+	if (camera.position.y <= -495)
 	{
-		RenderTextOnScreen(meshList[GEO_TEXT], "Your Pterodactyl can't fly yet!", Color(1, 0.1, 0.1), 2.3, 4, 11);
+		RenderTextOnScreen(meshList[GEO_TEXT], "You crashed into the ground!", Color(1, 0.1, 0.1), 3, 3, 9);
 	}
+	if (totalTime <= 0)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "You ran out of time!", Color(1, 0.1, 0.1), 3, 5, 9);
+	}
+	if (reachedGoal == true)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
+	}
+
 }
 
-void SceneMain::Exit()
+void Scene1_5::Exit()
 {
 	glDeleteProgram(m_programID);
 }
 
-void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
+void Scene1_5::RenderMesh(Mesh *mesh, bool enableLight)
 {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
@@ -549,7 +565,7 @@ void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
 	}
 }
 
-void SceneMain::RenderSkybox(float d, bool light)
+void Scene1_5::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
 	//modelStack.Rotate(0, 0, 0, 0);
@@ -590,13 +606,13 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0);
+	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
 }
 
-void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
+void Scene1_5::RenderText(Mesh* mesh, std::string text, Color color)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -623,7 +639,7 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
+void Scene1_5::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
 	if (!mesh || mesh->textureID <= 0) //Proper error check
 		return;
@@ -651,7 +667,7 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.8f, 0, 0); //1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -667,44 +683,60 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	glEnable(GL_DEPTH_TEST);
 }
 
-void SceneMain::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
+void Scene1_5::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey, float horideg, float vertideg)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
 	viewStack.LoadIdentity(); //No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
+	modelStack.Scale(sizex, sizey, sizey);
 	modelStack.Translate(x, y, 0);
-	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); //UI should not have light
+	modelStack.Rotate(-170, 0, 1, 0);
+	modelStack.Rotate(horideg, 0, 1, 0);
+	modelStack.Rotate(vertideg, 1, 0, 1);
+	RenderMesh(mesh, godlights); //UI should not have light, but yes for my scene!
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
 	glEnable(GL_DEPTH_TEST);
 }
 
-bool SceneMain::collision(Vector3 c)
+bool Scene1_5::collision(Vector3 c)
 {
-	float ActualYpos = c.y - 20;
+	float ActualYpos = c.y + 100;
 
-	for (int i = 0; i < NUM_OBJECTS; i++)
+	for (int i = 0; i < OBJ_GOAL; i++)
 	{
 		if (c.x >= objs[i].minX && c.x <= objs[i].maxX &&
-			c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
-			ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
+		c.z >= objs[i].minZ && c.z <= objs[i].maxZ &&
+		ActualYpos >= objs[i].minY && ActualYpos <= objs[i].maxY)
 		{
-			return true;
+		return true;
 		}
 	}
-
-	if (c.x >= 200.0f || c.x <= -200.0f || c.z >= 200.0f || c.z <= -200.0f || c.y >= 200.0f || c.y <= -200.0f) {
+	if (c.x >= camera.SkyboxSize || c.x <= -camera.SkyboxSize || c.z >= camera.SkyboxSize || c.z <= -camera.SkyboxSize || c.y >= camera.SkyboxSize || c.y <= -camera.SkyboxSize) {
 		return true;
 	}
 	else {
 		return false;
 	}
+}
+
+void Scene1_5::collideRing(Vector3 c)
+{
+	float ActualYpos = c.y;
+
+	if (c.x >= objs[OBJ_GOAL].minX && c.x <= objs[OBJ_GOAL].maxX &&
+		c.z >= objs[OBJ_GOAL].minZ && c.z <= objs[OBJ_GOAL].maxZ &&
+		ActualYpos >= objs[OBJ_GOAL].minY && ActualYpos <= objs[OBJ_GOAL].maxY)
+	{
+		reachedGoal = true;
+	}
+	else
+	reachedGoal = false;
 }
