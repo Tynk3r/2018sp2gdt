@@ -192,7 +192,7 @@ void SceneMain::Init()
 	meshList[GEO_EASTER1]->textureID = LoadTGA("Image//easter1.tga");
 
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
+	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 	meshList[GEO_FIREBASE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//campfireBase.obj");

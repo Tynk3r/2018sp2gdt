@@ -196,6 +196,8 @@ void Scene2::Init()
 	meshList[GEO_SKELETON]->textureID = LoadTGA("Image//skeleton.tga");
 	meshList[GEO_INCUBATOR] = MeshBuilder::GenerateOBJ("objs7", "OBJ//incubator.obj");
 	meshList[GEO_INCUBATOR]->textureID = LoadTGA("Image//incubator.tga");
+	meshList[GEO_HEART] = MeshBuilder::GenerateOBJ("objs8", "OBJ//heart.obj");
+	meshList[GEO_HEART]->textureID = LoadTGA("Image//heart.tga");
 
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
@@ -486,6 +488,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if(!MyPtero::instance()->hungry){ RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -494,6 +501,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 15, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if (!MyPtero::instance()->hungry) { RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -502,6 +514,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 25, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if (!MyPtero::instance()->hungry) { RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();

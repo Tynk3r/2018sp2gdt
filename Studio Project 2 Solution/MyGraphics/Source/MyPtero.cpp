@@ -71,7 +71,7 @@ void MyPtero::newPtero(void)
 	hungry = true;
 	incubating = false;
 	pteroStage = P_EGG;
-	pteroType = T_RED;
+	pteroType = T_GREEN;
 	pteroDirection = 180.0f;
 	pteroMovementSpeed = 0.0f;
 	pteroSpeedModifier = s;
