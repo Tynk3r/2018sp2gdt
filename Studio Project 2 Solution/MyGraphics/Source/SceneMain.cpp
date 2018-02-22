@@ -23,6 +23,9 @@ void SceneMain::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
+	developerMode = false;
+	Race1 = true;
+
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
 
 	Mtx44 projection;
@@ -243,18 +246,30 @@ void SceneMain::Update(double dt)
 	// portals
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
-		//1/2 chance for either race track
-		int track = rand() % 3 + 1;
-		if (track == 1)
+		if (!developerMode)
 		{
-			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+			//1/2 chance for either race track
+			int track = rand() % 3 + 1;
+			if (track == 1)
+			{
+				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+			}
+			else
+			{
+				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
+			}
 		}
 		else
 		{
-			SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
+			if (Race1)
+			{
+				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
+			}
+			else
+			{
+				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
+			}
 		}
-		//Developer Test
-		//SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
 	}
 	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
@@ -267,6 +282,24 @@ void SceneMain::Update(double dt)
 	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
+	}
+
+	if (Application::IsKeyPressed(VK_NUMPAD1))
+	{
+		if (!developerMode)
+			developerMode = true;
+		else
+			developerMode = false;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD2))
+	{
+		if (developerMode)
+		{
+			if (Race1)
+				Race1 = false;
+			else
+				Race1 = true;
+		}
 	}
 	
 	rotateMain++;
@@ -499,6 +532,15 @@ void SceneMain::Render()
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Your Pterodactyl can't fly yet!", Color(1, 0.1, 0.1), 2.3, 4, 11);
+	}
+
+	if (developerMode)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "Developer Mode", Color(0, 1, 0), 2, 1, 1);
+		std::ostringstream oh;
+		oh << Race1;
+		std::string str2 = oh.str();
+		RenderTextOnScreen(meshList[GEO_TEXT], "Is Race Track 1:" + str2, Color(1, 1, 0), 2, 1, 2);
 	}
 }
 

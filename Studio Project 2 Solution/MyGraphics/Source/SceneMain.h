@@ -149,5 +149,9 @@ private:
 	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	bool collision(Vector3);
+
+	//Developer Variable for Scene1 & 1.5
+	bool developerMode;
+	bool Race1;
 };
 #endif
