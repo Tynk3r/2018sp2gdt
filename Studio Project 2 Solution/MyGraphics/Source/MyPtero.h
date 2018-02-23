@@ -23,11 +23,18 @@ public:
 		P_ADULT,
 	};
 
+	enum PTERO_TYPE {
+		T_RED = 0,
+		T_GREEN,
+		T_PURPLE,
+	};
+
 	//For Breeding/Raising
 	bool hungry = true;
 	bool incubating = false;
 
 	int pteroStage;
+	int pteroType;
 	float pteroDirection;
 	float pteroMovementSpeed;
 	float pteroSpeedModifier;

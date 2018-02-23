@@ -15,6 +15,7 @@
 Scene2::Scene2()
 {
 	MyPtero::instance()->pteroStage = MyPtero::P_BABY;
+	MyPtero::instance()->pteroType = MyPtero::T_GREEN;
 }
 
 Scene2::~Scene2()
@@ -170,9 +171,21 @@ void Scene2::Init()
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
-	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
 	meshList[GEO_PTERO] = MeshBuilder::GenerateOBJ("objs2", "OBJ//pterodactyl.obj");
-	meshList[GEO_PTERO]->textureID = LoadTGA("Image//pterodactyl.tga");
+	switch (MyPtero::instance()->pteroType) {
+	case MyPtero::T_GREEN:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//greendino.tga");
+		break;
+	case MyPtero::T_RED:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//REDdino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//REDdino.tga");
+		break;
+	case MyPtero::T_PURPLE:
+		meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//PURPLEdino.tga");
+		meshList[GEO_PTERO]->textureID = LoadTGA("Image//PURPLEdino.tga");
+		break;
+	}
 	meshList[GEO_FENCE] = MeshBuilder::GenerateOBJ("objs3", "OBJ//fence.obj");
 	meshList[GEO_FENCE]->textureID = LoadTGA("Image//fence.tga");
 	meshList[GEO_CAMPFIRE_BASE] = MeshBuilder::GenerateOBJ("objs4", "OBJ//campfireBase.obj");
@@ -183,6 +196,8 @@ void Scene2::Init()
 	meshList[GEO_SKELETON]->textureID = LoadTGA("Image//skeleton.tga");
 	meshList[GEO_INCUBATOR] = MeshBuilder::GenerateOBJ("objs7", "OBJ//incubator.obj");
 	meshList[GEO_INCUBATOR]->textureID = LoadTGA("Image//incubator.tga");
+	meshList[GEO_HEART] = MeshBuilder::GenerateOBJ("objs8", "OBJ//heart.obj");
+	meshList[GEO_HEART]->textureID = LoadTGA("Image//heart.tga");
 
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
@@ -261,8 +276,23 @@ void Scene2::Update(double dt)
 		}
 	}
 	// reset ptero
-	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0f) {
+	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0 && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
+		Inventory::instance()->items[ITEMS_CURRENCY] -= 25;
 		MyPtero::instance()->newPtero();
+		switch (MyPtero::instance()->pteroType) {
+		case MyPtero::T_GREEN:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//greendino.tga");
+			break;
+		case MyPtero::T_RED:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//REDdino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//REDdino.tga");
+			break;
+		case MyPtero::T_PURPLE:
+			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//PURPLEdino.tga");
+			meshList[GEO_PTERO]->textureID = LoadTGA("Image//PURPLEdino.tga");
+			break;
+		}
 	}
 
 	// ptero movement
@@ -458,6 +488,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if(!MyPtero::instance()->hungry){ RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -466,6 +501,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 15, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if (!MyPtero::instance()->hungry) { RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -474,6 +514,11 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 25, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 1, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		if (!MyPtero::instance()->hungry) { RenderMesh(meshList[GEO_HEART], godlights); }
+		viewStack.PopMatrix();
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
 		RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
@@ -557,7 +602,7 @@ void Scene2::Render()
 		RenderText(meshList[GEO_TEXT], sg, Color(1, 0, 0));
 	viewStack.PopMatrix();
 	// reset button
-	if (camera.position.x > 25.0f && camera.position.z < -25.0f) {
+	if (camera.position.x > 25.0f && camera.position.z < -25.0f && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
 		viewStack.PushMatrix();
 			viewStack.Translate(99.9, 15, -70);
 			viewStack.Rotate(-90, 0, 1, 0);

@@ -77,6 +77,7 @@ class Scene2 : public Scene
 		GEO_CAMPFIRE_WOOD,
 		GEO_SKELETON,
 		GEO_INCUBATOR,
+		GEO_HEART,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
