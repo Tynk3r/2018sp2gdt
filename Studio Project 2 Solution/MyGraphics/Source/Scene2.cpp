@@ -198,6 +198,8 @@ void Scene2::Init()
 	meshList[GEO_INCUBATOR]->textureID = LoadTGA("Image//incubator.tga");
 	meshList[GEO_HEART] = MeshBuilder::GenerateOBJ("objs8", "OBJ//heart.obj");
 	meshList[GEO_HEART]->textureID = LoadTGA("Image//heart.tga");
+	meshList[GEO_NEST] = MeshBuilder::GenerateOBJ("objs9", "OBJ//nest.obj");
+	meshList[GEO_NEST]->textureID = LoadTGA("Image//nest.tga");
 
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
@@ -480,7 +482,9 @@ void Scene2::Render()
 	case MyPtero::P_EGG:
 		viewStack.PushMatrix();
 		viewStack.Translate(MyPtero::instance()->pteroLocationX, 0, MyPtero::instance()->pteroLocationZ);
-		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
+		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+		if (MyPtero::instance()->incubating) { RenderMesh(meshList[GEO_NEST], godlights); }
+		viewStack.Scale(10, 10, 10);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
 		break;
