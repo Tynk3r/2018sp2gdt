@@ -154,8 +154,8 @@ void CameraFPV::Update(double dt)
 
 		//Rolling
 		double roll = rollMove*dt;
-		rotation.SetToRotation(roll, front.x, front.y, front.z);
-		//TODO : ADD CODE TO ROLL CAMERA//
+		rotation.SetToRotation(roll, view.x, view.y, view.z);
+		//TODO: ADD ROLLING CODE
 		//
 		//
 
@@ -167,22 +167,22 @@ void CameraFPV::Update(double dt)
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
 		}
-
-		if (Application::IsKeyPressed('A'))
+		//Un-comment after adding rolling code
+		/*if (Application::IsKeyPressed(VK_RIGHT))
 		{
 			if (rollMove != 20)
 				rollMove += (double)(2.0*CAMERA_SPEED);
 			else
 				rollMove = 20;
 		}
-		if (Application::IsKeyPressed('D'))
+		if (Application::IsKeyPressed(VK_LEFT))
 		{
 			if (rollMove != -20)
 				rollMove -= (double)(2.0*CAMERA_SPEED);
 			else
 				rollMove = -20;
-		}
-		if (Application::IsKeyPressed(VK_UP))
+		}*/
+		if (Application::IsKeyPressed('W'))
 		{
 			if (up.y > 0)
 			{
@@ -192,21 +192,21 @@ void CameraFPV::Update(double dt)
 					vertMove = 30;
 			}
 		}
-		if (Application::IsKeyPressed(VK_DOWN))
+		if (Application::IsKeyPressed('S'))
 		{
 			if (vertMove != -20)
 				vertMove -= (double)(2.0*CAMERA_SPEED);
 			else
 				vertMove = -20;
 		}
-		if (Application::IsKeyPressed(VK_LEFT))
+		if (Application::IsKeyPressed('A'))
 		{
 			if (horizMove != -20)
 				horizMove -= (double)(2.0*CAMERA_SPEED);
 			else
 				horizMove = -20;
 		}
-		if (Application::IsKeyPressed(VK_RIGHT))
+		if (Application::IsKeyPressed('D'))
 		{
 			if (horizMove != 20)
 				horizMove += (double)(2.0*CAMERA_SPEED);
@@ -217,17 +217,6 @@ void CameraFPV::Update(double dt)
 		{
 			switch (MyPtero::instance()->pteroStage) {
 			case MyPtero::P_BABY:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75)*1.5;
-			case MyPtero::P_ADOLESCENT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*1.5;
-			case MyPtero::P_ADULT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25)*1.5;
-			}
-		}
-		else
-		{
-			switch (MyPtero::instance()->pteroStage) {
-			case MyPtero::P_BABY:
 				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75);
 			case MyPtero::P_ADOLESCENT:
 				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier);
@@ -235,9 +224,20 @@ void CameraFPV::Update(double dt)
 				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25);
 			}
 		}
+		else
+		{
+			switch (MyPtero::instance()->pteroStage) {
+			case MyPtero::P_BABY:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75)*1.5;
+			case MyPtero::P_ADOLESCENT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*1.5;
+			case MyPtero::P_ADULT:
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25)*1.5;
+			}
+		}
 
 		//If not pressing Down, automatically pitch downwards
-		if (!Application::IsKeyPressed(VK_DOWN))
+		if (!Application::IsKeyPressed('S'))
 		{
 			if (up.y > 0)
 			{
