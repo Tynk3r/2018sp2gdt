@@ -79,6 +79,7 @@ class Scene2 : public Scene
 		GEO_INCUBATOR,
 		GEO_HEART,
 		GEO_NEST,
+		GEO_MEAT,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -119,6 +120,10 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	double framerate;
 	bool godlights = true;
+	bool feeding = false;
+	float meatLocationX = 0;
+	float meatLocationZ = 62.5;
+	int feedingDelay = 0;
 
 	CameraFPV camera;
 	MS modelStack, viewStack, projectionStack;
