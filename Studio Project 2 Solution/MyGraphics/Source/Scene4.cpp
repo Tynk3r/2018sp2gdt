@@ -210,7 +210,8 @@ void Scene4::Init()
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 	meshList[GEO_NPC_HUNTER] = MeshBuilder::GenerateOBJ("npc_hunter", "OBJ//NPC_Hunter.obj");
-	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Shop.obj");
+	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//NPC_Hunter.tga");
+	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Hunter.obj");
 	//meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
