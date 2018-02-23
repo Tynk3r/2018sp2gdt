@@ -78,10 +78,10 @@ void Scene2::Init()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 
-	light[0].type = Light::LIGHT_DIRECTIONAL;
-	light[0].position.Set(2, 2, 2);
-	light[0].color.Set(1, 1, 1);
-	light[0].power = 2;
+	light[0].type = Light::LIGHT_POINT;
+	light[0].position.Set(0, 10, 3);
+	light[0].color.Set(0.898, 0.627, 0.125);
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -91,8 +91,8 @@ void Scene2::Init()
 	light[0].spotDirection.Set(0.f, 1.f, 0.f);
 
 	light[1].type = Light::LIGHT_DIRECTIONAL;
-	light[1].position.Set(-1, -1, -1);
-	light[1].color.Set(1, 1, 1);
+	light[1].position.Set(2, 2, 2);
+	light[1].color.Set(0.898, 0.627, 0.125);
 	light[1].power = 2;
 	light[1].kC = 1.f;
 	light[1].kL = 0.01f;
@@ -101,6 +101,18 @@ void Scene2::Init()
 	light[1].cosInner = cos(Math::DegreeToRadian(30));
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, 1.f, 0.f);
+
+	light[2].type = Light::LIGHT_DIRECTIONAL;
+	light[2].position.Set(-1, -1, -1);
+	light[2].color.Set(0.823, 0.466, 0.058);
+	light[2].power = 2;
+	light[2].kC = 1.f;
+	light[2].kL = 0.01f;
+	light[2].kQ = 0.001f;
+	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
+	light[2].cosInner = cos(Math::DegreeToRadian(30));
+	light[2].exponent = 3.f;
+	light[2].spotDirection.Set(0.f, 1.f, 0.f);
 
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
