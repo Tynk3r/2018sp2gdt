@@ -9,7 +9,7 @@ NPC::NPC()
 	NPCS[NPC_HUNTING].setBox(Vector3(-120, 4, 140), sizeOfBoxMove);
 	NPCS[NPC_RAISING].setBox(Vector3(-60, 4, -80), sizeOfBoxMove);
 	NPCS[NPC_RACING].setBox(Vector3(-100, 4, 40), sizeOfBoxMove);
-	NPCS[NPC_SHOP].setBox(Vector3(80, 4, -100), 70, 10, 50);
+	NPCS[NPC_SHOP].setBox(Vector3(80, 0, -100), 70, 10, 50);
 
 	for (int i = 0; i < numberOfNPCs; i++)
 	{

@@ -223,8 +223,8 @@ void Scene4::Init()
 
 	meshList[GEO_NPC_HUNTER] = MeshBuilder::GenerateOBJ("npc_hunter", "OBJ//NPC_Hunter.obj");
 	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//NPC_Hunter.tga");
-	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Hunter.obj");
-	//meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
+	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Shop.obj");
+	meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
