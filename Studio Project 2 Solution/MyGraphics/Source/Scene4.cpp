@@ -596,7 +596,7 @@ void Scene4::Render()
 	std::string trp = inv4.str();
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
-	Inventory::instance()->items[ITEMS_CURRENCY] = 899;
+	Inventory::instance()->items[ITEMS_CURRENCY] = 100;
 	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
