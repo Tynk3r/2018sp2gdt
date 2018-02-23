@@ -210,7 +210,8 @@ void Scene4::Init()
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
 	meshList[GEO_NPC_HUNTER] = MeshBuilder::GenerateOBJ("npc_hunter", "OBJ//NPC_Hunter.obj");
-	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Shop.obj");
+	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//NPC_Hunter.tga");
+	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Hunter.obj");
 	//meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
@@ -595,7 +596,7 @@ void Scene4::Render()
 	std::string trp = inv4.str();
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
-	Inventory::instance()->items[ITEMS_CURRENCY] = 899;
+	Inventory::instance()->items[ITEMS_CURRENCY] = 100;
 	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
