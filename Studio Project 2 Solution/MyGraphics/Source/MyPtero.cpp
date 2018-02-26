@@ -67,11 +67,11 @@ void MyPtero::newPtero(void)
 	srand(time(NULL));
 	float r = ((float)(rand() % 21) + (float)10) / (float)10; // 1.0-3.0
 	float s = ((float)(rand() % 31) + (float)10) / (float)10; // 1.0-4.0
-
+	int t = rand() % 3;
 	hungry = true;
 	incubating = false;
 	pteroStage = P_EGG;
-	pteroType = T_GREEN;
+	pteroType = t;
 	pteroDirection = 180.0f;
 	pteroMovementSpeed = 0.0f;
 	pteroSpeedModifier = s;

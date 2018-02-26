@@ -232,7 +232,20 @@ void Scene1::Init()
 
 	//Screen
 	meshList[GEO_DINO] = MeshBuilder::GenerateOBJ("flying thingy", "OBJ//flyingModel.obj");
-	meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
+	switch (MyPtero::instance()->pteroType) {
+	case MyPtero::T_GREEN:
+		meshList[GEO_DINO]->textureID = LoadTGA("Image//greendino.tga");
+		break;
+	case MyPtero::T_RED:
+		meshList[GEO_DINO]->textureID = LoadTGA("Image//REDdino.tga");
+		break;
+	case MyPtero::T_PURPLE:
+		meshList[GEO_DINO]->textureID = LoadTGA("Image//PURPLEdino.tga");
+		break;
+	default:
+		meshList[GEO_DINO]->textureID = LoadTGA("Image//pterodactyl.tga");
+		break;
+	}
 
 	//Environment
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
