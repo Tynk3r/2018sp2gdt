@@ -1,0 +1,5 @@
+Come back next time. I might have more
+tips for you!                         
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_racing_end

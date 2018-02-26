@@ -1,0 +1,5 @@
+What do dinosaurs call the beach?     
+                                      
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_1.1

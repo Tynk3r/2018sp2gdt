@@ -1,0 +1,5 @@
+If you can show me 30 blue fruits,    
+then I will add you as an applicant in
+our list of applicants.               
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_1.3

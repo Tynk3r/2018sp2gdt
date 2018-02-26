@@ -1,0 +1,5 @@
+You've impressed me once again. Well  
+done, you are now an official member  
+of our faction. Press X to continue.  
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_end.1

@@ -1,0 +1,5 @@
+Being a small arms dealer!            
+                                      
+Ha! Ha! Ha! Bet you'd laughed at that!
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_2.2

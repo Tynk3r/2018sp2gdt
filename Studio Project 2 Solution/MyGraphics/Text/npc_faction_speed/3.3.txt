@@ -1,0 +1,5 @@
+Show me $500 and that will make you an
+official Speedster member!            
+                                      
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_3.3

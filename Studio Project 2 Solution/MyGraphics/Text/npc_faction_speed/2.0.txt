@@ -1,0 +1,5 @@
+Quick! Speed is key!                  
+                                      
+I want 30 red fruits!                 
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_2.0

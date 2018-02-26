@@ -1,0 +1,5 @@
+If you want to apply to be a part of  
+the giant faction, then you have to   
+show me 30 blue fruits.               
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_2.0

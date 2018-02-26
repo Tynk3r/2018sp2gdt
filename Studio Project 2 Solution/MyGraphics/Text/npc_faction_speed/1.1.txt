@@ -1,0 +1,5 @@
+Do you think a fast dino is the best  
+kind of dino?                         
+X if you agree.                       
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_1.1

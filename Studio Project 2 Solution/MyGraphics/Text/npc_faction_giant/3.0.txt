@@ -1,0 +1,5 @@
+If you don't complete the task then it
+is unlikely to be accepted, so go and 
+get the 25 traps and meat to show me. 
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_3.0

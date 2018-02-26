@@ -1,0 +1,5 @@
+Remember to adopt the will of the     
+giant faction. Have everything be as  
+large as possible. Even for sentences!
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_end

@@ -1,0 +1,5 @@
+Okay, this is the last task before you
+can join.                             
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_3.2

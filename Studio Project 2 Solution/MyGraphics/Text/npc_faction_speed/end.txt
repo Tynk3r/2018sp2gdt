@@ -1,0 +1,5 @@
+Now go and show the world the best    
+kind of dino! SPEEDSTERS WILL RULE THE
+WORLD!                                
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_end

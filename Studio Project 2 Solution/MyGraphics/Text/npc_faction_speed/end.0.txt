@@ -1,0 +1,5 @@
+What are you waiting for? Speed is key
+to everything!                        
+SHOW ME $500!                         
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_end.0

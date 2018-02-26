@@ -1,0 +1,5 @@
+Impressive but I believe such a task  
+was too easy for a real member of the 
+giant faction. Press X to continue on.
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_2.1

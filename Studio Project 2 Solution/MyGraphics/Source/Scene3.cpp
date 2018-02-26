@@ -361,7 +361,7 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed('V') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) // Trap Interactions
+	if (Application::IsKeyPressed('X') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) // Trap Interactions
 	{
 		if ((trappedBush2 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
 		{
@@ -397,7 +397,7 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed('V') && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f)) // Trap Interactions
+	if (Application::IsKeyPressed('X') && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f)) // Trap Interactions
 	{
 		if ((trappedBush3 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
 		{
@@ -433,7 +433,7 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed('V') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) // Trap Interactions
+	if (Application::IsKeyPressed('X') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) // Trap Interactions
 	{
 		if ((trappedBush4 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
 		{
@@ -469,7 +469,7 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	if (Application::IsKeyPressed('V') && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f)) // Trap Interactions
+	if (Application::IsKeyPressed('X') && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f)) // Trap Interactions
 	{
 		if ((trappedBush5 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
 		{
@@ -788,7 +788,7 @@ void Scene3::Render()
 
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
-	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<V> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
+	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<X> to set/pick trap", Color(1, 1, 1), 1.5, 33, 37);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<I> to show inventory", Color(1, 1, 1), 1.5, 33, 39);
 
 	///////////////////////////////////////////////////////// START OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////

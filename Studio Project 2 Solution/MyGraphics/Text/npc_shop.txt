@@ -1,0 +1,4 @@
+Welcome to Billy John's little cart   
+shop withh all the best items found   
+around these woods! X to continue.    
+<-ThisIsTheCharacterLimitForEachLine->

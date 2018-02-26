@@ -1,0 +1,5 @@
+You are really impressing me. I didn't 
+expect you to be able to complete the 
+tasks. Press X to continue on.        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_3.1

@@ -1,0 +1,5 @@
+What dinosaurs are used in the poilce?
+                                      
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_4.1

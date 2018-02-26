@@ -170,8 +170,24 @@ private:
 	// For shop
 	SHOP shop;
 	bool clicked = false;
-	bool shopping = false;				// If the player is in the process of shopping (Switch to mouse controls)
-	int clickedDelay = 0;				// Prevent the double click buy/sell
-	int itemAmount = 0;					// The quantity of a item that the player wants to buy/sell
+	int clickedDelay = 0;			// Prevent the double click buy/sell
+	int itemAmount = 0;				// The quantity of a item that the player wants to buy/sell
+	bool shopping = false;			// If the player is in the process of shopping (Switch to mouse controls)
+
+	// For conversations
+	int conversationStage;			// The stage of the conversation
+	
+	int jokeNpcNum;					// For randomizing jokes
+	int racingNpcNum;				// For randomizing tips for racing
+	
+	int giantFactionQuest = 1;		// The quest number for the giant faction
+	bool giantQuestDone = false;	// If the quest has been done for the giant faction
+	bool giantChangedQuest = false;	// Used for faction quests dialogue, updates text based on ongoing quest for the giant faction
+
+	int speedFactionQuest = 1;		// The quest status for the speed faction
+	bool speedQuestDone = false;	// If the quest has been done for the speed faction
+	bool speedChangedQuest = false;	// Used for faction quests dialogue, updates text based on ongoing quest for the speed faction
+
+	int continueDelay;				// Prevent the double key press during conversations					
 };
 #endif

@@ -1,0 +1,5 @@
+What dinosaur has the best vocabulary?
+                                      
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_4.1

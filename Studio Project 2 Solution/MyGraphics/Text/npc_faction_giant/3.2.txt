@@ -1,0 +1,5 @@
+Now, this task is the final task and  
+if it is completed, you will instantly
+be a member. Press X to continue.     
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_3.2

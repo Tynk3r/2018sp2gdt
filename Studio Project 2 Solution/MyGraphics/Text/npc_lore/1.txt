@@ -1,0 +1,5 @@
+Hohoho! Be careful young one! There   
+are dinosaurs that can fly! But if you
+can tame one, it can be really fun!   
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_lore_1

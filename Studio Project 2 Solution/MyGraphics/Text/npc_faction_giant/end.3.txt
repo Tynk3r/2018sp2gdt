@@ -1,0 +1,5 @@
+You can see your new egg at your own  
+raising area. Now go show the world   
+the amazing giants of the dinosaurs.  
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_end.3

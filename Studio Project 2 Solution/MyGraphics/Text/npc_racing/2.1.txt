@@ -1,0 +1,5 @@
+There are different types of courses  
+that your pterodactyl can fly in.     
+X to continue. 
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_racing_2.1

@@ -1,0 +1,5 @@
+Greetings, you regard dinosaurs to be 
+much better when they are much bigger 
+right? Press X if you agree with me. 
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_1.1

@@ -1,0 +1,5 @@
+Hey kid, you want to hear a good joke 
+that I've just thought of?            
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_1
