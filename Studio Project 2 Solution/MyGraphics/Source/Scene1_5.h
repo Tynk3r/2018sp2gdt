@@ -172,13 +172,14 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizex, float sizey, float, float);
 
 	bool collision(Vector3);
+	bool godlights;
 	bool reachedGoal;
 
 	void collideRing(Vector3);
 	int points;
 	int totalTime;
 
-	bool godlights;
+	float SkyboxSize;
 
 	Vector3 goalpos;
 

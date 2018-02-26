@@ -274,6 +274,7 @@ void Scene1_5::Init()
 	camera.horizMove = 0.0;
 	camera.vertMove = 0.0;
 	camera.SkyboxSize = 500.0f;
+	SkyboxSize = 700.0f;
 }
 
 void Scene1_5::Update(double dt)
@@ -398,7 +399,7 @@ void Scene1_5::Render()
 	}
 
 	//Render Skybox
-	RenderSkybox(camera.SkyboxSize, godlights);
+	RenderSkybox(SkyboxSize, godlights);
 	//RenderMesh(meshList[GEO_AXES], false);
 
 	/* sampel
@@ -619,7 +620,7 @@ void Scene1_5::RenderSkybox(float d, bool light)
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, -d);
+	modelStack.Translate(0, 0, -camera.SkyboxSize);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();

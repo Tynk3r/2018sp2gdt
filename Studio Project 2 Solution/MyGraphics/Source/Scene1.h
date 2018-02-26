@@ -173,12 +173,13 @@ private:
 	void HandleRingCollide(int);
 
 	bool collision(Vector3);
+	bool godlights;
 
 	int collideRing(Vector3);
 	int points;
 	int totalTime;
 
-	bool godlights;
+	float SkyboxSize;
 
 	RingObject currentRing;
 
