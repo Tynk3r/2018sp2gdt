@@ -804,9 +804,12 @@ void Scene1::HandleRingCollide(int id)
 			}
 		}
 	}
-	if (id == objs[OBJ_RING20].getID())
+	if (currentRing.getID() == 20)
 	{
-		points += 50;
-		currentRing.setID(-1);
+		if (id == objs[OBJ_RING20].getID())
+		{
+			points += 50;
+			currentRing.setID(-1);
+		}
 	}
 }

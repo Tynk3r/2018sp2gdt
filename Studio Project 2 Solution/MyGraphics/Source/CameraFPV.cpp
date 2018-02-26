@@ -230,22 +230,22 @@ void CameraFPV::Update(double dt)
 		{
 			switch (MyPtero::instance()->pteroStage) {
 			case MyPtero::P_BABY:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75);
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*0.7;
 			case MyPtero::P_ADOLESCENT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier);
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier + 0.75)*0.5;
 			case MyPtero::P_ADULT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25);
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier + 1.25)*0.2;
 			}
 		}
 		else
 		{
 			switch (MyPtero::instance()->pteroStage) {
 			case MyPtero::P_BABY:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*0.75)*1.5;
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier);
 			case MyPtero::P_ADOLESCENT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*1.5;
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier + 0.75);
 			case MyPtero::P_ADULT:
-				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier*1.25)*1.5;
+				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier + 1.25);
 			}
 		}
 
