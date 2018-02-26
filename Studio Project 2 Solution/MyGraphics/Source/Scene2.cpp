@@ -102,18 +102,6 @@ void Scene2::Init()
 	light[1].exponent = 3.f;
 	light[1].spotDirection.Set(0.f, 1.f, 0.f);
 
-	light[2].type = Light::LIGHT_DIRECTIONAL;
-	light[2].position.Set(-1, -1, -1);
-	light[2].color.Set(0.823, 0.466, 0.058);
-	light[2].power = 2;
-	light[2].kC = 1.f;
-	light[2].kL = 0.01f;
-	light[2].kQ = 0.001f;
-	light[2].cosCutoff = cos(Math::DegreeToRadian(45));
-	light[2].cosInner = cos(Math::DegreeToRadian(30));
-	light[2].exponent = 3.f;
-	light[2].spotDirection.Set(0.f, 1.f, 0.f);
-
 	// Make sure you pass uniform parameters after glUseProgram()
 	glUniform1i(m_parameters[U_LIGHT0_TYPE], light[0].type);
 	glUniform3fv(m_parameters[U_LIGHT0_COLOR], 1, &light[0].color.r);
