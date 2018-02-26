@@ -27,22 +27,10 @@ void Scene3::Init()
 
 	camera.Init(Vector3(0, 20, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
 
-																		// Keep this here // 
-																		// Should be done everytime scene 3 is loaded up // 
-	bush1.harvestedBush = false; // Sets all bush to be harvestable upon startup
-	bush1.harvestCheck = false;  // Check for single-time Harvest
-
-	bush2.harvestedBush = false;
-	bush2.harvestCheck = false;
-
-	bush3.harvestedBush = false;
-	bush3.harvestCheck = false;
-
-	bush4.harvestedBush = false;
-	bush4.harvestCheck = false;
-
-	bush5.harvestedBush = false;
-	bush5.harvestCheck = false;
+	for (int i = 0; i < 5; i++)
+	{
+		bushesHarvested[i] = false;
+	}
 
 	// Trap State Chart // 
 	// 0 = no trap
@@ -253,7 +241,6 @@ void Scene3::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//4front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -304,13 +291,17 @@ void Scene3::Init()
 	meshList[GEO_INV_INTERFACE]->textureID = LoadTGA("Image//invInterface.tga");
 	///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 
+	meshList[GEO_PLACEHOLDER_UI_WHITE] = MeshBuilder::Generate2DQuad("placeholderTextBoxWhite", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_PLACEHOLDER_UI_BLACK] = MeshBuilder::Generate2DQuad("placeholderTextBoxBlack", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT] = MeshBuilder::Generate2DQuad("placeholderGameObject", 1.0f, 1.0f, 1.f, 0.f, 0.f);
+
+
 	objs[OBJ_WHEELBARROW].setBox(Vector3(95, 0, 0), 40, 10, 20);
 }
 
 void Scene3::Update(double dt)
 {
 	framerate = 1.0 / dt;
-	camera.Update(dt);
 	Inventory::instance()->Update();
 
 	if (Application::IsKeyPressed('P'))
@@ -323,17 +314,44 @@ void Scene3::Update(double dt)
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 
-	// Checking Bush 1 //
-	if (Application::IsKeyPressed('E') && (camera.position.x <= 125.0f && camera.position.x >= 95.0f && camera.position.z <= 85.0f && camera.position.z >= 55.0f)) // Harvest Bush Function
+	if ((Application::IsKeyPressed('E')) && (camera.position.x <= 125.0f && camera.position.x >= 95.0f && camera.position.z <= 85.0f && camera.position.z >= 55.0f))
 	{
-		bush1.harvestedBush = true;
-
-		if (bush1.harvestCheck == false)
+		if (bushesHarvested[0] == false)
 		{
-			if (getFruuts())
-			{
-				bush1.harvestCheck = true;
-			}
+			bushesHarvested[0] = true;
+			inGettingFruitsGame = true;
+		}
+	}
+	else if ((Application::IsKeyPressed('E')) && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f))
+	{
+		if (bushesHarvested[1] == false)
+		{
+			bushesHarvested[1] = true;
+			inGettingFruitsGame = true;
+		}
+	}
+	else if ((Application::IsKeyPressed('E')) && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f))
+	{
+		if (bushesHarvested[2] == false)
+		{
+			bushesHarvested[2] = true;
+			inGettingFruitsGame = true;
+		}
+	}
+	else if ((Application::IsKeyPressed('E')) && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f))
+	{
+		if (bushesHarvested[3] == false)
+		{
+			bushesHarvested[3] = true;
+			inGettingFruitsGame = true;
+		}
+	}
+	else if ((Application::IsKeyPressed('E')) && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f))
+	{
+		if (bushesHarvested[4] == false)
+		{
+			bushesHarvested[4] = true;
+			inGettingFruitsGame = true;
 		}
 	}
 
@@ -359,20 +377,6 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	// Checking Bush 2 // 
-	if (Application::IsKeyPressed('E') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) // Harvest Bush Function
-	{
-		bush2.harvestedBush = true;
-
-		if (bush2.harvestCheck == false)
-		{
-			if (getFruuts())
-			{
-				bush2.harvestCheck = true;
-			}
-		}
-	}
-
 	if (Application::IsKeyPressed('X') && (camera.position.x <= -15.0f && camera.position.x >= -45.0f && camera.position.z <= 65.0f && camera.position.z >= 35.0f)) // Trap Interactions
 	{
 		if ((trappedBush2 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
@@ -392,20 +396,6 @@ void Scene3::Update(double dt)
 			trappedBush2 = false;
 			trap2State = TRAP_NONE;
 			Inventory::instance()->items[ITEMS_MEAT] += 1;
-		}
-	}
-
-	// Checking Bush 3 // 
-	if (Application::IsKeyPressed('E') && (camera.position.x <= 165.0f && camera.position.x >= 135.0f && camera.position.z <= -75.0f && camera.position.z >= -105.0f)) // Harvest Bush Function
-	{
-		bush3.harvestedBush = true;
-
-		if (bush3.harvestCheck == false)
-		{
-			if (getFruuts())
-			{
-				bush3.harvestCheck = true;
-			}
 		}
 	}
 
@@ -431,20 +421,6 @@ void Scene3::Update(double dt)
 		}
 	}
 
-	// Checking Bush 4 // 
-	if (Application::IsKeyPressed('E') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) // Harvest Bush Function
-	{
-		bush4.harvestedBush = true;
-
-		if (bush4.harvestCheck == false)
-		{
-			if (getFruuts())
-			{
-				bush4.harvestCheck = true;
-			}
-		}
-	}
-
 	if (Application::IsKeyPressed('X') && (camera.position.x <= 95.0f && camera.position.x >= 65.0f && camera.position.z <= -135.0f && camera.position.z >= -165.0f)) // Trap Interactions
 	{
 		if ((trappedBush4 == false) && (Inventory::instance()->items[ITEMS_TRAP] > 0)) // Setting a trap
@@ -464,20 +440,6 @@ void Scene3::Update(double dt)
 			trappedBush4 = false;
 			trap4State = TRAP_NONE;
 			Inventory::instance()->items[ITEMS_MEAT] += 1;
-		}
-	}
-
-	// Checking Bush 5 // 
-	if (Application::IsKeyPressed('E') && (camera.position.x <= -55.0f && camera.position.x >= -85.0f && camera.position.z <= -85.0f && camera.position.z >= -115.0f)) // Harvest Bush Function
-	{
-		bush5.harvestedBush = true;
-
-		if (bush5.harvestCheck == false)
-		{
-			if (getFruuts())
-			{
-				bush5.harvestCheck = true;
-			}
 		}
 	}
 
@@ -502,13 +464,75 @@ void Scene3::Update(double dt)
 			Inventory::instance()->items[ITEMS_MEAT] += 1;
 		}
 	}
+
+	////////////////////////////////////////////////////////////////// START OF GETTING FRUITS GAME CODE //////////////////////////////////////////////////////////////////
+	if (inGettingFruitsGame == true)
+	{
+		if (gameStartDelay == 20)
+		{
+			if (Application::IsKeyPressed('E'))
+			{
+				if ((fruitMovingPosition >= 30) && (fruitMovingPosition <= 50))
+				{
+					fruitsWon++;
+					fruitsGameDifficulty++;
+					gameStartDelay = 0;
+				}
+				else
+				{
+					getFruuts(fruitsWon);
+					inGettingFruitsGame = false;
+					fruitsGameDifficulty = 1;
+					gameStartDelay = 0;
+					fruitsWon = 0;
+				}
+			}
+		}
+		else
+		{
+			gameStartDelay++;
+		}
+
+		if (fruitMovingPosition <= 2)
+		{
+			fruitMoveTowardsLeft = false;
+		}
+		if (fruitMovingPosition >= 79)
+		{
+			fruitMoveTowardsLeft = true;
+		}
+
+		if (fruitMoveTowardsLeft)
+		{
+			fruitMovingPosition -= fruitsGameDifficulty;
+		}
+		else
+		{
+			fruitMovingPosition += fruitsGameDifficulty;
+		}
+
+		// Max difficulty
+		if (fruitsGameDifficulty == 10)
+		{
+			getFruuts(fruitsWon * 2);
+			inGettingFruitsGame = false;
+			fruitsGameDifficulty = 1;
+			gameStartDelay = 0;
+			fruitsWon = 0;
+		}
+	}
+	////////////////////////////////////////////////////////////////// END OF GETTING FRUITS GAME CODE ////////////////////////////////////////////////////////////////////
+	else
+	{
+		camera.Update(dt);
+	}
 }
 
-bool Scene3::getFruuts()
+bool Scene3::getFruuts(int fruitsWon)
 {
 	bool gotFruits = false;
-	int gain = 0;
-	gain = rand() % 5 + 1;
+	int gain = rand() % 3 + 1;
+	gain += fruitsWon;
 
 	if ((Inventory::instance()->items[ITEMS_REDFRUIT] + gain) >= 999 && (Inventory::instance()->items[ITEMS_REDFRUIT] != 999)) // Capped at 999
 	{
@@ -521,14 +545,21 @@ bool Scene3::getFruuts()
 		gotFruits = true;
 	}
 
-	if ((Inventory::instance()->items[ITEMS_BLUFRUIT] + (5 - gain)) >= 999 && (Inventory::instance()->items[ITEMS_BLUFRUIT] != 999)) // Capped at 999
+	gain -= 5;
+
+	if (gain < 0)
+	{
+		gain = 0;
+	}
+
+	if ((Inventory::instance()->items[ITEMS_BLUFRUIT] + gain) >= 999 && (Inventory::instance()->items[ITEMS_BLUFRUIT] != 999)) // Capped at 999
 	{
 		Inventory::instance()->items[ITEMS_BLUFRUIT] = 999;
 		gotFruits = true;
 	}
 	else if ((Inventory::instance()->items[ITEMS_BLUFRUIT] + gain) < 999)
 	{
-		Inventory::instance()->items[ITEMS_BLUFRUIT] += (5 - gain);
+		Inventory::instance()->items[ITEMS_BLUFRUIT] += gain;
 		gotFruits = true;
 	}
 
@@ -604,7 +635,7 @@ void Scene3::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
+	
 
 	// BUSH 1 // 
 	viewStack.PushMatrix();
@@ -614,7 +645,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_BUSH], light);
 	viewStack.PopMatrix();
 
-	if (bush1.harvestedBush == false) // Bush 1 With fruits
+	if (bushesHarvested[0] == false) // Bush 1 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(110, 30, 70);
@@ -651,7 +682,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_BUSH], light);
 	viewStack.PopMatrix();
 
-	if (bush2.harvestedBush == false) // Bush 2 With fruits
+	if (bushesHarvested[1] == false) // Bush 2 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(-30, 30, 50);
@@ -688,7 +719,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_BUSH], light);
 	viewStack.PopMatrix();
 
-	if (bush3.harvestedBush == false) // Bush 3 With fruits
+	if (bushesHarvested[2] == false) // Bush 3 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(150, 30, -90);
@@ -725,7 +756,7 @@ void Scene3::Render()
 	viewStack.Rotate(90, 0, 1, 0);
 	RenderMesh(meshList[GEO_BUSH], light);
 	viewStack.PopMatrix();
-	if (bush4.harvestedBush == false) // Bush 4 With fruits
+	if (bushesHarvested[3] == false) // Bush 4 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(80, 30, -150);
@@ -762,7 +793,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_BUSH], light);
 	viewStack.PopMatrix();
 
-	if (bush5.harvestedBush == false) // Bush 5 With fruits
+	if (bushesHarvested[4] == false) // Bush 5 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(-70, 30, -100);
@@ -823,7 +854,7 @@ void Scene3::Render()
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
 
-	if (Inventory::instance()->showInventory)
+	if ((Inventory::instance()->showInventory) && (!inGettingFruitsGame))
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
 		RenderTextOnScreen(meshList[GEO_INV_REDFRUIT], red, Color(1, 0, 0), 3, 10.9, 14.7);
@@ -834,7 +865,50 @@ void Scene3::Render()
 		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 17.6, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+
+	if (inGettingFruitsGame)
+	{
+		viewStack.PushMatrix();
+			RenderGettingFruitsGameUI();
+		viewStack.PopMatrix();
+	}
 }
+
+void Scene3::RenderGettingFruitsGameUI()
+{
+	viewStack.PushMatrix();
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 40, 30, 40, 1); // Middle white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 32, 80, 1);	// Top black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 28, 80, 1);	// Bottom black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT], fruitMovingPosition, 30, 1, 1); // Middle red object
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 30, 1, 3);	// Left black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 79, 30, 1, 3);	// Right black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 30, 30, 1, 1);	// Middle left black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 50, 30, 1, 1);	// Middle right black area
+
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 1, 1, 80, 10);	 // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 1, 80, 1);	// Bottom white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 10, 80, 1);	// Top white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 1, 1, 10);	// Left white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 79, 1, 1, 10);	// Right white area
+
+		if (fruitsGameDifficulty == 1)
+		{
+			RenderTextOnScreen(meshList[GEO_TEXT], "  Press 'E' when it's in the middle   ", Color(1, 0, 0), 2, 1.8, 3.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], " to advance. The higher the level the ", Color(1, 0, 0), 2, 1.8, 2.7);
+			RenderTextOnScreen(meshList[GEO_TEXT], "  higher the chances of more fruits.  ", Color(1, 0, 0), 2, 1.8, 1.7);
+		}
+		else
+		{
+			std::ostringstream levelStream;
+			levelStream << fruitsGameDifficulty;
+			std::string getFruitLevel = levelStream.str();
+
+			RenderTextOnScreen(meshList[GEO_TEXT], "              Level : " + getFruitLevel, Color(1, 0, 0), 2, 1.8, 2.7);
+		}
+	viewStack.PopMatrix();
+}
+
 
 void Scene3::Exit()
 {

@@ -7,9 +7,9 @@ NPC::NPC()
 	NPCS[NPC_RACING].setBox(Vector3(60, 4, 80), sizeOfBoxMove);
 	NPCS[NPC_LORE].setBox(Vector3(100, 4, 0), sizeOfBoxMove);
 	NPCS[NPC_JOKER].setBox(Vector3(-120, 4, 140), sizeOfBoxMove);
-	NPCS[NPC_FACTION_SPEED].setBox(Vector3(-60, 4, -80), sizeOfBoxMove);
-	NPCS[NPC_FACTION_GIANT].setBox(Vector3(-100, 4, 40), sizeOfBoxMove);
-	NPCS[NPC_SHOP].setBox(Vector3(80, 4, -100), 70, 10, 40);
+	NPCS[NPC_FACTION_SPEED].setBox(Vector3(-60, 2, -80), sizeOfBoxMove);
+	NPCS[NPC_FACTION_GIANT].setBox(Vector3(-100, 7, 40), sizeOfBoxMove);
+	NPCS[NPC_SHOP].setBox(Vector3(80, 0, -100), 70, 10, 40);
 
 	for (int i = 0; i < numberOfNPCs; i++)
 	{

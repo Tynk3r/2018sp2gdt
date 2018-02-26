@@ -11,7 +11,6 @@
 #include "Light.h"
 #include "Utility.h"
 #include "Object.h"
-#include "bush.h"
 #include <time.h>
 #include "Inventory.h"
 
@@ -94,7 +93,7 @@ class Scene3 : public Scene
 		GEO_WHEELBARROW,
 		GEO_EXPLAINTEXT,
 		GEO_INSTRUCTIONS,
-		
+
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
 		GEO_INV_BLUFRUIT,
@@ -104,8 +103,12 @@ class Scene3 : public Scene
 		GEO_INV_CURRENCY,
 		GEO_INV_INTERFACE,
 		///////////////////////////////////////////////////////// END OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
-		
+
 		GEO_TEXT,
+
+		GEO_PLACEHOLDER_UI_WHITE,
+		GEO_PLACEHOLDER_UI_BLACK,
+		GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT,
 		NUM_GEOMETRY,
 	};
 
@@ -135,12 +138,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	
-	//Classes for bushes//
-	bush bush1;
-	bush bush2;
-	bush bush3;
-	bush bush4;
-	bush bush5;
+	bool bushesHarvested[5];
 
 	//Keep storage of all trap states//
 	int trap1State;
@@ -177,7 +175,15 @@ private:
 	bool collision(Vector3);
 	float rotateMain = 0;
 
-	bool getFruuts();
+	int fruitsWon = 0;					// Number of fruits won in a game
+	int gameStartDelay = 0;				// Stop instant press at the start
+	int fruitMovingPosition = 0;		// The moving position of the object 
+	int fruitsGameDifficulty = 1;		// Difficulty of the getting fruits game
+	void RenderGettingFruitsGameUI();	// To render the UI for the getting fruits game
+	bool inGettingFruitsGame = false;	// Check if the player is in the getting fruits game
+	bool fruitMoveTowardsLeft = false;	// If true, the object will move left until the edge then it will swap
+
+	bool getFruuts(int fruitsWon);
 
 	bool godlights = false;
 };

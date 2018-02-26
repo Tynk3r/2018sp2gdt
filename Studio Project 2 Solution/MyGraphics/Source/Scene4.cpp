@@ -188,7 +188,6 @@ void Scene4::Init()
 	glBindVertexArray(m_vertexArrayID);
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//4front.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -227,8 +226,8 @@ void Scene4::Init()
 	meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
-	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
-	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_PLACEHOLDER_TEXT_BOX2] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 
 	meshList[GEO_SHOP_INTERFACE] = MeshBuilder::Generate2DQuad("shopInterface", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_SHOP_INTERFACE]->textureID = LoadTGA("Image//shopInterface.tga");
@@ -602,7 +601,6 @@ void Scene4::Render()
 	}
 
 	RenderSkybox(200.0f, godlights);
-	RenderMesh(meshList[GEO_AXES], false);
 
 	viewStack.PushMatrix();
 		RenderNPC();
@@ -949,7 +947,7 @@ void Scene4::RenderNPC()
 	else if (shopping == true && textBoxRender == NPC_SHOP)
 	{
 		viewStack.PushMatrix();
-		RenderShopTextBox();
+			RenderShopTextBox();
 		viewStack.PopMatrix();
 	}
 
@@ -1504,11 +1502,11 @@ void Scene4::loadText(int npc_type, std::string text[3])
 void Scene4::RenderTextBox()
 {
 	viewStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 80, 10); // Middle black area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 80, 1);	// Bottom white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 80, 1);	// Top white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left white area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 1, 1, 10);	// Right white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 80, 10); // Middle white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 80, 1);	// Bottom black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 80, 1);	// Top black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 79, 1, 1, 10);	// Right black area
 	viewStack.PopMatrix();
 }
 
