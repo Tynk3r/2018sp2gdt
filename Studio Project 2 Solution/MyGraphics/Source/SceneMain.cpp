@@ -369,81 +369,83 @@ void SceneMain::Render()
 		glUniform3fv(m_parameters[U_LIGHT2_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox(200.0f, godlights);
-	//RenderMesh(meshList[GEO_AXES], false);
+	viewStack.PushMatrix();
+		viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
+		RenderSkybox(200.0f, godlights);
+	viewStack.PopMatrix();
 
 	//Environment//
 	//Trees//
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(270, 0, 1, 0);
-	RenderMesh(meshList[GEO_TREE], godlights);
+		viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		viewStack.Rotate(270, 0, 1, 0);
+		RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	RenderMesh(meshList[GEO_TREE], godlights);
+		viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_TREE], godlights);
+		viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		viewStack.Rotate(90, 0, 1, 0);
+		RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
 	//Rocks//
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(0, 0, 1, 0);
+		viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+		viewStack.Translate(objs[5].getPos().x, objs[5].getPos().y, objs[5].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		viewStack.Rotate(0, 0, 1, 0);
 	RenderMesh(meshList[GEO_ROCK], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[5].getPos().x, objs[5].getPos().y, objs[5].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_ROCK], godlights);
-	viewStack.PopMatrix();
-
-	viewStack.PushMatrix();
-	viewStack.Translate(objs[6].getPos().x, objs[6].getPos().y, objs[6].getPos().z);
-	viewStack.Scale(4, 4, 4);
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_ROCK], godlights);
+		viewStack.Translate(objs[6].getPos().x, objs[6].getPos().y, objs[6].getPos().z);
+		viewStack.Scale(4, 4, 4);
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_ROCK], godlights);
 	viewStack.PopMatrix();
 
 	//Campfire//
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
-	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_FIREBASE], godlights);
+		viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
+		viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_FIREBASE], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-	viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
-	viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
-	viewStack.Rotate(0, 0, 1, 0);
-	RenderMesh(meshList[GEO_FIREWOOD], godlights);
+		viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
+		viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
+		viewStack.Rotate(0, 0, 1, 0);
+		RenderMesh(meshList[GEO_FIREWOOD], godlights);
 	viewStack.PopMatrix();
 
 	//BORDER//
 	viewStack.PushMatrix();
-	viewStack.Translate(0,0,-10);
-	viewStack.Scale(20,30,20);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.Translate(0,0,-10);
+		viewStack.Scale(20,30,20);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-	viewStack.Translate(0, 0, -10);
-	viewStack.Scale(23, 60, 23);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.Translate(0, 0, -10);
+		viewStack.Scale(23, 60, 23);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
 	//Fern//
@@ -452,26 +454,26 @@ void SceneMain::Render()
 		for (int j = 1; j < 6; j++)
 		{
 			viewStack.PushMatrix();
-			//viewStack.Rotate(12.5*i, 0, 1, 0);
-			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
-			viewStack.Scale(8, 8, 8);
-			viewStack.Rotate(12.5*i, 0, 1, 0);
-			RenderMesh(meshList[GEO_FERN], godlights);
+				//viewStack.Rotate(12.5*i, 0, 1, 0);
+				viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
+				viewStack.Scale(8, 8, 8);
+				viewStack.Rotate(12.5*i, 0, 1, 0);
+				RenderMesh(meshList[GEO_FERN], godlights);
 			viewStack.PopMatrix();
 		}
 	}
 
 	//Easter Eggs//
 	viewStack.PushMatrix();
-	viewStack.Translate(-190, 10, -190);
-	viewStack.Scale(10, 10, 10);
-	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_EASTER1], false);
+		viewStack.Translate(-190, 10, -190);
+		viewStack.Scale(10, 10, 10);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_EASTER1], false);
 	viewStack.PopMatrix();
 
 	//End of Environment//
 
-		viewStack.PushMatrix();
+	viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
 
 		viewStack.PushMatrix();

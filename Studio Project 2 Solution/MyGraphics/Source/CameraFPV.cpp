@@ -53,18 +53,14 @@ void CameraFPV::Update(double dt)
 		double pitch = (vertMove*dt) / 25.0f;
 		target = target + Vector3(-up.x*pitch, -up.y*pitch, -up.z*pitch);
 
-		if (target.y > 20.7)
+		if (target.y < (position.y - 0.7))
 		{
 			target = target - Vector3(-up.x*pitch, -up.y*pitch, -up.z*pitch);
 		}
-		else if (target.y < 19.3)
+		if (target.y >(position.y + 0.7))
 		{
 			target = target - Vector3(-up.x*pitch, -up.y*pitch, -up.z*pitch);
 		}
-
-		std::cout << "x : " << target.x << std::endl;
-		std::cout << "y : " << target.y << std::endl;
-		std::cout << "z : " << target.z << std::endl;
 
 		if (Application::IsKeyPressed(VK_RIGHT) || Application::IsKeyPressed('D')) // right
 		{
@@ -127,6 +123,12 @@ void CameraFPV::Update(double dt)
 		{
 			Reset();
 		}
+
+		if ((target.y < (position.y - 0.7)) || (target.y > (position.y + 0.7)))
+		{
+			Reset();
+		}
+
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
 	}
