@@ -1,0 +1,5 @@
+I'm sorry but you need to have a sum  
+of $500 before I can immediately make 
+you an official member of our faction.
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_end.0

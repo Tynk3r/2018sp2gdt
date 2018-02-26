@@ -271,7 +271,7 @@ void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
+	Inventory::instance()->Update();
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
@@ -280,7 +280,10 @@ void Scene2::Update(double dt)
 	// feed/incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
-		feeding = true;
+		//feeding = true;
+		meatLocationX = camera.position.x;
+		meatLocationY = camera.position.y;
+		meatLocationZ = camera.position.z;
 		// hungry + Meat
 		if (MyPtero::instance()->hungry && MyPtero::instance()->pteroStage != MyPtero::P_EGG && Inventory::instance()->items[ITEMS_MEAT] > 0 && !feeding) {
 			feeding = true;
@@ -483,6 +486,39 @@ void Scene2::Update(double dt)
 	if (feedingDelay > 0) {
 		feedingDelay--;
 	}
+	//meat throwin
+	if (feeding) {
+		// x
+		if (meatLocationX > -1 && meatLocationX < 1) {
+			meatLocationX = 0;
+		}
+		else if (meatLocationX > 0) {
+			meatLocationX--;
+		}
+		else if (meatLocationX < 0) {
+			meatLocationX++;
+		}
+		// y
+		if (meatLocationY > -1 && meatLocationY < 1) {
+			meatLocationY = 0;
+		}
+		else if (meatLocationY > 0) {
+			meatLocationY -= 0.25;
+		}
+		else if (meatLocationY < 0) {
+			meatLocationY += 0.25;
+		}
+		// z
+		if (meatLocationZ > 61 && meatLocationZ < 63) {
+			meatLocationZ = 62;
+		}
+		else if (meatLocationZ > 62) {
+			meatLocationZ--;
+		}
+		else if (meatLocationZ < 62) {
+			meatLocationZ++;
+		}
+	}
 }
 
 void Scene2::Render()
@@ -559,6 +595,7 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(0, 1, 0);
 		viewStack.Rotate(90, 0, 1, 0);
+		viewStack.Scale(2.5, 2.5, 2.5);
 		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
 		viewStack.PopMatrix();
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
@@ -572,6 +609,7 @@ void Scene2::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(0, 1, 0);
 		viewStack.Rotate(90, 0, 1, 0);
+		viewStack.Scale(4, 4, 4);
 		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
 		viewStack.PopMatrix();
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
@@ -614,9 +652,8 @@ void Scene2::Render()
 	//meat
 	if (feeding || feedingDelay > 0) {
 		viewStack.PushMatrix();
-		viewStack.Translate(meatLocationX, 0, meatLocationZ);
+		viewStack.Translate(meatLocationX, meatLocationY, meatLocationZ);
 		viewStack.Rotate(0, 0, 1, 0);
-		viewStack.Scale(1, 1, 1);
 		RenderMesh(meshList[GEO_MEAT], godlights);
 		viewStack.PopMatrix();
 	}

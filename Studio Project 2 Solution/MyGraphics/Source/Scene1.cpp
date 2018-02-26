@@ -23,7 +23,7 @@ void Scene1::Init()
 	currentRing.setID(0);
 	points = 0;
 	ringpos = Vector3(0, -23, 0);
-	totalTime = 1500;
+	totalTime = 1100;
 	timer.startTimer();
 
 	framerate = 0.0f;
@@ -292,7 +292,7 @@ void Scene1::Update(double dt)
 	framerate = 1.0 / dt;
 	camera.Update(dt);
 
-	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing.getID() == 21)
+	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing.getID() == -1)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
@@ -308,7 +308,7 @@ void Scene1::Update(double dt)
 	{
 		currentRing.setID(0);
 		points = 0;
-		totalTime = 1500;
+		totalTime = 1100;
 	}
 
 	light[3].position.Set(objs[currentRing.getID()].getPos().x, objs[currentRing.getID()].getPos().y, objs[currentRing.getID()].getPos().z);
@@ -557,7 +557,7 @@ void Scene1::Render()
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You ran out of time!", Color(1, 0.1, 0.1), 3, 5, 9);
 	}
-	if (currentRing.getID() == 21)
+	if (currentRing.getID() == -1)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
 	}
@@ -804,9 +804,9 @@ void Scene1::HandleRingCollide(int id)
 			}
 		}
 	}
-	if (id == 20)
+	if (id == objs[OBJ_RING20].getID())
 	{
 		points += 50;
-		currentRing.setID(21);
+		currentRing.setID(-1);
 	}
 }

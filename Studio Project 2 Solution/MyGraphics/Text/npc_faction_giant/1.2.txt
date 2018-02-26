@@ -1,0 +1,5 @@
+Ah I see that you too are a person of 
+culture. I suggest you join us, the   
+giant faction. Press X to continue on.
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_1.2

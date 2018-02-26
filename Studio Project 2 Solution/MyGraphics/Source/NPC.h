@@ -7,11 +7,11 @@
 // Type of NPC
 enum NPC_TYPE
 {
-	NPC_WEATHER,
-	NPC_LORE,
-	NPC_HUNTING,
-	NPC_RAISING,
 	NPC_RACING,
+	NPC_LORE,
+	NPC_JOKER,
+	NPC_FACTION_SPEED,
+	NPC_FACTION_GIANT,
 	NPC_SHOP,
 
 	NPC_TOTAL,
@@ -60,7 +60,8 @@ public:
 	Vector3 GetCoord(int);
 
 	// Update functions
-	void Update(double dt);
+	void UpdateAll();
+	void Update(int NPC_TYPE);
 	void RotationUpdate(int i, int angle);
 	void CheckForCollision(int i);
 	void CheckForMinMaxMovement(int i);

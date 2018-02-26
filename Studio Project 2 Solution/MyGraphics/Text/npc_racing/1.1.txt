@@ -1,0 +1,5 @@
+Every pterodactyl has many different  
+strengths and weaknesses.             
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_racing_1.1

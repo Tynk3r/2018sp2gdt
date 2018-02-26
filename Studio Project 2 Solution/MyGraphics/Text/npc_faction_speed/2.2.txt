@@ -1,0 +1,5 @@
+But that was easy. How about you do   
+something much harder now.            
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_2.2

@@ -1,0 +1,5 @@
+The final task is showing me a sum of 
+$500 to me. I wish you the best of    
+luck in your final task to join us.   
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_3.3

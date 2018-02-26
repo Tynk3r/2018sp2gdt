@@ -1,0 +1,5 @@
+WOW! You got that one really fast!    
+                                      
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_3.1

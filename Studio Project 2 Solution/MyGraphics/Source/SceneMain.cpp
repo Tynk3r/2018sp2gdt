@@ -241,7 +241,7 @@ void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
+	Inventory::instance()->Update();
 
 	// portals
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
@@ -286,19 +286,24 @@ void SceneMain::Update(double dt)
 
 	if (Application::IsKeyPressed(VK_NUMPAD1))
 	{
-		if (!developerMode)
-			developerMode = true;
-		else
-			developerMode = false;
+		developerMode = true;
 	}
 	if (Application::IsKeyPressed(VK_NUMPAD2))
 	{
+		developerMode = false;
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD3))
+	{
 		if (developerMode)
 		{
-			if (Race1)
-				Race1 = false;
-			else
-				Race1 = true;
+			Race1 = true;
+		}
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD4))
+	{
+		if (developerMode)
+		{
+			Race1 = false;
 		}
 	}
 	

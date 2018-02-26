@@ -1,0 +1,5 @@
+Hohoho! It seems like you doing pretty
+well for yourself! Hohoho! But I'm    
+sure you are able to do so much more! 
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_lore_2

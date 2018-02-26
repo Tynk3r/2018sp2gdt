@@ -1,0 +1,5 @@
+If you want to win, take note of your 
+pterodactyl's strengths.              
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_racing_1.2

@@ -1,0 +1,5 @@
+To really prove that you deserve to be
+a member, how about a much harder task
+this time. Press X to continue on.    
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_2.2

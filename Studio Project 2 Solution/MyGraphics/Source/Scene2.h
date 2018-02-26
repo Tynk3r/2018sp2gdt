@@ -123,6 +123,7 @@ private:
 	bool feeding = false;
 	float meatLocationX = 0;
 	float meatLocationZ = 62.5;
+	float meatLocationY = 0;
 	int feedingDelay = 0;
 
 	CameraFPV camera;

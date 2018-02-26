@@ -240,9 +240,60 @@ void Scene4::Init()
 void Scene4::Update(double dt)
 {
 	framerate = 1.0 / dt;
-	Inventory::instance()->Update(dt);
-	npc.Update(dt);
+	Inventory::instance()->Update();
+	npc.UpdateAll();
 	shop.Update();
+
+	////////////////////////////////////////////////////////////////// START OF QUEST CODE //////////////////////////////////////////////////////////////////
+	switch (speedFactionQuest)
+	{
+	case 2: 
+		if (Inventory::instance()->items[ITEMS_REDFRUIT] >= 30)
+		{
+			speedQuestDone = true;
+		}
+		break;
+	case 3:
+		if (Inventory::instance()->items[ITEMS_MEAT] >= 50)
+		{
+			speedQuestDone = true;
+		}
+		break;
+	case 4:
+		if (Inventory::instance()->items[ITEMS_CURRENCY] >= 500)
+		{
+			speedQuestDone = true;
+		}
+		break;
+	default:
+		break;
+	}
+
+	switch (giantFactionQuest)
+	{
+	case 1:
+		if (Inventory::instance()->items[ITEMS_BLUFRUIT] >= 30)
+		{
+			giantQuestDone = true;
+		}
+		break;
+	case 2:
+		if ((Inventory::instance()->items[ITEMS_MEAT] >= 25) && (Inventory::instance()->items[ITEMS_TRAP] >= 25))
+		{
+			giantQuestDone = true;
+		}
+		break;
+	case 3:
+		if (Inventory::instance()->items[ITEMS_CURRENCY] >= 500)
+		{
+			giantQuestDone = true;
+		}
+		break;
+	default:
+		break;
+	}
+	////////////////////////////////////////////////////////////////// END OF QUEST CODE //////////////////////////////////////////////////////////////////
+
 
 	if (shopping == false)
 	{
@@ -608,7 +659,7 @@ void Scene4::Render()
 	std::string trp = inv4.str();
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
-	Inventory::instance()->items[ITEMS_CURRENCY] = 100;
+	Inventory::instance()->items[ITEMS_CURRENCY] = 900;
 	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
@@ -841,8 +892,22 @@ void Scene4::RenderNPC()
 				else
 				{
 					viewStack.Rotate(npc.npcFacingRotaion[i], 0, 1, 0);
-					viewStack.Scale(8, 8, 8);
-					RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+
+					if (i == NPC_FACTION_GIANT)
+					{
+						viewStack.Scale(14, 14, 14);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
+					else if (i == NPC_FACTION_SPEED)
+					{
+						viewStack.Scale(4, 4, 4);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
+					else
+					{
+						viewStack.Scale(8, 8, 8);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
 				}
 			viewStack.PopMatrix();
 		viewStack.PopMatrix();
@@ -856,67 +921,26 @@ void Scene4::RenderNPC()
 
 	std::string text[3];
 
-	if (textBoxRender == NPC_WEATHER)
+	if (shopping == false && textBoxRender != -1)
 	{
+
+		if (continueDelay == 20)
+		{
+			if (Application::IsKeyPressed('X') && textBoxRender != NPC_SHOP)
+			{
+				continueDelay = 0;
+				conversationStage++;
+			}
+		}
+		else
+		{
+			continueDelay++;
+		}
+
 		viewStack.PushMatrix();
 			RenderTextBox();
 
-			loadText(NPC_WEATHER, text);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
-		viewStack.PopMatrix();
-	}
-	if (textBoxRender == NPC_LORE)
-	{
-		viewStack.PushMatrix();
-			RenderTextBox();
-
-			loadText(NPC_LORE, text);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
-		viewStack.PopMatrix();
-	}
-	if (textBoxRender == NPC_HUNTING)
-	{
-		viewStack.PushMatrix();
-			RenderTextBox();
-
-			loadText(NPC_HUNTING, text);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
-		viewStack.PopMatrix();
-	}
-	if (textBoxRender == NPC_RAISING)
-	{
-		viewStack.PushMatrix();
-			RenderTextBox();
-
-			loadText(NPC_RAISING, text);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
-		viewStack.PopMatrix();
-	}
-	if (textBoxRender == NPC_RACING)
-	{
-		viewStack.PushMatrix();
-			RenderTextBox();
-
-			loadText(NPC_RACING, text);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
-			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
-		viewStack.PopMatrix();
-	}
-	if (shopping == false && textBoxRender == NPC_SHOP)
-	{
-		viewStack.PushMatrix();
-			RenderTextBox();
-
-			loadText(NPC_SHOP, text);
+			loadText(textBoxRender, text);
 			RenderTextOnScreen(meshList[GEO_TEXT], text[0], Color(1, 0, 0), 2, 1.8, 3.7);
 			RenderTextOnScreen(meshList[GEO_TEXT], text[1], Color(1, 0, 0), 2, 1.8, 2.7);
 			RenderTextOnScreen(meshList[GEO_TEXT], text[2], Color(1, 0, 0), 2, 1.8, 1.7);
@@ -928,6 +952,24 @@ void Scene4::RenderNPC()
 		RenderShopTextBox();
 		viewStack.PopMatrix();
 	}
+
+	if (textBoxRender == -1)
+	{
+		conversationStage = 1;
+		jokeNpcNum = 0;
+		racingNpcNum = 0;
+		
+		if (speedChangedQuest == true)
+		{
+			speedFactionQuest++;
+			speedChangedQuest = false;
+		}
+		if (giantChangedQuest == true)
+		{
+			giantFactionQuest++;
+			giantChangedQuest = false;
+		}
+	}
 }
 
 void Scene4::loadText(int npc_type, std::string text[3])
@@ -936,23 +978,516 @@ void Scene4::loadText(int npc_type, std::string text[3])
 	std::string rawdata;
 	switch (npc_type)
 	{
-	case NPC_WEATHER:
-		reading.open("Text/npc_weather_1.txt");
+	case NPC_RACING:
+		switch (conversationStage)
+		{
+		case 1:
+			reading.open("Text/npc_racing/1.txt");
+			break;
+		case 2:
+			if (racingNpcNum == 0)
+			{
+				racingNpcNum = ((rand() % 2) + 1);
+			}
+			switch (racingNpcNum)
+			{
+			case 1:
+				reading.open("Text/npc_racing/1.1.txt");
+				break;
+			case 2:
+				reading.open("Text/npc_racing/2.1.txt");
+				break;
+			}
+			break;
+		case 3:
+			switch (racingNpcNum)
+			{
+			case 1:
+				reading.open("Text/npc_racing/1.2.txt");
+				break;
+			case 2:
+				reading.open("Text/npc_racing/2.2.txt");
+				break;
+			}
+			break;
+		default:
+			reading.open("Text/npc_racing/end.txt");
+			break;
+		}
 		break;
 	case NPC_LORE:
-		reading.open("Text/npc_lore_1.txt");
+		switch (conversationStage)
+		{
+		case 1:
+			if ((Inventory::instance()->items[ITEMS_TRAP] == 999) &&
+				(Inventory::instance()->items[ITEMS_REDFRUIT] == 999) &&
+				(Inventory::instance()->items[ITEMS_BLUFRUIT] == 999) &&
+				(Inventory::instance()->items[ITEMS_MEAT] == 999) &&
+				(Inventory::instance()->items[ITEMS_INCUBATOR] == 999) &&
+				(Inventory::instance()->items[ITEMS_CURRENCY] == 999))
+			{
+				reading.open("Text/npc_lore/3.txt");
+			}
+			else if (MyPtero::instance()->pteroStage != MyPtero::P_EGG)
+			{
+				reading.open("Text/npc_lore/2.txt");
+			}
+			else
+			{
+				reading.open("Text/npc_lore/1.txt");
+			}
+			break;
+		default:
+			if ((Inventory::instance()->items[ITEMS_TRAP] == 999) &&
+				(Inventory::instance()->items[ITEMS_REDFRUIT] == 999) &&
+				(Inventory::instance()->items[ITEMS_BLUFRUIT] == 999) &&
+				(Inventory::instance()->items[ITEMS_MEAT] == 999) &&
+				(Inventory::instance()->items[ITEMS_INCUBATOR] == 999) &&
+				(Inventory::instance()->items[ITEMS_CURRENCY] == 999))
+			{
+				reading.open("Text/npc_lore/3.txt");
+			}
+			else if (MyPtero::instance()->pteroStage != MyPtero::P_EGG)
+			{
+				reading.open("Text/npc_lore/2.txt");
+			}
+			else
+			{
+				reading.open("Text/npc_lore/1.txt");
+			}
+			break;
+		}
 		break;
-	case NPC_HUNTING:
-		reading.open("Text/npc_hunting_1.txt");
+	case NPC_JOKER:
+		switch (conversationStage)
+		{
+		case 1:
+			reading.open("Text/npc_joker/1.txt");
+			break;
+		case 2:
+			if (jokeNpcNum == 0)
+			{
+				jokeNpcNum = ((rand() % 5) + 1);
+			}
+			switch(jokeNpcNum)
+			{
+			case 1:
+				reading.open("Text/npc_joker/1.1.txt");
+				break;
+			case 2:
+				reading.open("Text/npc_joker/2.1.txt");
+				break;
+			case 3:
+				reading.open("Text/npc_joker/3.1.txt");
+				break;
+			case 4:
+				reading.open("Text/npc_joker/4.1.txt");
+				break;
+			case 5:
+				reading.open("Text/npc_joker/5.1.txt");
+				break;
+			}
+			break;
+		case 3:
+			switch (jokeNpcNum)
+			{
+			case 1:
+				reading.open("Text/npc_joker/1.2.txt");
+				break;
+			case 2:
+				reading.open("Text/npc_joker/2.2.txt");
+				break;
+			case 3:
+				reading.open("Text/npc_joker/3.2.txt");
+				break;
+			case 4:
+				reading.open("Text/npc_joker/4.2.txt");
+				break;
+			case 5:
+				reading.open("Text/npc_joker/5.2.txt");
+				break;
+			}
+			break;
+		default:
+			switch (jokeNpcNum)
+			{
+			case 1:
+				reading.open("Text/npc_joker/1.2.txt");
+				break;
+			case 2:
+				reading.open("Text/npc_joker/2.2.txt");
+				break;
+			case 3:
+				reading.open("Text/npc_joker/3.2.txt");
+				break;
+			case 4:
+				reading.open("Text/npc_joker/4.2.txt");
+				break;
+			case 5:
+				reading.open("Text/npc_joker/5.2.txt");
+				break;
+			}
+			break;
+		}
 		break;
-	case NPC_RAISING:
-		reading.open("Text/npc_raising_1.txt");
+	case NPC_FACTION_SPEED:
+		switch (conversationStage)
+		{
+		case 1:
+			switch (speedFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_speed/1.1.txt");
+				speedQuestDone = false;
+				break;
+			case 2:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/2.1.txt");
+					speedQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/2.0.txt");
+				}
+				break;
+			case 3:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/3.1.txt");
+					speedQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/3.0.txt");
+				}
+				break;
+			case 4:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/end.1.txt");
+					speedQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_speed/end.txt");
+				break;
+			}
+			break;
+		case 2:
+			switch (speedFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_speed/1.2.txt");
+				break;
+			case 2:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/2.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/2.0.txt");
+				}
+				break;
+			case 3:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/3.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/3.0.txt");
+				}
+				break;
+			case 4:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/end.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_speed/end.txt");
+				break;
+			}
+			break;
+		case 3:
+			switch (speedFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_speed/1.3.txt");
+				speedChangedQuest = true;
+				break;
+			case 2:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/2.3.txt");
+					speedChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/2.0.txt");
+					speedChangedQuest = true;
+				}
+				break;
+			case 3:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/3.3.txt");
+					speedChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/3.0.txt");
+				}
+				break;
+			case 4:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/end.3.txt");
+					speedChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_speed/end.txt");
+				break;
+			}
+			break;
+		default:
+			switch (speedFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_speed/1.3.txt");
+				break;
+			case 2:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/2.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/2.0.txt");
+				}
+				break;
+			case 3:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/3.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/3.0.txt");
+				}
+				break;
+			case 4:
+				if (speedQuestDone)
+				{
+					reading.open("Text/npc_faction_speed/end.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_speed/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_speed/end.txt");
+				break;
+			}
+			break;
+		}
 		break;
-	case NPC_RACING:
-		reading.open("Text/npc_racing_1.txt");
+	case NPC_FACTION_GIANT:
+		switch (conversationStage)
+		{
+		case 1:
+			switch (giantFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_giant/1.1.txt");
+				giantQuestDone = false;
+				break;
+			case 2:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/2.1.txt");
+					giantQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/2.0.txt");
+				}
+				break;
+			case 3:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/3.1.txt");
+					giantQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/3.0.txt");
+				}
+				break;
+			case 4:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/end.1.txt");
+					giantQuestDone = false;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_giant/end.txt");
+				break;
+			}
+			break;
+		case 2:
+			switch (giantFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_giant/1.2.txt");
+				break;
+			case 2:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/2.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/2.0.txt");
+				}
+				break;
+			case 3:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/3.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/3.0.txt");
+				}
+				break;
+			case 4:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/end.2.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_giant/end.txt");
+				break;
+			}
+			break;
+		case 3:
+			switch (giantFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_giant/1.3.txt");
+				giantChangedQuest = true;
+				break;
+			case 2:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/2.3.txt");
+					giantChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/2.0.txt");
+					giantChangedQuest = true;
+				}
+				break;
+			case 3:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/3.3.txt");
+					giantChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/3.0.txt");
+				}
+				break;
+			case 4:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/end.3.txt");
+					giantChangedQuest = true;
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_giant/end.txt");
+				break;
+			}
+			break;
+		default:
+			switch (giantFactionQuest)
+			{
+			case 1:
+				reading.open("Text/npc_faction_giant/1.3.txt");
+				break;
+			case 2:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/2.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/2.0.txt");
+				}
+				break;
+			case 3:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/3.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/3.0.txt");
+				}
+				break;
+			case 4:
+				if (giantQuestDone)
+				{
+					reading.open("Text/npc_faction_giant/end.3.txt");
+				}
+				else
+				{
+					reading.open("Text/npc_faction_giant/end.0.txt");
+				}
+				break;
+			default:
+				reading.open("Text/npc_faction_giant/end.txt");
+				break;
+			}
+			break;
+		}
 		break;
 	case NPC_SHOP:
-		reading.open("Text/npc_shop_1.txt");
+		reading.open("Text/npc_shop.txt");
 		break;
 	default:
 		break;

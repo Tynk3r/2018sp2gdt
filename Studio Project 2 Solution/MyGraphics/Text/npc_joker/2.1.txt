@@ -1,0 +1,5 @@
+What's the best job for a t-rex?      
+                                      
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_2.1

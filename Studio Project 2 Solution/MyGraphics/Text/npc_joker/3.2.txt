@@ -1,0 +1,5 @@
+Because the 'P' is silent!            
+                                      
+Ha! Ha! Ha! Bet you'd laughed at that!
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_joker_3.2

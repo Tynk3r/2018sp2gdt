@@ -1,0 +1,5 @@
+If you want to win, take note of the  
+course and what is required to win.   
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_racing_2.2

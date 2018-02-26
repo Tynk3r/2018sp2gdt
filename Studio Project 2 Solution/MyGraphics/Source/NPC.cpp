@@ -4,12 +4,12 @@ static const int moveDelayAmount = 2;	// Movement delay so movement is seamless
 
 NPC::NPC()
 {
-	NPCS[NPC_WEATHER].setBox(Vector3(60, 4, 80), sizeOfBoxMove);
+	NPCS[NPC_RACING].setBox(Vector3(60, 4, 80), sizeOfBoxMove);
 	NPCS[NPC_LORE].setBox(Vector3(100, 4, 0), sizeOfBoxMove);
-	NPCS[NPC_HUNTING].setBox(Vector3(-120, 4, 140), sizeOfBoxMove);
-	NPCS[NPC_RAISING].setBox(Vector3(-60, 4, -80), sizeOfBoxMove);
-	NPCS[NPC_RACING].setBox(Vector3(-100, 4, 40), sizeOfBoxMove);
-	NPCS[NPC_SHOP].setBox(Vector3(80, 0, -100), 70, 10, 50);
+	NPCS[NPC_JOKER].setBox(Vector3(-120, 4, 140), sizeOfBoxMove);
+	NPCS[NPC_FACTION_SPEED].setBox(Vector3(-60, 4, -80), sizeOfBoxMove);
+	NPCS[NPC_FACTION_GIANT].setBox(Vector3(-100, 4, 40), sizeOfBoxMove);
+	NPCS[NPC_SHOP].setBox(Vector3(80, 4, -100), 70, 10, 40);
 
 	for (int i = 0; i < numberOfNPCs; i++)
 	{
@@ -28,8 +28,9 @@ Vector3 NPC::GetCoord(int i)
 	return NPCS[i].getPos();
 }
 
-void NPC::Update(double dt)
+void NPC::UpdateAll()
 {
+	// Check and set all collision data
 	for (int i = 0; i < numberOfNPCs; i++)
 	{
 		if (i != NPC_SHOP)
@@ -40,137 +41,155 @@ void NPC::Update(double dt)
 	// To move in the x and z direction
 	for (int i = 0; i < numberOfNPCs; i++)
 	{
-		if (i != NPC_SHOP)
+		Update(i);
+	}
+
+	// To move the speed faction npc more
+	for (int loop = 0; loop < 3; loop++)
+	{
+		for (int i = 0; i < numberOfNPCs; i++)
 		{
-			CheckForMinMaxMovement(i);
-			if (npcMoveDelay[i] == moveDelayAmount)
+			if (i != NPC_SHOP)
 			{
-				// Generate random number that determines positive, negative or no movement
-				int movement = ((rand() % 3) - 1);
+				CheckForCollision(i);
+			}
+		}
+		Update(NPC_FACTION_SPEED);
+	}		
+}
 
-				// Set travel direction if not set
-				if ((npcDirectionDelay[i][MOVEAXIS_X] == 0) && (npcDirectionDelay[i][MOVEAXIS_Z] == 0))
+void NPC::Update(int NPC_TYPE)
+{
+	if (NPC_TYPE != NPC_SHOP)
+	{
+		CheckForMinMaxMovement(NPC_TYPE);
+		if (npcMoveDelay[NPC_TYPE] == moveDelayAmount)
+		{
+			// Generate random number that determines positive, negative or no movement
+			int movement = ((rand() % 3) - 1);
+
+			// Set travel direction if not set
+			if ((npcDirectionDelay[NPC_TYPE][MOVEAXIS_X] == 0) && (npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z] == 0))
+			{
+				// Generate random number that determines x or z axis
+				int axis = (rand() % MOVEAXIS_TOTAL);
+
+				// Generate random number that determines the movement amount required before switching
+				int switching = (rand() % 100);
+				if (switching >= 2)
 				{
-					// Generate random number that determines x or z axis
-					int axis = (rand() % MOVEAXIS_TOTAL);
+					switching = 0;
+				}
+				else
+				{
+					switching = 5;
+				}
 
-					// Generate random number that determines the movement amount required before switching
-					int switching = (rand() % 100);
-					if (switching >= 2)
+				if (axis == MOVEAXIS_X)
+				{
+					if (movement > 0)
 					{
-						switching = 0;
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_X] = switching;
+					}
+					else if (movement < 0)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_X] = -switching;
+					}
+				}
+				else if (axis == MOVEAXIS_Z)
+				{
+					if (movement > 0)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z] = switching;
+					}
+					else if (movement < 0)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z] = -switching;
+					}
+				}
+
+			}
+
+			// Setting final position vector
+			if (canMove[NPC_TYPE] == true)
+			{
+				if (npcDirectionDelay[NPC_TYPE][MOVEAXIS_X] > 0)
+				{
+					if ((npcFacingRotaion[NPC_TYPE] % 360) == 90)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_X]--;
+						if ((moveDirX[NPC_TYPE] == MOVEDIR_BOTH) || (moveDirX[NPC_TYPE] == MOVEDIR_POS))
+						{
+							moveAmt[NPC_TYPE][MOVEAXIS_X]++;
+							Vector3 finalPos = NPCS[NPC_TYPE].getPos() + Vector3(movementSpeed, 0, 0);
+							NPCS[NPC_TYPE].setBox(finalPos, sizeOfBoxMove);
+							npcMoveDelay[NPC_TYPE] = 0;
+						}
 					}
 					else
 					{
-						switching = 5;
+						RotationUpdate(NPC_TYPE, 90);
 					}
-
-					if (axis == MOVEAXIS_X)
-					{
-						if (movement > 0)
-						{
-							npcDirectionDelay[i][MOVEAXIS_X] = switching;
-						}
-						else if (movement < 0)
-						{
-							npcDirectionDelay[i][MOVEAXIS_X] = -switching;
-						}
-					}
-					else if (axis == MOVEAXIS_Z)
-					{
-						if (movement > 0)
-						{
-							npcDirectionDelay[i][MOVEAXIS_Z] = switching;
-						}
-						else if (movement < 0)
-						{
-							npcDirectionDelay[i][MOVEAXIS_Z] = -switching;
-						}
-					}
-
 				}
-
-				// Setting final position vector
-				if (canMove[i] == true)
+				else if (npcDirectionDelay[NPC_TYPE][MOVEAXIS_X] < 0)
 				{
-					if (npcDirectionDelay[i][MOVEAXIS_X] > 0)
+					if ((npcFacingRotaion[NPC_TYPE] % 360) == 270)
 					{
-						if ((npcFacingRotaion[i] % 360) == 90)
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_X]++;
+						if ((moveDirX[NPC_TYPE] == MOVEDIR_BOTH) || (moveDirX[NPC_TYPE] == MOVEDIR_NEG))
 						{
-							npcDirectionDelay[i][MOVEAXIS_X]--;
-							if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_POS))
-							{
-								moveAmt[i][MOVEAXIS_X]++;
-								Vector3 finalPos = NPCS[i].getPos() + Vector3(movementSpeed, 0, 0);
-								NPCS[i].setBox(finalPos, sizeOfBoxMove);
-								npcMoveDelay[i] = 0;
-							}
-						}
-						else
-						{
-							RotationUpdate(i, 90);
+							moveAmt[NPC_TYPE][MOVEAXIS_X]--;
+							Vector3 finalPos = NPCS[NPC_TYPE].getPos() + Vector3(-movementSpeed, 0, 0);
+							NPCS[NPC_TYPE].setBox(finalPos, sizeOfBoxMove);
+							npcMoveDelay[NPC_TYPE] = 0;
 						}
 					}
-					else if (npcDirectionDelay[i][MOVEAXIS_X] < 0)
+					else
 					{
-						if ((npcFacingRotaion[i] % 360) == 270)
+						RotationUpdate(NPC_TYPE, 270);
+					}
+				}
+				else if (npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z] > 0)
+				{
+					if ((npcFacingRotaion[NPC_TYPE] % 360) == 0)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z]--;
+						if ((moveDirZ[NPC_TYPE] == MOVEDIR_BOTH) || (moveDirZ[NPC_TYPE] == MOVEDIR_POS))
 						{
-							npcDirectionDelay[i][MOVEAXIS_X]++;
-							if ((moveDirX[i] == MOVEDIR_BOTH) || (moveDirX[i] == MOVEDIR_NEG))
-							{
-								moveAmt[i][MOVEAXIS_X]--;
-								Vector3 finalPos = NPCS[i].getPos() + Vector3(-movementSpeed, 0, 0);
-								NPCS[i].setBox(finalPos, sizeOfBoxMove);
-								npcMoveDelay[i] = 0;
-							}
-						}
-						else
-						{
-							RotationUpdate(i, 270);
+							moveAmt[NPC_TYPE][MOVEAXIS_Z]++;
+							Vector3 finalPos = NPCS[NPC_TYPE].getPos() + Vector3(0, 0, movementSpeed);
+							NPCS[NPC_TYPE].setBox(finalPos, sizeOfBoxMove);
+							npcMoveDelay[NPC_TYPE] = 0;
 						}
 					}
-					else if (npcDirectionDelay[i][MOVEAXIS_Z] > 0)
+					else
 					{
-						if ((npcFacingRotaion[i] % 360) == 0)
+						RotationUpdate(NPC_TYPE, 0);
+					}
+				}
+				else if (npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z] < 0)
+				{
+					if ((npcFacingRotaion[NPC_TYPE] % 360) == 180)
+					{
+						npcDirectionDelay[NPC_TYPE][MOVEAXIS_Z]++;
+						if ((moveDirZ[NPC_TYPE] == MOVEDIR_BOTH) || (moveDirZ[NPC_TYPE] == MOVEDIR_NEG))
 						{
-							npcDirectionDelay[i][MOVEAXIS_Z]--;
-							if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_POS))
-							{
-								moveAmt[i][MOVEAXIS_Z]++;
-								Vector3 finalPos = NPCS[i].getPos() + Vector3(0, 0, movementSpeed);
-								NPCS[i].setBox(finalPos, sizeOfBoxMove);
-								npcMoveDelay[i] = 0;
-							}
-						}
-						else
-						{
-							RotationUpdate(i, 0);
+							moveAmt[NPC_TYPE][MOVEAXIS_Z]--;
+							Vector3 finalPos = NPCS[NPC_TYPE].getPos() + Vector3(0, 0, -movementSpeed);
+							NPCS[NPC_TYPE].setBox(finalPos, sizeOfBoxMove);
+							npcMoveDelay[NPC_TYPE] = 0;
 						}
 					}
-					else if (npcDirectionDelay[i][MOVEAXIS_Z] < 0)
+					else
 					{
-						if ((npcFacingRotaion[i] % 360) == 180)
-						{
-							npcDirectionDelay[i][MOVEAXIS_Z]++;
-							if ((moveDirZ[i] == MOVEDIR_BOTH) || (moveDirZ[i] == MOVEDIR_NEG))
-							{
-								moveAmt[i][MOVEAXIS_Z]--;
-								Vector3 finalPos = NPCS[i].getPos() + Vector3(0, 0, -movementSpeed);
-								NPCS[i].setBox(finalPos, sizeOfBoxMove);
-								npcMoveDelay[i] = 0;
-							}
-						}
-						else
-						{
-							RotationUpdate(i, 180);
-						}
+						RotationUpdate(NPC_TYPE, 180);
 					}
 				}
 			}
-			else
-			{
-				npcMoveDelay[i]++;
-			}
+		}
+		else
+		{
+			npcMoveDelay[NPC_TYPE]++;
 		}
 	}
 }

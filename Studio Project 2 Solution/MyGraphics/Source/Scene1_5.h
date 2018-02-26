@@ -16,7 +16,6 @@
 
 #include <stdlib.h>
 #include <time.h>
-//#include <irrKlang.h>
 
 class Scene1_5 : public Scene
 {

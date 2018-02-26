@@ -1,0 +1,5 @@
+What a dissapointment. It's no wonder 
+your mother left you here. I've should
+have done the same.                   
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_lore_0

@@ -1,0 +1,5 @@
+As a new member of the faction, you   
+will have the official faction breed  
+of dinosaur. Press X to continue.     
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_giant_end.2

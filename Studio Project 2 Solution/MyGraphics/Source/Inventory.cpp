@@ -22,7 +22,7 @@ Inventory* Inventory::instance(void)
 	return Inventory::INVENTORY_instance;
 }
 
-void Inventory::Update(double dt)
+void Inventory::Update()
 {
 	if (Application::IsKeyPressed('I'))
 	{

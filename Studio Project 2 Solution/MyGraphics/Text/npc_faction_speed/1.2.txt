@@ -1,0 +1,5 @@
+AH! But you need to prove it! Then you
+can join.                             
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_1.2

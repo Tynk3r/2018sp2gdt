@@ -104,7 +104,7 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = 60.0f;
+			MOVEMENT_SPEED = 100.0f;
 		}
 		else
 		{

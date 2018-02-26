@@ -1,0 +1,5 @@
+WOW! You really proved yourself! You  
+are now an official Speedster!                 
+X to continue.                        
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_end.1

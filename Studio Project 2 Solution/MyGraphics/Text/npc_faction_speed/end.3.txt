@@ -1,0 +1,5 @@
+You can see your new speedster egg at 
+your own raising area! Now go show the
+world the best kind of dino!          
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_end.3

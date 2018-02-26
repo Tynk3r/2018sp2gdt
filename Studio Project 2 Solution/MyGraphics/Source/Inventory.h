@@ -24,7 +24,7 @@ public:
 	int items[ITEMS_TOTAL];
 
 	static Inventory* instance(void);
-	void Update(double dt);
+	void Update();
 };
 
 #endif

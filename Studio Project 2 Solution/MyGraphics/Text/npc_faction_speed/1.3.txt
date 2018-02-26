@@ -1,0 +1,5 @@
+Show me 30 red fruits! QUICK!         
+                                      
+                                      
+<-ThisIsTheCharacterLimitForEachLine->
+file : npc_faction_speed_1.3
