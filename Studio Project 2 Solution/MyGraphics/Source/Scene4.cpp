@@ -240,8 +240,8 @@ void Scene4::Init()
 void Scene4::Update(double dt)
 {
 	framerate = 1.0 / dt;
-	Inventory::instance()->Update(dt);
-	npc.Update(dt);
+	Inventory::instance()->Update();
+	npc.UpdateAll();
 	shop.Update();
 
 	////////////////////////////////////////////////////////////////// START OF QUEST CODE //////////////////////////////////////////////////////////////////
@@ -892,8 +892,22 @@ void Scene4::RenderNPC()
 				else
 				{
 					viewStack.Rotate(npc.npcFacingRotaion[i], 0, 1, 0);
-					viewStack.Scale(8, 8, 8);
-					RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+
+					if (i == NPC_FACTION_GIANT)
+					{
+						viewStack.Scale(14, 14, 14);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
+					else if (i == NPC_FACTION_SPEED)
+					{
+						viewStack.Scale(4, 4, 4);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
+					else
+					{
+						viewStack.Scale(8, 8, 8);
+						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
 				}
 			viewStack.PopMatrix();
 		viewStack.PopMatrix();
@@ -996,13 +1010,11 @@ void Scene4::loadText(int npc_type, std::string text[3])
 				break;
 			}
 			break;
-		case 4:
-			reading.open("Text/npc_racing/end.txt");
-			break;
 		default:
 			reading.open("Text/npc_racing/end.txt");
 			break;
 		}
+		break;
 	case NPC_LORE:
 		switch (conversationStage)
 		{

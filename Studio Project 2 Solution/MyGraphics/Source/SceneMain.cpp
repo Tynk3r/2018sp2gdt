@@ -241,7 +241,7 @@ void SceneMain::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
+	Inventory::instance()->Update();
 
 	// portals
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)

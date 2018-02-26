@@ -271,7 +271,7 @@ void Scene2::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
+	Inventory::instance()->Update();
 
 	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{

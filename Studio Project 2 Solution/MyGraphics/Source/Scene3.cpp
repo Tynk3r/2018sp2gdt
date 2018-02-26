@@ -311,7 +311,7 @@ void Scene3::Update(double dt)
 {
 	framerate = 1.0 / dt;
 	camera.Update(dt);
-	Inventory::instance()->Update(dt);
+	Inventory::instance()->Update();
 
 	if (Application::IsKeyPressed('P'))
 	{

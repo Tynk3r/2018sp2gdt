@@ -60,7 +60,8 @@ public:
 	Vector3 GetCoord(int);
 
 	// Update functions
-	void Update(double dt);
+	void UpdateAll();
+	void Update(int NPC_TYPE);
 	void RotationUpdate(int i, int angle);
 	void CheckForCollision(int i);
 	void CheckForMinMaxMovement(int i);

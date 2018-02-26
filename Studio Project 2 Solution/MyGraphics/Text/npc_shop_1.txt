@@ -1,4 +1,0 @@
-Welcome! Welcome to Billy John's      
-little cart shop with all the best    
-items found around these woods!       
-<-ThisIsTheCharacterLimitForEachLine->
