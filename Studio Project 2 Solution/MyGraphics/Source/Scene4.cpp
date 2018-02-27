@@ -208,6 +208,9 @@ void Scene4::Init()
 	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("fern", "OBJ//fern.obj");
 	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
 
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("border", "OBJ//border.obj");
+	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
+
 	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
 
@@ -1208,6 +1211,22 @@ void Scene4::Render()
 				viewStack.PopMatrix();
 			}
 		}
+
+		//BORDER//
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 0, -10);
+		viewStack.Scale(35, 45, 35);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.PopMatrix();
+
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 0, -10);
+		viewStack.Scale(40, 60, 40);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.PopMatrix();
+
 		//End of environment//
 	viewStack.PopMatrix();
 

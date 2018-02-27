@@ -107,6 +107,7 @@ class Scene4 : public Scene
 		GEO_TREE,
 		GEO_FERN,
 		GEO_PORTAL,
+		GEO_BORDER,
 
 		GEO_PTERO1,
 		GEO_PTERO2,
