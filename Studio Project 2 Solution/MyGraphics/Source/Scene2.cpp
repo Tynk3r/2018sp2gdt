@@ -613,7 +613,7 @@ void Scene2::Render()
 				{
 					viewStack.PushMatrix();
 					viewStack.Translate((moveRow), -20, (moveCol));
-					viewStack.Scale(4, 4, 4);
+					viewStack.Scale(2, 4, 2);
 					RenderMesh(meshList[GEO_TREE], godlights);
 					viewStack.PopMatrix();
 				}
