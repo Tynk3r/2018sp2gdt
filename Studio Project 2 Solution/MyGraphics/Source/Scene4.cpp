@@ -663,24 +663,24 @@ void Scene4::Render()
 		//End of environment//
 	viewStack.PopMatrix();
 
-	viewStack.PushMatrix();
-		RenderNPC();
-	viewStack.PopMatrix();
-
 	// portal
 	viewStack.PushMatrix();
-		viewStack.Translate(0, 20, -200);
-		viewStack.PushMatrix();
-			viewStack.Translate(-10, 30, 0);
-			viewStack.Scale(3.75, 3.75, 3.75);
-			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
-			viewStack.Translate(-0.5, -1.4, 0);
-			viewStack.Scale(2, 2, 2);
-			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
-		viewStack.PopMatrix();
-		viewStack.Rotate(rotateMain, 0, 0, 1);
-		viewStack.Scale(20, 20, 20);
-		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.Translate(0, 20, -200);
+	viewStack.PushMatrix();
+	viewStack.Translate(-10, 30, 0);
+	viewStack.Scale(3.75, 3.75, 3.75);
+	RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+	viewStack.Translate(-0.5, -1.4, 0);
+	viewStack.Scale(2, 2, 2);
+	RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+	viewStack.PopMatrix();
+	viewStack.Rotate(rotateMain, 0, 0, 1);
+	viewStack.Scale(20, 20, 20);
+	RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+		RenderNPC();
 	viewStack.PopMatrix();
 
 	std::ostringstream ah;
@@ -1670,7 +1670,7 @@ void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 		modelStack.LoadIdentity();
 		modelStack.Translate(x, y, 0);
 		modelStack.Scale(sizex, sizey, 1);
-		RenderMesh(mesh, false); //UI should not have light
+		RenderMesh(mesh, godlights); //UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

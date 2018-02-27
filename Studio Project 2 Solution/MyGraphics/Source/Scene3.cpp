@@ -315,12 +315,12 @@ void Scene3::Init()
 	meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT] = MeshBuilder::Generate2DQuad("placeholderGameObject", 1.0f, 1.0f, 1.f, 0.f, 0.f);
 
 	//Set Object Positions//
-	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
-	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
-	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
-	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 50);
-	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 50);
-	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 50);
+	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 20, 40, 20);
+	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 20, 40, 20);
+	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 20, 40, 20);
+	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 60);
+	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 60);
+	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 60);
 	objs[OBJ_WHEELBARROW].setBox(Vector3(95, 0, 0), 40, 10, 20);
 }
 
