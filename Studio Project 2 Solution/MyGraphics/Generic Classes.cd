@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Application">
+    <Position X="15.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAABACAAAAAIAAAwAAAAACABgAICgCAAAAIAY=</HashCode>
+      <FileName>Source\Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory">
+    <Position X="7" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAAAAAAAAAAAAgAAAAAAgBAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Source\Inventory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh">
+    <Position X="8.75" Y="8.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Mesh::DRAW_MODE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Mesh.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAEAAACAAAAgAAAACBAEABAAARAAAABAAAA=</HashCode>
+      <FileName>Source\Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeshBuilder">
+    <Position X="14" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYAIAAAAAAAAAgAAAAAAAAAAAAAAAAAAAgAAACAAAEA=</HashCode>
+      <FileName>Source\MeshBuilder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC">
+    <Position X="10.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABCSgAAQkAEAACAAAAAAIFBAAgAAIAgJBAQAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SHOP">
+    <Position X="12.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASEAAAABAAAAEAAgAAAAAAAAABQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\Shop.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

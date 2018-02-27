@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Scene">
+    <Position X="19.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAAAAAAAgAAAAAAAQAAAAAAAIBACAAAAAAA=</HashCode>
+      <FileName>Source\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene1">
+    <Position X="20" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene1::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgADIIgAAAAoAgABAAgAAARIAoAIAIBgCAABEABQ=</HashCode>
+      <FileName>Source\Scene1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene1_5">
+    <Position X="21.75" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene1_5::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1_5::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1_5::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgADIIgAAAAoAAABAggBAARIBoAAAIBACAAAMABQ=</HashCode>
+      <FileName>Source\Scene1_5.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene2">
+    <Position X="23.5" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene2::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene2::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene2::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQIgABIIwAAAAoAkAAAAgAAABIAIAAAIBACAQAEQBc=</HashCode>
+      <FileName>Source\Scene2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene3">
+    <Position X="25.25" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene3::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::TRAP_STATE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oSaAkoBIIwgAAAqEoAoqAgAEABIAIAAAMBACAAAEABQ=</HashCode>
+      <FileName>Source\Scene3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene4">
+    <Position X="27" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene4::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene4::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene4::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oGQIgIDIYwAAAAoApAAhAgAEBFJgJAAAsBCzAAAEAAQ=</HashCode>
+      <FileName>Source\Scene4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneMain">
+    <Position X="18.25" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SceneMain::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="SceneMain::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="SceneMain::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgEBIIwAACAoAAAAAAgAAABIAIAAAIBACCEAEABQ=</HashCode>
+      <FileName>Source\SceneMain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager">
+    <Position X="22.75" Y="1" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SceneManager::SCENE_ID" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneManager.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAAAAIAAQhQAAAAAAAAAiBAAAQ=</HashCode>
+      <FileName>Source\SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
