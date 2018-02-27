@@ -15,7 +15,7 @@ class Mesh
 public:
 	enum DRAW_MODE
 	{
-		DRAW_TRIANGLES, //default mode
+		DRAW_TRIANGLES,			// default mode
 		DRAW_TRIANGLE_STRIP,
 		DRAW_TRIANGLE_FAN,
 		DRAW_LINES,

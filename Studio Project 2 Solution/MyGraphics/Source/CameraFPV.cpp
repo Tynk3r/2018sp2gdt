@@ -28,7 +28,7 @@ void CameraFPV::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 
 void CameraFPV::Update(double dt)
 {
-	//////////////////            WALKING CAMERA              //////////////////////
+	////////////////////          START OF WALKING CAMERA CODE          ////////////////////
 	if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_MAIN ||
 		SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_2 ||
 		SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_3 ||
@@ -66,7 +66,8 @@ void CameraFPV::Update(double dt)
 		{
 			position += right * (float)(MOVEMENT_SPEED * dt);
 			target += right * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) 
+			{
 				position -= right * (float)(MOVEMENT_SPEED * dt);
 				target -= right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -75,7 +76,8 @@ void CameraFPV::Update(double dt)
 		{
 			position -= right * (float)(MOVEMENT_SPEED * dt);
 			target -= right * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position))
+			{
 				position += right * (float)(MOVEMENT_SPEED * dt);
 				target += right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -85,7 +87,8 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position += view1 * (float)(MOVEMENT_SPEED * dt);
 			target += view1 * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position))
+			{
 				position -= view1 * (float)(MOVEMENT_SPEED * dt);
 				target -= view1 * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -96,7 +99,8 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
-			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
+			if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position))
+			{
 				position += view1 * (float)(MOVEMENT_SPEED * dt);
 				target += view1 * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -104,7 +108,8 @@ void CameraFPV::Update(double dt)
 		//Sprinting
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			switch (SceneManager::instance()->GetSceneID()) {
+			switch (SceneManager::instance()->GetSceneID())
+			{
 			case SceneManager::SCENEID_2:
 				MOVEMENT_SPEED = 50.0f;
 				break;
@@ -115,7 +120,8 @@ void CameraFPV::Update(double dt)
 		}
 		else
 		{
-			switch (SceneManager::instance()->GetSceneID()) {
+			switch (SceneManager::instance()->GetSceneID())
+			{
 			case SceneManager::SCENEID_2:
 				MOVEMENT_SPEED = 25.0f;
 				break;
@@ -137,31 +143,14 @@ void CameraFPV::Update(double dt)
 		//Mouse Camera Control
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
-
-		//Archived
-		/*
-		if (Application::IsKeyPressed(' '))
-		{
-			position += up * (float)(MOVEMENT_SPEED * dt);
-			target += up * (float)(MOVEMENT_SPEED * dt);
-		}
-		if (Application::IsKeyPressed(17))
-		{
-			position -= up * (float)(MOVEMENT_SPEED * dt);
-			target -= up * (float)(MOVEMENT_SPEED * dt);
-		}
-		*/
 	}
+	////////////////////          END OF WALKING CAMERA CODE          ////////////////////
 
-	//////////////////            FLYING CAMERA              //////////////////////
+	////////////////////          START OF FLYING CAMERA CODE          ////////////////////
 	else if (SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_1 || 
 			 SceneManager::instance()->GetSceneID() == SceneManager::SCENEID_1_5) 
 	{
 		//Set Camera Speed for Scene1
-		//OLD
-		//static const float CAMERA_SPEED = 1.0f;
-		//static float MOVEMENT_SPEED = 50.0f;
-		//NEW
 		static const float CAMERA_SPEED = 1.0f;
 		static float MOVEMENT_SPEED = 30.0f;
 		static float BASE_SPEED = 30.0f;
@@ -190,33 +179,16 @@ void CameraFPV::Update(double dt)
 		//Rolling
 		double roll = rollMove*dt;
 		rotation.SetToRotation(roll, view.x, view.y, view.z);
-		//TODO: ADD ROLLING CODE
-		//
-		//
 
 		//Auto Movement in Direction
 		Vector3 view1(view.x, view.y, view.z);
 		position += view1 * (float)(MOVEMENT_SPEED * dt);
 		target += view1 * (float)(MOVEMENT_SPEED * dt);
-		if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position)) {
+		if (SceneManager::instance()->SC_SceneList[SceneManager::instance()->GetSceneID()]->collision(position))
+		{
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
 		}
-		//Un-comment after adding rolling code
-		/*if (Application::IsKeyPressed(VK_RIGHT))
-		{
-			if (rollMove != 20)
-				rollMove += (double)(2.0*CAMERA_SPEED);
-			else
-				rollMove = 20;
-		}
-		if (Application::IsKeyPressed(VK_LEFT))
-		{
-			if (rollMove != -20)
-				rollMove -= (double)(2.0*CAMERA_SPEED);
-			else
-				rollMove = -20;
-		}*/
 		if (Application::IsKeyPressed('W'))
 		{
 			if (up.y > 0)
@@ -250,7 +222,8 @@ void CameraFPV::Update(double dt)
 		}
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			switch (MyPtero::instance()->pteroStage) {
+			switch (MyPtero::instance()->pteroStage)
+			{
 			case MyPtero::P_BABY:
 				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier)*0.7;
 			case MyPtero::P_ADOLESCENT:
@@ -261,7 +234,8 @@ void CameraFPV::Update(double dt)
 		}
 		else
 		{
-			switch (MyPtero::instance()->pteroStage) {
+			switch (MyPtero::instance()->pteroStage)
+			{
 			case MyPtero::P_BABY:
 				MOVEMENT_SPEED = BASE_SPEED*(MyPtero::instance()->pteroSpeedModifier);
 			case MyPtero::P_ADOLESCENT:
@@ -294,7 +268,9 @@ void CameraFPV::Update(double dt)
 		}
 	}
 
-	//////////////////            DEFAULT CAMERA              //////////////////////
+	//////////////////            END OF FLYING CAMERA CODE          ////////////////////
+
+	//////////////////            START OF DEFAULT CAMERA CODE          ////////////////////
 	else {
 		static const float CAMERA_SPEED = 4.0f;
 		static float MOVEMENT_SPEED = 30.0f;
@@ -319,7 +295,8 @@ void CameraFPV::Update(double dt)
 		{
 			position += right * (float)(MOVEMENT_SPEED * dt);
 			target += right * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position -= right * (float)(MOVEMENT_SPEED * dt);
 				target -= right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -328,7 +305,8 @@ void CameraFPV::Update(double dt)
 		{
 			position -= right * (float)(MOVEMENT_SPEED * dt);
 			target -= right * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position += right * (float)(MOVEMENT_SPEED * dt);
 				target += right * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -338,7 +316,8 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position += view1 * (float)(MOVEMENT_SPEED * dt);
 			target += view1 * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position -= view1 * (float)(MOVEMENT_SPEED * dt);
 				target -= view1 * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -349,7 +328,8 @@ void CameraFPV::Update(double dt)
 			Vector3 view1(view.x, 0, view.z);
 			position -= view1 * (float)(MOVEMENT_SPEED * dt);
 			target -= view1 * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position += view1 * (float)(MOVEMENT_SPEED * dt);
 				target += view1 * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -358,7 +338,8 @@ void CameraFPV::Update(double dt)
 		{
 			position += up * (float)(MOVEMENT_SPEED * dt);
 			target += up * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position -= up * (float)(MOVEMENT_SPEED * dt);
 				target -= up * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -367,7 +348,8 @@ void CameraFPV::Update(double dt)
 		{
 			position -= up * (float)(MOVEMENT_SPEED * dt);
 			target -= up * (float)(MOVEMENT_SPEED * dt);
-			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f) {
+			if (position.x >= 200.0f || position.x <= -200.0f || position.z >= 200.0f || position.z <= -200.0f || target.x >= 200.0f || target.x <= -200.0f || target.z >= 200.0f || target.z <= -200.0f || position.y >= 200.0f || position.y <= -200.0f || target.y >= 200.0f || target.y <= -200.0f)
+			{
 				position += up * (float)(MOVEMENT_SPEED * dt);
 				target += up * (float)(MOVEMENT_SPEED * dt);
 			}
@@ -388,9 +370,11 @@ void CameraFPV::Update(double dt)
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
 	}
+	//////////////////            END OF DEFAULT CAMERA CODE          ////////////////////
 }
 
-void CameraFPV::Reset(){
+void CameraFPV::Reset()
+{
 	position = defaultPosition;
 	target = defaultTarget;
 	up = defaultUp;
@@ -398,13 +382,3 @@ void CameraFPV::Reset(){
 	horizMove = 0.0;
 	vertMove = 0.0;
 }
-
-
-
-
-//Code Snippet For Rotation//
-//Mtx44 rotation;
-//Vector3 view = (target - position).Normalized();
-//rotation.SetToRotation(-rotateAngle, 0, 1, 0);
-//view = rotation * view;
-//target = position + view;

@@ -1,11 +1,8 @@
 #include "RingObject.h"
 
-
-
 RingObject::RingObject()
 {
 }
-
 
 RingObject::~RingObject()
 {

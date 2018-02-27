@@ -24,7 +24,7 @@ void Scene4::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // Init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -186,7 +186,7 @@ void Scene4::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
+	// Remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -311,11 +311,11 @@ void Scene4::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	if (Application::IsKeyPressed('Q')) // turn on global light
+	if (Application::IsKeyPressed('Q')) // Turn on global light
 	{
 			godlights = false;
 	}
-	if (Application::IsKeyPressed('E')) // turn off global light
+	if (Application::IsKeyPressed('E')) // Turn off global light
 	{
 			godlights = true;
 	}
@@ -646,13 +646,12 @@ void Scene4::Render()
 			}
 		}
 
-		//Fern//
+		// Fern //
 		for (int i = 0; i < 6; i++)
 		{
 			for (int j = 1; j < 6; j++)
 			{
 				viewStack.PushMatrix();
-					//viewStack.Rotate(12.5*i, 0, 1, 0);
 					viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
 					viewStack.Scale(8, 8, 8);
 					viewStack.Rotate(12.5*i, 0, 1, 0);
@@ -660,14 +659,14 @@ void Scene4::Render()
 				viewStack.PopMatrix();
 			}
 		}
-		//End of environment//
+		// End of environment //
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 		RenderNPC();
 	viewStack.PopMatrix();
 
-	// portal
+	// Portal
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
@@ -691,7 +690,6 @@ void Scene4::Render()
 	std::ostringstream shopAMOUNT;
 	shopAMOUNT << itemAmount;
 	std::string amt = shopAMOUNT.str();
-
 
 	int totalCostRedF = (shop.cost[SHOP_BUY_REDFRUIT] * itemAmount);
 	int totalCostBluF = (shop.cost[SHOP_BUY_BLUFRUIT] * itemAmount);
@@ -734,7 +732,7 @@ void Scene4::Render()
 	std::string trp = inv4.str();
 	std::string inc = inv5.str();
 	std::string cur = inv6.str();
-	Inventory::instance()->items[ITEMS_CURRENCY] = 900;
+
 	if (Inventory::instance()->showInventory && shopping != true)
 	{
 		RenderMeshOnScreen(meshList[GEO_INV_INTERFACE], 40, 30, 20, 20);
@@ -906,7 +904,6 @@ void Scene4::RenderMesh(Mesh *mesh, bool enableLight)
 void Scene4::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
-	//modelStack.Rotate(0, 0, 0, 0);
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_FRONT], light);
@@ -1571,7 +1568,7 @@ void Scene4::loadText(int npc_type, std::string text[3])
 void Scene4::RenderTextBox()
 {
 	viewStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 80, 10); // Middle white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX1], 1, 1, 80, 10);	// Middle white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 80, 1);	// Bottom black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 10, 80, 1);	// Top black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_TEXT_BOX2], 1, 1, 1, 10);	// Left black area
@@ -1588,7 +1585,7 @@ void Scene4::RenderShopTextBox()
 
 void Scene4::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0) //Proper error check
+	if (!mesh || mesh->textureID <= 0) // Proper error check
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -1602,7 +1599,7 @@ void Scene4::RenderText(Mesh* mesh, std::string text, Color color)
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -1615,19 +1612,19 @@ void Scene4::RenderText(Mesh* mesh, std::string text, Color color)
 
 void Scene4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if (!mesh || mesh->textureID <= 0) //Proper error check
+	if (!mesh || mesh->textureID <= 0) // Proper error check
 		return;
 
 	glDisable(GL_DEPTH_TEST);
-	//Add these code just after glDisable(GL_DEPTH_TEST);
+	// Add these code just after glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
-	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.LoadIdentity(); // Reset modelStack
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 
@@ -1641,7 +1638,7 @@ void Scene4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -1649,7 +1646,7 @@ void Scene4::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-	//Add these code just before glEnable(GL_DEPTH_TEST);
+	// Add these code just before glEnable(GL_DEPTH_TEST);
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1661,16 +1658,16 @@ void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
 		modelStack.LoadIdentity();
 		modelStack.Translate(x, y, 0);
 		modelStack.Scale(sizex, sizey, 1);
-		RenderMesh(mesh, false); //UI should not have light
+		RenderMesh(mesh, false); // UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

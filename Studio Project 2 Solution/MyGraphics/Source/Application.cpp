@@ -1,4 +1,3 @@
-
 #include "Application.h"
 
 //Include GLEW
@@ -59,6 +58,7 @@ double Application::CursorX = 0.0;
 double Application::CursorY = 0.0;
 int Application::WindowWidth = 2;
 int Application::WindowHeight = 2;
+
 void Application::Init()
 {
 	// Seed the random number generator
@@ -89,9 +89,6 @@ void Application::Init()
 		exit(EXIT_FAILURE);
 	}
 	glfwSetWindowSizeCallback(m_window, resize_callback);
-	//GLFWimage imgs[2];
-	//imgs[0] = load_icon("Image//mybaby.png");
-	//This function makes the context of the specified window current on the calling thread. 
 	glfwMakeContextCurrent(m_window);
 
 	glewExperimental = true; // Needed for core profile
@@ -114,20 +111,21 @@ void Application::Init()
 
 void Application::Run()
 {
-	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
+	// Start timer to calculate how long it takes to render this frame
+	m_timer.startTimer();
 	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
 	{
 		SceneManager::instance()->Update(&m_timer);
 		//Swap buffers
 		glfwSwapBuffers(m_window);
-		glfwGetCursorPos(m_window, &CursorX, &CursorY);
-		//std::cout << CursorX << " " << CursorY << std::endl;
+		glfwGetCursorPos(m_window, &CursorX, &CursorY);;
 		glfwGetWindowSize(m_window, &WindowWidth, &WindowHeight);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...
 		glfwPollEvents();
-        m_timer.waitUntil(frameTime);       // Frame rate limiter. Limits each frame to a specified time in ms.   
-
-	} //Check if the ESC key had been pressed or if the window had been closed
+		// Frame rate limiter. Limits each frame to a specified time in ms.
+        m_timer.waitUntil(frameTime);
+	}
+	//Check if the ESC key had been pressed or if the window had been closed
 	SceneManager::instance()->Update(&m_timer, true);
 }
 

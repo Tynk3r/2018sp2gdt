@@ -28,7 +28,7 @@ void Scene2::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 10, 0), Vector3(0, 10, 1), Vector3(0, 1, 0)); // Init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -134,7 +134,7 @@ void Scene2::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
+	// Remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
@@ -211,31 +211,35 @@ void Scene2::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
-	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
+	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // Left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
 	objs[OBJ_SKELETON].setBox(Vector3(-70, 0, 70), 2);
 	objs[OBJ_INCUBATOR].setBox(Vector3(70, -1, 85), 7);
 
 	camera.SkyboxSize = 100.0f;
 
-	//updating stage
-	switch (MyPtero::instance()->pteroStage)	{
+	// Updating stage
+	switch (MyPtero::instance()->pteroStage)
+	{
 	case MyPtero::P_EGG:
-		if (MyPtero::instance()->incubating) {
+		if (MyPtero::instance()->incubating)
+		{
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->incubating = false;
 		MyPtero::instance()->pteroLocationY = 0;
 		break;
 	case MyPtero::P_BABY:
-		if (!MyPtero::instance()->hungry) {
+		if (!MyPtero::instance()->hungry)
+		{
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->hungry = true;
 		MyPtero::instance()->pteroLocationY = 10;
 		break;
 	case MyPtero::P_ADOLESCENT:
-		if (!MyPtero::instance()->hungry) {
+		if (!MyPtero::instance()->hungry)
+		{
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->hungry = true;
@@ -249,7 +253,8 @@ void Scene2::Init()
 		break;
 	}
 	// movement speed
-	switch (MyPtero::instance()->pteroStage) {
+	switch (MyPtero::instance()->pteroStage)
+	{
 	case MyPtero::P_EGG:
 		MyPtero::instance()->pteroMovementSpeed = 0.0f;
 		break;
@@ -277,28 +282,32 @@ void Scene2::Update(double dt)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	// feed/incubate
+	// Feed or incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
 		meatLocationX = camera.position.x;
 		meatLocationY = camera.position.y;
 		meatLocationZ = camera.position.z;
-		// hungry + Meat
-		if (MyPtero::instance()->hungry && MyPtero::instance()->pteroStage != MyPtero::P_EGG && Inventory::instance()->items[ITEMS_MEAT] > 0 && !feeding) {
+		// Hungry + Meat
+		if (MyPtero::instance()->hungry && MyPtero::instance()->pteroStage != MyPtero::P_EGG && Inventory::instance()->items[ITEMS_MEAT] > 0 && !feeding) 
+		{
 			feeding = true;
 			Inventory::instance()->items[ITEMS_MEAT]--;
 		}
-		// egg + incubator
-		if (MyPtero::instance()->pteroStage == MyPtero::P_EGG && !MyPtero::instance()->incubating && Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+		// Egg + incubator
+		if (MyPtero::instance()->pteroStage == MyPtero::P_EGG && !MyPtero::instance()->incubating && Inventory::instance()->items[ITEMS_INCUBATOR] > 0)
+		{
 			MyPtero::instance()->incubating = true;
 			Inventory::instance()->items[ITEMS_INCUBATOR]--;
 		}
 	}
-	// reset ptero
-	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0 && Inventory::instance()->items[ITEMS_CURRENCY] >= 25 && !feeding) {
+	// Reset ptero
+	if (Application::IsKeyPressed('X') && camera.position.x > 25.0f && camera.position.z < -25.0 && Inventory::instance()->items[ITEMS_CURRENCY] >= 25 && !feeding) 
+	{
 		Inventory::instance()->items[ITEMS_CURRENCY] -= 25;
 		MyPtero::instance()->newPtero();
-		switch (MyPtero::instance()->pteroType) {
+		switch (MyPtero::instance()->pteroType) 
+		{
 		case MyPtero::T_GREEN:
 			meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//greendino.tga");
 			meshList[GEO_PTERO]->textureID = LoadTGA("Image//greendino.tga");
@@ -314,11 +323,13 @@ void Scene2::Update(double dt)
 		}
 	}
 
-	// ptero movement
+	// Ptero movement
 	int r = rand() % 200 + 1;
-	if (!feeding && feedingDelay == 0) {
-		//reset Y pos
-		switch (MyPtero::instance()->pteroStage) {
+	if (!feeding && feedingDelay == 0)
+	{
+		// Reset Y pos
+		switch (MyPtero::instance()->pteroStage)
+		{
 		case MyPtero::P_EGG:
 			MyPtero::instance()->pteroLocationY = 0;
 			break;
@@ -334,130 +345,150 @@ void Scene2::Update(double dt)
 		default:
 			break;
 		}
-		//change X and Z pos
-		switch ((int)MyPtero::instance()->pteroDirection) {
-		case 180:	// front
-			switch (r) {
-			case 1: // back
+		// Change X and Z pos
+		switch ((int)MyPtero::instance()->pteroDirection) 
+		{
+		case 180:	// Front
+			switch (r) 
+			{
+			case 1: // Back
 				MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 0.0f;
 				break;
-			case 2: // right
+			case 2: // Right
 				MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) 
+				{
 					MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 90.0f;
 				break;
-			case 3: // left
+			case 3: // Left
 				MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) 
+				{
 					MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 270.0f;
 				break;
-			default: // front
+			default: // Front
 				MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) 
+				{
 					MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 180.0f;
 				break;
 			}
 			break;
-		case 90:		// right
-			switch (r) {
-			case 1: // back
+		case 90:	// Right
+			switch (r) 
+			{
+			case 1: // Back
 				MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 0.0f;
 				break;
-			case 2: // front
+			case 2: // Front
 				MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 180.0f;
 				break;
-			case 3: // left
+			case 3: // Left
 				MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 270.0f;
 				break;
-			default: // right
+			default: // Right
 				MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 90.0f;
 				break;
 			}
 			break;
-		case 0:		// back
-			switch (r) {
-			case 1: // right
+		case 0:		// Back
+			switch (r) 
+			{
+			case 1: // Right
 				MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 90.0f;
 				break;
-			case 2: // front
+			case 2: // Front
 				MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 180.0f;
 				break;
-			case 3: // left
+			case 3: // Left
 				MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 270.0f;
 				break;
-			default: // back
+			default: // Back
 				MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 0.0f;
 				break;
 			}
 			break;
-		case 270:	// left
+		case 270:	// Left
 			switch (r) {
-			case 1: // right
+			case 1: // Right
 				MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 90.0f;
 				break;
-			case 2: // front
+			case 2: // Front
 				MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 180.0f;
 				break;
-			case 3: // back
+			case 3: // Back
 				MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f) {
+				if (MyPtero::instance()->pteroLocationZ >= 90.0f || MyPtero::instance()->pteroLocationZ <= 25.0f)
+				{
 					MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 0.0f;
 				break;
-			default: // left
+			default: // Left
 				MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
-				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f) {
+				if (MyPtero::instance()->pteroLocationX >= 90.0f || MyPtero::instance()->pteroLocationX <= -90.0f)
+				{
 					MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
 				}
 				MyPtero::instance()->pteroDirection = 270.0f;
@@ -470,73 +501,91 @@ void Scene2::Update(double dt)
 		}
 	}
 	else {
-		// on the same z val as meats
-		if (MyPtero::instance()->pteroLocationZ == meatLocationZ) {
-			// at meat
-			if (MyPtero::instance()->pteroLocationX == meatLocationX && feedingDelay == 0) {
+		// On the same z val as meats
+		if (MyPtero::instance()->pteroLocationZ == meatLocationZ)
+		{
+			// At meat
+			if (MyPtero::instance()->pteroLocationX == meatLocationX && feedingDelay == 0)
+			{
 				MyPtero::instance()->hungry = false;
 				feeding = false;
 				feedingDelay = 120;
 			}
-			// same z but meat to left
-			else if (MyPtero::instance()->pteroLocationX > meatLocationX) { 
+			// Same z but meat to left
+			else if (MyPtero::instance()->pteroLocationX > meatLocationX)
+			{ 
 				MyPtero::instance()->pteroDirection = 270.0f;
 				MyPtero::instance()->pteroLocationX -= MyPtero::instance()->pteroMovementSpeed;
 			}
-			// same z but meat to right								   
-			else if (MyPtero::instance()->pteroLocationX < meatLocationX) {
+			// Same z but meat to right								   
+			else if (MyPtero::instance()->pteroLocationX < meatLocationX)
+			{
 				MyPtero::instance()->pteroDirection = 90.0f;
 				MyPtero::instance()->pteroLocationX += MyPtero::instance()->pteroMovementSpeed;
 			}
 		}
-		// going front to z = 62.5
-		else if (MyPtero::instance()->pteroLocationZ > meatLocationZ) {
+		// Going front to z = 62.5
+		else if (MyPtero::instance()->pteroLocationZ > meatLocationZ)
+		{
 			MyPtero::instance()->pteroDirection = 180.0f;
 			MyPtero::instance()->pteroLocationZ -= MyPtero::instance()->pteroMovementSpeed;
 		}
-		// going back to z = 62.5
-		else if (MyPtero::instance()->pteroLocationZ < meatLocationZ) {
+		// Going back to z = 62.5
+		else if (MyPtero::instance()->pteroLocationZ < meatLocationZ)
+		{
 			MyPtero::instance()->pteroDirection = 0.0f;
 			MyPtero::instance()->pteroLocationZ += MyPtero::instance()->pteroMovementSpeed;
 		}
 	}
-	if (feedingDelay > 0) {
+	if (feedingDelay > 0)
+	{
 		feedingDelay--;
 	}
-	//meat throwin
-	if (feeding) {
+	// Meat throwin
+	if (feeding)
+	{
 		// x
-		if (meatLocationX > -1 && meatLocationX < 1) {
+		if (meatLocationX > -1 && meatLocationX < 1)
+		{
 			meatLocationX = 0;
 		}
-		else if (meatLocationX > 0) {
+		else if (meatLocationX > 0)
+		{
 			meatLocationX--;
 		}
-		else if (meatLocationX < 0) {
+		else if (meatLocationX < 0)
+		{
 			meatLocationX++;
 		}
 		// y
-		if (meatLocationY > -1 && meatLocationY < 1) {
+		if (meatLocationY > -1 && meatLocationY < 1)
+		{
 			meatLocationY = 0;
 		}
-		else if (meatLocationY > 0) {
+		else if (meatLocationY > 0)
+		{
 			meatLocationY -= 0.25;
 		}
-		else if (meatLocationY < 0) {
+		else if (meatLocationY < 0)
+		{
 			meatLocationY += 0.25;
 		}
 		// z
-		if (meatLocationZ > 61 && meatLocationZ < 63) {
+		if (meatLocationZ > 61 && meatLocationZ < 63)
+		{
 			meatLocationZ = 62;
 		}
-		else if (meatLocationZ > 62) {
+		else if (meatLocationZ > 62)
+		{
 			meatLocationZ--;
 		}
-		else if (meatLocationZ < 62) {
+		else if (meatLocationZ < 62)
+		{
 			meatLocationZ++;
 		}
 	}
-	if (MyPtero::instance()->pteroLocationX == meatLocationX && MyPtero::instance()->pteroLocationZ == meatLocationZ && MyPtero::instance()->pteroLocationY != meatLocationY + 5) {
+	if (MyPtero::instance()->pteroLocationX == meatLocationX && MyPtero::instance()->pteroLocationZ == meatLocationZ && MyPtero::instance()->pteroLocationY != meatLocationY + 5)
+	{
 		MyPtero::instance()->pteroLocationY -= MyPtero::instance()->pteroMovementSpeed;
 	}
 
@@ -568,18 +617,21 @@ void Scene2::Render()
 		Position lightPosition_cameraspace = viewStack.Top() * light[0].position;
 		glUniform3fv(m_parameters[U_LIGHT0_POSITION], 1, &lightPosition_cameraspace.x);
 	}
-	if (light[1].type == Light::LIGHT_DIRECTIONAL) {
+	if (light[1].type == Light::LIGHT_DIRECTIONAL) 
+	{
 		Vector3 lightDir(light[1].position.x, light[1].position.y, light[1].position.z);
 		Vector3 lightDirection_cameraspace = viewStack.Top() * lightDir;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightDirection_cameraspace.x);
 	}
-	else if (light[1].type == Light::LIGHT_SPOT) {
+	else if (light[1].type == Light::LIGHT_SPOT)
+	{
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 		Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
-	else {
+	else
+	{
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
@@ -622,73 +674,76 @@ void Scene2::Render()
 	}
 	viewStack.PopMatrix();
 
-	// pterodactyl
-	switch (MyPtero::instance()->pteroStage) {
+	// Pterodactyl
+	switch (MyPtero::instance()->pteroStage)
+	{
 	case MyPtero::P_EGG:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
-		if (MyPtero::instance()->incubating) { RenderMesh(meshList[GEO_NEST], godlights); }
-		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
-		viewStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_DINOEGG], godlights);
+			viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
+			if (MyPtero::instance()->incubating) { RenderMesh(meshList[GEO_NEST], godlights); }
+			viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+			viewStack.Scale(10, 10, 10);
+			RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
 		break;
 	case MyPtero::P_BABY:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
-		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
-		viewStack.PushMatrix();
-		viewStack.Translate(0, 1, 0);
-		viewStack.Rotate(90, 0, 1, 0);
-		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
-		if(!MyPtero::instance()->hungry && feedingDelay == 0){ RenderMesh(meshList[GEO_HEART], godlights); }
-		viewStack.PopMatrix();
-		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
-		RenderMesh(meshList[GEO_PTERO], godlights);
+			viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
+			viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(0, 1, 0);
+				viewStack.Rotate(90, 0, 1, 0);
+				viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+				if (!MyPtero::instance()->hungry && feedingDelay == 0){ RenderMesh(meshList[GEO_HEART], godlights); }
+			viewStack.PopMatrix();
+			viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
+			RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
 	case MyPtero::P_ADOLESCENT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
-		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
-		viewStack.PushMatrix();
-		viewStack.Translate(0, 5, 0);
-		viewStack.Rotate(90, 0, 1, 0);
-		viewStack.Scale(2.5, 2.5, 2.5);
-		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
-		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
-		viewStack.PopMatrix();
-		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
-		RenderMesh(meshList[GEO_PTERO], godlights);
+			viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
+			viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(0, 5, 0);
+				viewStack.Rotate(90, 0, 1, 0);
+				viewStack.Scale(2.5, 2.5, 2.5);
+				viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+				if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
+			viewStack.PopMatrix();
+			viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
+			RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
 	case MyPtero::P_ADULT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
-		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
-		viewStack.PushMatrix();
-		viewStack.Translate(0, 5, 0);
-		viewStack.Rotate(90, 0, 1, 0);
-		viewStack.Scale(4, 4, 4);
-		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
-		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
-		viewStack.PopMatrix();
-		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
-		RenderMesh(meshList[GEO_PTERO], godlights);
+			viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
+			viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
+			viewStack.PushMatrix();
+				viewStack.Translate(0, 5, 0);
+				viewStack.Rotate(90, 0, 1, 0);
+				viewStack.Scale(4, 4, 4);
+				viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+				if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
+			viewStack.PopMatrix();
+			viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
+			RenderMesh(meshList[GEO_PTERO], godlights);
 		viewStack.PopMatrix();
 		break;
 	default:
 		break;
 	}
-	// fences
-	for (int i = 0; i <= 200; i += 10) {
+	// Fences
+	for (int i = 0; i <= 200; i += 10) 
+	{
 		viewStack.PushMatrix();
-		viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
-		viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
-		RenderMesh(meshList[GEO_FENCE], godlights);
+			viewStack.Translate(objs[OBJ_FENCE].getPos().x - i, objs[OBJ_FENCE].getPos().y, objs[OBJ_FENCE].getPos().z);
+			viewStack.Scale(objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY(), objs[OBJ_FENCE].getSizeY());
+			RenderMesh(meshList[GEO_FENCE], godlights);
 		viewStack.PopMatrix();
 	}
-	//campfire
+
+	// Campfire
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_CAMPFIRE].getPos().x, objs[OBJ_CAMPFIRE].getPos().y, objs[OBJ_CAMPFIRE].getPos().z);
 		viewStack.Rotate(0, 0, 1, 0);
@@ -696,35 +751,40 @@ void Scene2::Render()
 		RenderMesh(meshList[GEO_CAMPFIRE_BASE], godlights);
 		RenderMesh(meshList[GEO_CAMPFIRE_WOOD], godlights);
 	viewStack.PopMatrix();
-	//skeleton
+
+	// Skeleton
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_SKELETON].getPos().x, objs[OBJ_SKELETON].getPos().y, objs[OBJ_SKELETON].getPos().z);
 		viewStack.Rotate(32, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_SKELETON].getSizeX(), objs[OBJ_SKELETON].getSizeY(), objs[OBJ_SKELETON].getSizeZ());
 		RenderMesh(meshList[GEO_SKELETON], godlights);
 	viewStack.PopMatrix();
-	// incubator
+
+	// Incubator
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[OBJ_INCUBATOR].getPos().x, objs[OBJ_INCUBATOR].getPos().y, objs[OBJ_INCUBATOR].getPos().z);
 		viewStack.Rotate(180, 0, 1, 0);
 		viewStack.Scale(objs[OBJ_INCUBATOR].getSizeX(), objs[OBJ_INCUBATOR].getSizeY(), objs[OBJ_INCUBATOR].getSizeZ());
 		RenderMesh(meshList[GEO_INCUBATOR], godlights);
 	viewStack.PopMatrix();
-	//meat
-	if (feeding || feedingDelay > 0) {
+
+	// Meat
+	if (feeding || feedingDelay > 0)
+	{
 		viewStack.PushMatrix();
-		viewStack.Translate(meatLocationX, meatLocationY, meatLocationZ);
-		viewStack.Rotate(0, 0, 1, 0);
-		RenderMesh(meshList[GEO_MEAT], godlights);
+			viewStack.Translate(meatLocationX, meatLocationY, meatLocationZ);
+			viewStack.Rotate(0, 0, 1, 0);
+			RenderMesh(meshList[GEO_MEAT], godlights);
 		viewStack.PopMatrix();
 	}
-	// screen
+	// Screen
 	std::ostringstream sh;
 	sh << MyPtero::instance()->pteroSize;
 	std::ostringstream sp;
 	sp << MyPtero::instance()->pteroSpeedModifier;
 	std::string sg;
-	switch (MyPtero::instance()->pteroStage) {
+	switch (MyPtero::instance()->pteroStage)
+	{
 	case MyPtero::P_EGG:
 		sg = "INCUBATOR";
 		break;
@@ -763,7 +823,8 @@ void Scene2::Render()
 		viewStack.Translate(0.5, -1, 0);
 		RenderText(meshList[GEO_TEXT], sg, Color(1, 1, 1));
 	viewStack.PopMatrix();
-	// reset button
+
+	// Reset button
 	if (camera.position.x > 25.0f && camera.position.z < -25.0f && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
 		viewStack.PushMatrix();
 			viewStack.Translate(99.99999999999999, 15, -70);
@@ -782,7 +843,7 @@ void Scene2::Render()
 		viewStack.PopMatrix();
 	}
 
-	// portal
+	// Portal
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 10, -100);
 		viewStack.PushMatrix();
@@ -798,64 +859,80 @@ void Scene2::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
-	//stage info
-	switch (MyPtero::instance()->pteroStage) {
+	// Stage info
+	switch (MyPtero::instance()->pteroStage)
+	{
 	case MyPtero::P_EGG:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: EGG", Color(1, 1, 1), 3, 1, 1);
-		if (MyPtero::instance()->incubating) {
+		if (MyPtero::instance()->incubating)
+		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "EGG INCUBATED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
 		else if (camera.position.z > 0.0f) {
-			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0) {
+			if (Inventory::instance()->items[ITEMS_INCUBATOR] > 0)
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO INCUBATE EGG", Color(1, 0, 0), 2, 1, 29);
 			}
-			else {
+			else 
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "OBTAIN INCUBATOR", Color(1, 0, 0), 2, 1, 29);
 			}
 		}
 		break;
 	case MyPtero::P_BABY:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: BABY", Color(0, 1, 0), 3, 1, 1);
-		if (!MyPtero::instance()->hungry && feedingDelay == 0) {
+		if (!MyPtero::instance()->hungry && feedingDelay == 0)
+		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z > 0.0f) {
-			if (Inventory::instance()->items[ITEMS_MEAT] > 0) {
+		else if (camera.position.z > 0.0f)
+		{
+			if (Inventory::instance()->items[ITEMS_MEAT] > 0)
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
 			}
-			else {
+			else
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
 			}
 		}
 		break;
 	case MyPtero::P_ADOLESCENT:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: ADOLESCENT", Color(0, 1, 0), 3, 1, 1);
-		if (!MyPtero::instance()->hungry && feedingDelay == 0) {
+		if (!MyPtero::instance()->hungry && feedingDelay == 0)
+		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z > 0.0f) {
-			if (Inventory::instance()->items[ITEMS_MEAT] > 0) {
+		else if (camera.position.z > 0.0f)
+		{
+			if (Inventory::instance()->items[ITEMS_MEAT] > 0)
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
 			}
-			else {
+			else
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
 			}
 		}
 		break;
 	case MyPtero::P_ADULT:
 		RenderTextOnScreen(meshList[GEO_TEXT], "Stage: ADULT", Color(0, 1, 0), 3, 1, 1);
-		if (!MyPtero::instance()->hungry && feedingDelay == 0) {
+		if (!MyPtero::instance()->hungry && feedingDelay == 0)
+		{
 			RenderTextOnScreen(meshList[GEO_TEXT], "PTERODACTYL FED", Color(1, 0, 0), 2, 1, 29);
 			RenderTextOnScreen(meshList[GEO_TEXT], "(COME BACK IN A WHILE)", Color(1, 0, 0), 1.5, 1, 37);
 		}
-		else if (camera.position.z > 0.0f) {
-			if (Inventory::instance()->items[ITEMS_MEAT] > 0) {
+		else if (camera.position.z > 0.0f)
+		{
+			if (Inventory::instance()->items[ITEMS_MEAT] > 0)
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "PRESS X TO FEED PTERODACTYL", Color(1, 0, 0), 2, 1, 29);
 			}
-			else {
+			else
+			{
 				RenderTextOnScreen(meshList[GEO_TEXT], "GATHER MEAT TO FEED", Color(1, 0, 0), 2, 1, 29);
 			}
 		}
@@ -1017,19 +1094,19 @@ void Scene2::RenderText(Mesh* mesh, std::string text, Color color)
 
 void Scene2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if (!mesh || mesh->textureID <= 0) //Proper error check
+	if (!mesh || mesh->textureID <= 0) // Proper error check
 		return;
 
 	glDisable(GL_DEPTH_TEST);
-	//Add these code just after glDisable(GL_DEPTH_TEST);
+	// Add these code just after glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
-	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.LoadIdentity(); // Reset modelStack
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 
@@ -1043,7 +1120,7 @@ void Scene2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -1051,7 +1128,7 @@ void Scene2::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-	//Add these code just before glEnable(GL_DEPTH_TEST);
+	// Add these code just before glEnable(GL_DEPTH_TEST);
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -1085,16 +1162,16 @@ void Scene2::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
 	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); //UI should not have light
+	RenderMesh(mesh, false); // UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

@@ -120,20 +120,24 @@ bool LoadOBJ(
 	return true;
 }
 
-struct PackedVertex {
+struct PackedVertex 
+{
 	Position position;
 	TexCoord uv;
 	Vector3 normal;
-	bool operator<(const PackedVertex that) const {
+	bool operator<(const PackedVertex that) const
+	{
 		return memcmp((void*)this, (void*)&that, sizeof(PackedVertex))>0;
 	};
 };
 
-bool getSimilarVertexIndex_fast(
-	PackedVertex & packed,
-	std::map<PackedVertex, unsigned short> & VertexToOutIndex,
-	unsigned short & result
-) {
+bool getSimilarVertexIndex_fast
+	(
+		PackedVertex & packed,
+		std::map<PackedVertex, unsigned short> & VertexToOutIndex,
+		unsigned short & result
+	) 
+{
 	std::map<PackedVertex, unsigned short>::iterator it = VertexToOutIndex.find(packed);
 	if (it == VertexToOutIndex.end())
 	{
@@ -146,14 +150,15 @@ bool getSimilarVertexIndex_fast(
 	}
 }
 
-void IndexVBO(
-	std::vector<Position> & in_vertices,
-	std::vector<TexCoord> & in_uvs,
-	std::vector<Vector3> & in_normals,
+void IndexVBO
+	(
+		std::vector<Position> & in_vertices,
+		std::vector<TexCoord> & in_uvs,
+		std::vector<Vector3> & in_normals,
 
-	std::vector<unsigned> & out_indices,
-	std::vector<Vertex> & out_vertices
-)
+		std::vector<unsigned> & out_indices,
+		std::vector<Vertex> & out_vertices
+	)
 {
 	std::map<PackedVertex, unsigned short> VertexToOutIndex;
 

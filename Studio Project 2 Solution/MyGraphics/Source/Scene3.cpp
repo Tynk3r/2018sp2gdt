@@ -9,9 +9,6 @@
 #include <string>
 #include <sstream>
 
-// THIS IS THE SP FOLDER VERSION // 
-// THIS ONE IS TO BE MODIFIED FOR RELEASE // 
-
 Scene3::Scene3()
 {
 }
@@ -241,7 +238,7 @@ void Scene3::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
+	// Remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -262,7 +259,7 @@ void Scene3::Init()
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
 
-	//Environment Mesh Codes
+	// Environment Mesh Codes
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
 	meshList[GEO_TRAPDEFAULT]->textureID = LoadTGA("Image//scene3Trap.tga");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
@@ -314,7 +311,7 @@ void Scene3::Init()
 	meshList[GEO_PLACEHOLDER_UI_BLACK] = MeshBuilder::Generate2DQuad("placeholderTextBoxBlack", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT] = MeshBuilder::Generate2DQuad("placeholderGameObject", 1.0f, 1.0f, 1.f, 0.f, 0.f);
 
-	//Set Object Positions//
+	// Set Object Positions//
 	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
 	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
 	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
@@ -698,8 +695,8 @@ void Scene3::Render()
 		}
 	viewStack.PopMatrix();
 	
-	//Environment//
-	//Trees//
+	// Environment //
+	// Trees //
 	viewStack.PushMatrix();
 	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
 	viewStack.Scale(4, 4, 4);
@@ -720,7 +717,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
-	//Rocks//
+	// Rocks //
 	viewStack.PushMatrix();
 	viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
 	viewStack.Scale(4, 4, 4);
@@ -742,7 +739,7 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_ROCK], godlights);
 	viewStack.PopMatrix();
 
-	//BORDER//
+	// BORDER //
 	viewStack.PushMatrix();
 	viewStack.Translate(0, 0, -10);
 	viewStack.Scale(30, 40, 30);
@@ -757,13 +754,12 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
-	//Fern//
+	// Fern //
 	for (int i = 0; i < 6; i++)
 	{
 		for (int j = 1; j < 6; j++)
 		{
 			viewStack.PushMatrix();
-			//viewStack.Rotate(12.5*i, 0, 1, 0);
 			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
 			viewStack.Scale(8, 8, 8);
 			viewStack.Rotate(12.5*i, 0, 1, 0);
@@ -771,7 +767,7 @@ void Scene3::Render()
 			viewStack.PopMatrix();
 		}
 	}
-	//End of environment//
+	// End of environment //
 	
 	// BUSH 1 // 
 	viewStack.PushMatrix();
@@ -961,11 +957,10 @@ void Scene3::Render()
 	viewStack.PushMatrix();
 	viewStack.Translate(100, 8, 0);
 	viewStack.Scale(15, 15, 15);
-	//viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], godlights);
 	viewStack.PopMatrix();
 
-	// portal
+	// Portal
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
@@ -980,7 +975,6 @@ void Scene3::Render()
 		viewStack.Scale(20, 20, 20);
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
-
 
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
@@ -1030,16 +1024,17 @@ void Scene3::Render()
 void Scene3::RenderGettingFruitsGameUI()
 {
 	viewStack.PushMatrix();
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 40, 30, 40, 1); // Middle white area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 40, 30, 40, 1);	// Middle white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 32, 80, 1);	// Top black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 28, 80, 1);	// Bottom black area
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT], fruitMovingPosition, 30, 1, 1); // Middle red object
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 30, 1, 3);	// Left black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 79, 30, 1, 3);	// Right black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 30, 30, 1, 1);	// Middle left black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 50, 30, 1, 1);	// Middle right black area
 
-		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 1, 1, 80, 10);	 // Middle black area
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT], fruitMovingPosition, 30, 1, 1); // Middle red object
+
+		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_WHITE], 1, 1, 80, 10);	// Middle black area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 1, 80, 1);	// Bottom white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 10, 80, 1);	// Top white area
 		RenderMeshOnScreen(meshList[GEO_PLACEHOLDER_UI_BLACK], 1, 1, 1, 10);	// Left white area
@@ -1113,7 +1108,6 @@ void Scene3::RenderMesh(Mesh *mesh, bool enableLight)
 void Scene3::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
-	// modelStack.Rotate(0, 0, 0, 0);
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_FRONT], light);
@@ -1147,14 +1141,6 @@ void Scene3::RenderSkybox(float d, bool light)
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_TOP], light);
 	modelStack.PopMatrix();
-
-	/*modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(d, d, d);
-	RenderMesh(meshList[GEO_BOTTOM], light);
-	modelStack.PopMatrix();*/
 }
 
 void Scene3::RenderText(Mesh* mesh, std::string text, Color color)
@@ -1232,7 +1218,7 @@ void Scene3::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();

@@ -14,9 +14,6 @@
 #include <time.h>
 #include "Inventory.h"
 
-//THIS IS THE SP FOLDER VERSION//
-//THIS ONE IS TO BE MODIFIED FOR RELEASE//
-
 class Scene3 : public Scene
 {
 	enum UNIFORM_TYPE
@@ -69,7 +66,6 @@ class Scene3 : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
-
 	};
 
 	enum GEOMETRY_TYPE
@@ -153,7 +149,7 @@ public:
 	
 	bool bushesHarvested[5];
 
-	//Keep storage of all trap states//
+	// Keep storage of all trap states //
 	int trap1State;
 	int trap2State;
 	int trap3State;
@@ -166,7 +162,7 @@ public:
 	bool trappedBush4;
 	bool trappedBush5;
 
-	//Toggle for Inv Overlay//
+	// Toggle for Inv Overlay //
 	bool showInventory = false;
 
 private:

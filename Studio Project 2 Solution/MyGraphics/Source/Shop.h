@@ -42,7 +42,7 @@ class SHOP
 public:
 	const static int numberOfSHOPs = SHOP_TOTAL;
 	Object coord[numberOfSHOPs];
-	int cost[numberOfSHOPs];		// The selling/Buying value of each action
+	int cost[numberOfSHOPs];		// The selling/buying value of each action
 	double supply[numberOfSHOPs];	// This will affect the cost of each action
 
 	// Get the coord of the requested action

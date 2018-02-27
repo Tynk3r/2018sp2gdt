@@ -26,7 +26,7 @@ void SceneMain::Init()
 	developerMode = false;
 	Race1 = true;
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); //init camera
+	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // Init camera
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 1000.f);
@@ -167,13 +167,15 @@ void SceneMain::Init()
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
+	// Remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	if (MyPtero::instance()->pteroStage == MyPtero::P_EGG) {
+	if (MyPtero::instance()->pteroStage == MyPtero::P_EGG)
+	{
 		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront2.tga");
 	}
-	else {
+	else
+	{
 		meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
 	}
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -209,7 +211,7 @@ void SceneMain::Init()
 	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("Tree", "OBJ//fern.obj");
 	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
 
-	//Set Object Positions//
+	// Set Object Positions //
 	objs[OBJ_DINOEGG].setBox(Vector3(0, 0, 0), 20);
 	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 20, 40, 20);
 	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 20, 40, 20);
@@ -243,12 +245,12 @@ void SceneMain::Update(double dt)
 	camera.Update(dt);
 	Inventory::instance()->Update();
 
-	// portals
+	// Portals
 	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
 	{
 		if (!developerMode)
 		{
-			//1/2 chance for either race track
+			// 50% chance for either race track
 			int track = rand() % 3 + 1;
 			if (track == 1)
 			{
@@ -346,7 +348,8 @@ void SceneMain::Render()
 		Vector3 spotDirection_cameraspace = viewStack.Top() * light[1].spotDirection;
 		glUniform3fv(m_parameters[U_LIGHT1_SPOTDIRECTION], 1, &spotDirection_cameraspace.x);
 	}
-	else {
+	else 
+	{
 		Position lightPosition_cameraspace = viewStack.Top() * light[1].position;
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
@@ -384,8 +387,8 @@ void SceneMain::Render()
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
-	//Environment//
-	//Trees//
+	// Environment //
+	// Trees //
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
 		viewStack.Scale(4, 4, 4);
@@ -406,7 +409,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_TREE], godlights);
 	viewStack.PopMatrix();
 
-	//Rocks//
+	// Rocks //
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
 		viewStack.Scale(4, 4, 4);
@@ -428,7 +431,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_ROCK], godlights);
 	viewStack.PopMatrix();
 
-	//Campfire//
+	// Campfire //
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[7].getPos().x, objs[7].getPos().y, objs[7].getPos().z);
 		viewStack.Scale(objs[OBJ_CAMPFIRE].getSizeX(), objs[OBJ_CAMPFIRE].getSizeY(), objs[OBJ_CAMPFIRE].getSizeZ());
@@ -443,7 +446,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_FIREWOOD], godlights);
 	viewStack.PopMatrix();
 
-	//BORDER//
+	// BORDER //
 	viewStack.PushMatrix();
 		viewStack.Translate(0,0,-10);
 		viewStack.Scale(20,30,20);
@@ -458,13 +461,12 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
 
-	//Fern//
+	// Fern //
 	for (int i = 0; i < 6; i++)
 	{
 		for (int j = 1; j < 6; j++)
 		{
 			viewStack.PushMatrix();
-				//viewStack.Rotate(12.5*i, 0, 1, 0);
 				viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
 				viewStack.Scale(8, 8, 8);
 				viewStack.Rotate(12.5*i, 0, 1, 0);
@@ -473,8 +475,8 @@ void SceneMain::Render()
 		}
 	}
 
-	//Portals//
-	viewStack.PushMatrix(); // scene 1
+	// Portals //
+	viewStack.PushMatrix(); // Scene 1
 		viewStack.Translate(0, 20, -186);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
@@ -488,7 +490,7 @@ void SceneMain::Render()
 		viewStack.Scale(20, 20, 20);
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
-	viewStack.PushMatrix(); // scene 2
+	viewStack.PushMatrix(); // Scene 2
 		viewStack.Translate(-186, 20, 0);
 		viewStack.Rotate(90, 0, 1, 0);
 		viewStack.PushMatrix();
@@ -503,7 +505,7 @@ void SceneMain::Render()
 		viewStack.Scale(20, 20, 20);
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
-	viewStack.PushMatrix(); // scene 3
+	viewStack.PushMatrix(); // Scene 3
 		viewStack.Translate(0, 20, 186);
 		viewStack.Rotate(180, 0, 1, 0);
 		viewStack.PushMatrix();
@@ -518,7 +520,7 @@ void SceneMain::Render()
 		viewStack.Scale(20, 20, 20);
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
-	viewStack.PushMatrix(); // scene 4
+	viewStack.PushMatrix(); // Scene 4
 		viewStack.Translate(186, 20, 0);
 		viewStack.Rotate(-90, 0, 1, 0);
 		viewStack.PushMatrix();
@@ -534,7 +536,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
-	//End of Environment//
+	// End of Environment //
 
 	viewStack.PushMatrix();
 		viewStack.Translate(objs[0].getPos().x, objs[0].getPos().y, objs[0].getPos().z);
@@ -674,7 +676,6 @@ void SceneMain::RenderMesh(Mesh *mesh, bool enableLight)
 void SceneMain::RenderSkybox(float d, bool light)
 {
 	modelStack.PushMatrix();
-	//modelStack.Rotate(0, 0, 0, 0);
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_FRONT], light);
@@ -712,7 +713,7 @@ void SceneMain::RenderSkybox(float d, bool light)
 
 void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 {
-	if (!mesh || mesh->textureID <= 0) //Proper error check
+	if (!mesh || mesh->textureID <= 0) // Proper error check
 		return;
 
 	glDisable(GL_DEPTH_TEST);
@@ -726,7 +727,7 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -739,19 +740,19 @@ void SceneMain::RenderText(Mesh* mesh, std::string text, Color color)
 
 void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y)
 {
-	if (!mesh || mesh->textureID <= 0) //Proper error check
+	if (!mesh || mesh->textureID <= 0) // Proper error check
 		return;
 
 	glDisable(GL_DEPTH_TEST);
-	//Add these code just after glDisable(GL_DEPTH_TEST);
+	// Add these code just after glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
-	modelStack.LoadIdentity(); //Reset modelStack
+	modelStack.LoadIdentity(); // Reset modelStack
 	modelStack.Scale(size, size, size);
 	modelStack.Translate(x, y, 0);
 
@@ -765,7 +766,7 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 1.0f, 0, 0); // 1.0f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -773,7 +774,7 @@ void SceneMain::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
-	//Add these code just before glEnable(GL_DEPTH_TEST);
+	// Add these code just before glEnable(GL_DEPTH_TEST);
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
@@ -785,16 +786,16 @@ void SceneMain::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int size
 {
 	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); // Size of screen UI
 	projectionStack.PushMatrix();
 	projectionStack.LoadMatrix(ortho);
 	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
+	viewStack.LoadIdentity(); // No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
 	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); //UI should not have light
+	RenderMesh(mesh, false); // UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

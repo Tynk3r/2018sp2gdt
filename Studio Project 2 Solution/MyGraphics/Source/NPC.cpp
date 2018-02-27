@@ -249,7 +249,7 @@ void NPC::CheckForCollision(int i)
 				}
 			}
 			else if ((NPCS[i].minX >= NPCS[a].minX) && (NPCS[i].minX <= NPCS[a].maxX) &&
-				(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
+					(NPCS[i].getPos().z >= NPCS[a].minZ) && (NPCS[i].getPos().z <= NPCS[a].maxZ))
 			{
 				if (moveDirX[i] == MOVEDIR_NEG)
 				{
@@ -261,7 +261,7 @@ void NPC::CheckForCollision(int i)
 				}
 			}
 			else if ((NPCS[i].maxZ >= NPCS[a].minZ) && (NPCS[i].maxZ <= NPCS[a].maxZ) &&
-				(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
+					(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
 			{
 				if (moveDirZ[i] == MOVEDIR_POS)
 				{
@@ -273,7 +273,7 @@ void NPC::CheckForCollision(int i)
 				}
 			}
 			else if ((NPCS[i].minZ >= NPCS[a].minZ) && (NPCS[i].minZ <= NPCS[a].maxZ) &&
-				(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
+					(NPCS[i].getPos().x >= NPCS[a].minX) && (NPCS[i].getPos().x <= NPCS[a].maxX))
 			{
 				if (moveDirZ[i] == MOVEDIR_NEG)
 				{

@@ -1,4 +1,3 @@
-
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
@@ -6,6 +5,13 @@
 
 class Application
 {
+private:
+	//Declare a window object
+	StopWatch m_timer;
+	static double CursorX;
+	static double CursorY;
+	static int WindowWidth;
+	static int WindowHeight;
 public:
 	Application();
 	~Application();
@@ -18,14 +24,6 @@ public:
 	static double GetCursorY(void);
 	static int GetWindowWidth(void);
 	static int GetWindowHeight(void);
-private:
-
-	//Declare a window object
-	StopWatch m_timer;
-	static double CursorX;
-	static double CursorY;
-	static int WindowWidth;
-	static int WindowHeight;
 };
 
 #endif

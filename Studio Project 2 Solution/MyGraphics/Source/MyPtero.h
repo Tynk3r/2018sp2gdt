@@ -16,14 +16,16 @@ private:
 public:
 	static MyPtero* instance(void);
 
-	enum PTERO_STATE {
+	enum PTERO_STATE
+	{
 		P_EGG = 0,
 		P_BABY,
 		P_ADOLESCENT,
 		P_ADULT,
 	};
 
-	enum PTERO_TYPE {
+	enum PTERO_TYPE
+	{
 		T_RED = 0,
 		T_GREEN,
 		T_PURPLE,
@@ -50,10 +52,10 @@ public:
 	void setFlightStamina(float);
 
 	//For Flying
-	float getSpeed(void); //How fast ptero can fly
-	float getSteerSpeed(void); //How fast ptero can turn in air
-	float getStability(void); //How fast the ptero pitches downwards on its own
-	float getStamina(void); //How long you can hold down shift for speed boost
+	float getSpeed(void);			//How fast ptero can fly
+	float getSteerSpeed(void);		//How fast ptero can turn in air
+	float getStability(void);		//How fast the ptero pitches downwards on its own
+	float getStamina(void);			//How long you can hold down shift for speed boost
 };
 
 #endif

@@ -102,7 +102,7 @@ class Scene1_5 : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 
-		//Scene1_5 Models
+		// Scene1_5 Models
 		GEO_GOAL,
 		GEO_DINO,
 		GEO_TREE,
@@ -116,7 +116,7 @@ class Scene1_5 : public Scene
 
 	enum OBJECTS
 	{
-		//Cloud Obstacles
+		// Cloud Obstacles
 		OBJ_CLOUD0,
 		OBJ_CLOUD1,
 		OBJ_CLOUD2,
@@ -139,7 +139,7 @@ class Scene1_5 : public Scene
 		OBJ_CLOUD19,
 		OBJ_CLOUD20,
 
-		OBJ_GOAL, //Put at last
+		OBJ_GOAL, // Put at last
 
 		NUM_OBJECTS,
 	};

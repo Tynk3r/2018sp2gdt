@@ -85,7 +85,6 @@ class Scene1 : public Scene
 		U_TEXT_COLOR,
 
 		U_TOTAL,
-
 	};
 
 	enum GEOMETRY_TYPE
@@ -102,7 +101,7 @@ class Scene1 : public Scene
 		GEO_FRONT,
 		GEO_BACK,
 		
-		//Scene1 Models
+		// Scene1 Models
 		GEO_RING,
 		GEO_SMALLRING,
 		GEO_DINO,
@@ -117,7 +116,7 @@ class Scene1 : public Scene
 
 	enum OBJECTS
 	{
-		//Red Rings
+		// Red Rings
 		OBJ_RING0,
 		OBJ_RING1,
 		OBJ_RING2,
@@ -138,7 +137,8 @@ class Scene1 : public Scene
 		OBJ_RING17,
 		OBJ_RING18,
 		OBJ_RING19,
-		//Blue Ring
+
+		// Blue Ring
 		OBJ_RING20,
 
 		NUM_OBJECTS,

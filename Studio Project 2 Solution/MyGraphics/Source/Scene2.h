@@ -143,4 +143,5 @@ private:
 	bool collision(Vector3);
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 };
+
 #endif

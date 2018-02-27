@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RING_OBJECT_H
+#define RING_OBJECT_H
+
 #include "Object.h"
 
 class RingObject : public Object
@@ -13,3 +15,4 @@ public:
 	int getID();
 };
 
+#endif
