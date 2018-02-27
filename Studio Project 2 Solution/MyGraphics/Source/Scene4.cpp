@@ -189,19 +189,22 @@ void Scene4::Init()
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//4front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//4back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//4left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//4right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//4top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//4bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -600,7 +603,59 @@ void Scene4::Render()
 		glUniform3fv(m_parameters[U_LIGHT3_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox(200.0f, godlights);
+	viewStack.PushMatrix();
+		viewStack.PushMatrix();
+			viewStack.Translate(camera.position.x, camera.position.y - 30, camera.position.z - 20);
+			RenderSkybox(500.0f, false);
+		viewStack.PopMatrix();
+
+		modelStack.PushMatrix();
+			modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Rotate(-90, 0, 0, 1);
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(800, 800, 800);
+			RenderMesh(meshList[GEO_BOTTOM], light);
+		modelStack.PopMatrix();
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+		for (int sides = 0; sides <= 20; sides++)
+		{
+			int move = sides * 20;
+
+			viewStack.PushMatrix();
+				viewStack.Translate(210, -20, (200 - move));
+				viewStack.Scale(4, 4, 4);
+				RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+
+			viewStack.PushMatrix();
+				viewStack.Translate(-210, -20, (200 - move));
+				viewStack.Scale(4, 4, 4);
+				RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+		}
+
+		for (int frontBack = 0; frontBack <= 20; frontBack++)
+		{
+			int move = frontBack * 20;
+
+			viewStack.PushMatrix();
+				viewStack.Translate((200 - move), -20, 220);
+				viewStack.Scale(4, 4, 4);
+				RenderMesh(meshList[GEO_TREE], godlights);
+			viewStack.PopMatrix();
+
+			if ((frontBack < 10) || (frontBack > 11))
+			{
+				viewStack.PushMatrix();
+					viewStack.Translate((200 - move), -20, -220);
+					viewStack.Scale(4, 4, 4);
+					RenderMesh(meshList[GEO_TREE], godlights);
+				viewStack.PopMatrix();
+			}
+		}
+	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 		RenderNPC();
@@ -862,14 +917,6 @@ void Scene4::RenderSkybox(float d, bool light)
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_TOP], light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0); // change -d to 0 to bring floor up to foot level
-	modelStack.Scale(d, d, d);
-	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
 }
 

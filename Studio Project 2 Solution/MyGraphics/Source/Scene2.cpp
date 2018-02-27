@@ -137,17 +137,17 @@ void Scene2::Init()
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 	meshList[GEO_FRONT] = MeshBuilder::Generate2DQuad("front", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//2front.tga");
+	meshList[GEO_FRONT]->textureID = LoadTGA("Image//mainfront.tga");
 	meshList[GEO_BACK] = MeshBuilder::Generate2DQuad("back", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//2back.tga");
+	meshList[GEO_BACK]->textureID = LoadTGA("Image//mainback.tga");
 	meshList[GEO_LEFT] = MeshBuilder::Generate2DQuad("left", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image//2left.tga");
+	meshList[GEO_LEFT]->textureID = LoadTGA("Image//mainleft.tga");
 	meshList[GEO_RIGHT] = MeshBuilder::Generate2DQuad("right", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//2right.tga");
+	meshList[GEO_RIGHT]->textureID = LoadTGA("Image//mainright.tga");
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//2top.tga");
+	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//2bottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
 
@@ -550,8 +550,21 @@ void Scene2::Render()
 		glUniform3fv(m_parameters[U_LIGHT1_POSITION], 1, &lightPosition_cameraspace.x);
 	}
 
-	RenderSkybox(camera.SkyboxSize, godlights);
+	viewStack.PushMatrix();
+		viewStack.PushMatrix();
+			viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
+			RenderSkybox(500.0f, false);
+		viewStack.PopMatrix();
 
+		modelStack.PushMatrix();
+			modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Rotate(-90, 0, 0, 1);
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(400, 400, 400);
+			RenderMesh(meshList[GEO_BOTTOM], light);
+		modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:
@@ -895,14 +908,6 @@ void Scene2::RenderSkybox(float d, bool light)
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_TOP], light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(d, d, d);
-	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
 }
 

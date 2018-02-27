@@ -11,6 +11,7 @@
 #include "Light.h"
 #include "Utility.h"
 
+#include "Object.h"
 #include "NPC.h"
 #include "Shop.h"
 #include "Inventory.h"
@@ -103,6 +104,8 @@ class Scene4 : public Scene
 
 		GEO_NPC_HUNTER,
 		GEO_NPC_SHOP,
+
+		GEO_TREE,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
