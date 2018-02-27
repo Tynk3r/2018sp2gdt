@@ -16,7 +16,6 @@
 #include "Shop.h"
 #include "Inventory.h"
 
-
 #include <iostream>
 #include <fstream>
 
@@ -106,6 +105,8 @@ class Scene4 : public Scene
 		GEO_NPC_SHOP,
 
 		GEO_TREE,
+		GEO_FERN,
+		GEO_PORTAL,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -169,6 +170,7 @@ private:
 	void loadText(int npc_type, std::string text[3]);
 
 	bool godlights = false;
+	float rotateMain = 0;
 
 	// For shop
 	SHOP shop;

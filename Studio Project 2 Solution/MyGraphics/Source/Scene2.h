@@ -80,6 +80,9 @@ class Scene2 : public Scene
 		GEO_HEART,
 		GEO_NEST,
 		GEO_MEAT,
+		GEO_PORTAL,
+		GEO_TREE,
+		GEO_ROCK,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -120,6 +123,7 @@ private:
 	unsigned m_parameters[U_TOTAL];
 	double framerate;
 	bool godlights = true;
+	float rotateMain = 0;
 	bool feeding = false;
 	float meatLocationX = 0;
 	float meatLocationZ = 62.5;

@@ -11,7 +11,6 @@
 #include <iostream>
 #include <fstream>
 
-
 Scene4::Scene4()
 {
 }
@@ -206,6 +205,12 @@ void Scene4::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
+	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("fern", "OBJ//fern.obj");
+	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
+
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
+
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
 	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
@@ -273,19 +278,19 @@ void Scene4::Update(double dt)
 
 	switch (giantFactionQuest)
 	{
-	case 1:
+	case 2:
 		if (Inventory::instance()->items[ITEMS_BLUFRUIT] >= 30)
 		{
 			giantQuestDone = true;
 		}
 		break;
-	case 2:
+	case 3:
 		if ((Inventory::instance()->items[ITEMS_MEAT] >= 25) && (Inventory::instance()->items[ITEMS_TRAP] >= 25))
 		{
 			giantQuestDone = true;
 		}
 		break;
-	case 3:
+	case 4:
 		if (Inventory::instance()->items[ITEMS_CURRENCY] >= 500)
 		{
 			giantQuestDone = true;
@@ -521,6 +526,7 @@ void Scene4::Update(double dt)
 		}
 	}
 	////////////////////////////////////////////////////////////////// END OF SHOP CODE ////////////////////////////////////////////////////////////////////
+	rotateMain++;
 }
 
 void Scene4::Render()
@@ -619,46 +625,62 @@ void Scene4::Render()
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
-		for (int sides = 0; sides <= 20; sides++)
+		for (int row = 0; row < 30; row++)
 		{
-			int move = sides * 20;
+			for (int col = 0; col < 30; col++)
+			{
+				int moveRow = (300 - (row * 20));
+				int moveCol = (300 - (col * 20));
 
-			viewStack.PushMatrix();
-				viewStack.Translate(210, -20, (200 - move));
-				viewStack.Scale(4, 4, 4);
-				RenderMesh(meshList[GEO_TREE], godlights);
-			viewStack.PopMatrix();
-
-			viewStack.PushMatrix();
-				viewStack.Translate(-210, -20, (200 - move));
-				viewStack.Scale(4, 4, 4);
-				RenderMesh(meshList[GEO_TREE], godlights);
-			viewStack.PopMatrix();
+				if ((moveRow > 200) || (moveRow < -200) || (moveCol > 200) || (moveCol < -200))
+				{
+					if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -180))
+					{
+						viewStack.PushMatrix();
+							viewStack.Translate((moveRow), -20, (moveCol));
+							viewStack.Scale(4, 4, 4);
+							RenderMesh(meshList[GEO_TREE], godlights);
+						viewStack.PopMatrix();
+					}
+				}
+			}
 		}
 
-		for (int frontBack = 0; frontBack <= 20; frontBack++)
+		//Fern//
+		for (int i = 0; i < 6; i++)
 		{
-			int move = frontBack * 20;
-
-			viewStack.PushMatrix();
-				viewStack.Translate((200 - move), -20, 220);
-				viewStack.Scale(4, 4, 4);
-				RenderMesh(meshList[GEO_TREE], godlights);
-			viewStack.PopMatrix();
-
-			if ((frontBack < 10) || (frontBack > 11))
+			for (int j = 1; j < 6; j++)
 			{
 				viewStack.PushMatrix();
-					viewStack.Translate((200 - move), -20, -220);
-					viewStack.Scale(4, 4, 4);
-					RenderMesh(meshList[GEO_TREE], godlights);
+					//viewStack.Rotate(12.5*i, 0, 1, 0);
+					viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
+					viewStack.Scale(8, 8, 8);
+					viewStack.Rotate(12.5*i, 0, 1, 0);
+					RenderMesh(meshList[GEO_FERN], godlights);
 				viewStack.PopMatrix();
 			}
 		}
+		//End of environment//
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 		RenderNPC();
+	viewStack.PopMatrix();
+
+	// portal
+	viewStack.PushMatrix();
+		viewStack.Translate(0, 20, -186);
+		viewStack.PushMatrix();
+			viewStack.Translate(-10, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
 	std::ostringstream ah;

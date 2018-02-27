@@ -202,6 +202,11 @@ void Scene2::Init()
 	meshList[GEO_NEST]->textureID = LoadTGA("Image//nest.tga");
 	meshList[GEO_MEAT] = MeshBuilder::GenerateOBJ("objs10", "OBJ//meat.obj");
 	meshList[GEO_MEAT]->textureID = LoadTGA("Image//meat.tga");
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("tree", "OBJ//tree.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
@@ -532,6 +537,8 @@ void Scene2::Update(double dt)
 	if (MyPtero::instance()->pteroLocationX == meatLocationX && MyPtero::instance()->pteroLocationZ == meatLocationZ && MyPtero::instance()->pteroLocationY != meatLocationY + 5) {
 		MyPtero::instance()->pteroLocationY -= MyPtero::instance()->pteroMovementSpeed;
 	}
+
+	rotateMain++;
 }
 
 void Scene2::Render()
@@ -585,11 +592,34 @@ void Scene2::Render()
 			modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Rotate(-90, 0, 0, 1);
 			modelStack.Translate(0, 0, 0);
-			modelStack.Scale(400, 400, 400);
+			modelStack.Scale(800, 800, 800);
 			RenderMesh(meshList[GEO_BOTTOM], light);
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
-	
+
+	viewStack.PushMatrix();
+	for (int row = 0; row < 30; row++)
+	{
+		for (int col = 0; col < 30; col++)
+		{
+			int moveRow = (300 - (row * 20));
+			int moveCol = (300 - (col * 20));
+
+			if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
+			{
+				if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -80))
+				{
+					viewStack.PushMatrix();
+					viewStack.Translate((moveRow), -20, (moveCol));
+					viewStack.Scale(4, 4, 4);
+					RenderMesh(meshList[GEO_TREE], godlights);
+					viewStack.PopMatrix();
+				}
+			}
+		}
+	}
+	viewStack.PopMatrix();
+
 	// pterodactyl
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:
@@ -749,6 +779,23 @@ void Scene2::Render()
 			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(1, 0, 0));
 		viewStack.PopMatrix();
 	}
+
+	// portal
+	viewStack.PushMatrix();
+		viewStack.Translate(0, 10, -86);
+		viewStack.PushMatrix();
+			viewStack.Translate(-5, 15, 0);
+			viewStack.Scale(1.9, 1.9, 1.9);
+			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+			viewStack.Translate(-0.75, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+
 	//stage info
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:

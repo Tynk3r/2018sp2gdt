@@ -93,6 +93,7 @@ class Scene3 : public Scene
 		GEO_WHEELBARROW,
 		GEO_EXPLAINTEXT,
 		GEO_INSTRUCTIONS,
+		GEO_PORTAL,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
