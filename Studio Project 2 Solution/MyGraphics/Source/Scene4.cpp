@@ -305,7 +305,7 @@ void Scene4::Update(double dt)
 		camera.Update(dt);
 	}
 
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	if (camera.position.z <= -195.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
@@ -690,7 +690,7 @@ void Scene4::Render()
 
 	// portal
 	viewStack.PushMatrix();
-		viewStack.Translate(0, 20, -186);
+		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
 			viewStack.Translate(-10, 30, 0);
 			viewStack.Scale(3.75, 3.75, 3.75);
