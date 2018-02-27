@@ -619,6 +619,28 @@ void Scene4::Render()
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
+	for (int row = 0; row < 30; row++)
+	{
+		for (int col = 0; col < 30; col++)
+		{
+			int moveRow = (300 - (row * 20));
+			int moveCol = (300 - (col * 20));
+
+			if ((moveRow > 200) || (moveRow < -200) || (moveCol > 200) || (moveCol < -200))
+			{
+				if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -180))
+				{
+					viewStack.PushMatrix();
+						viewStack.Translate((moveRow), -20, (moveCol));
+						viewStack.Scale(4, 4, 4);
+						RenderMesh(meshList[GEO_TREE], godlights);
+					viewStack.PopMatrix();
+				}
+			}
+		}
+	}
+	std::cout << camera.position << std::endl;
+	/*
 		for (int sides = 0; sides <= 20; sides++)
 		{
 			int move = sides * 20;
@@ -646,7 +668,7 @@ void Scene4::Render()
 				RenderMesh(meshList[GEO_TREE], godlights);
 			viewStack.PopMatrix();
 
-			if ((frontBack < 10) || (frontBack > 11))
+			if ((frontBack < 10) || (frontBack > 10))
 			{
 				viewStack.PushMatrix();
 					viewStack.Translate((200 - move), -20, -220);
@@ -655,6 +677,7 @@ void Scene4::Render()
 				viewStack.PopMatrix();
 			}
 		}
+		*/
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
