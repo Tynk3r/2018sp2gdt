@@ -271,15 +271,15 @@ void SceneMain::Update(double dt)
 			}
 		}
 	}
-	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	else if (camera.position.x <= -195.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
 	}
-	else if (camera.position.z >= 185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	else if (camera.position.z >= 195.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
 	}
-	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	else if (camera.position.x >= 195.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
@@ -306,7 +306,6 @@ void SceneMain::Update(double dt)
 			Race1 = false;
 		}
 	}
-	
 	rotateMain++;
 }
 
@@ -475,7 +474,7 @@ void SceneMain::Render()
 
 	//Portals//
 	viewStack.PushMatrix(); // scene 1
-		viewStack.Translate(0, 20, -186);
+		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
 			viewStack.Scale(3.75, 3.75, 3.75);
@@ -489,7 +488,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 2
-		viewStack.Translate(-186, 20, 0);
+		viewStack.Translate(-200, 20, 0);
 		viewStack.Rotate(90, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
@@ -504,7 +503,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 3
-		viewStack.Translate(0, 20, 186);
+		viewStack.Translate(0, 20, 200);
 		viewStack.Rotate(180, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
@@ -519,7 +518,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 4
-		viewStack.Translate(186, 20, 0);
+		viewStack.Translate(200, 20, 0);
 		viewStack.Rotate(-90, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
