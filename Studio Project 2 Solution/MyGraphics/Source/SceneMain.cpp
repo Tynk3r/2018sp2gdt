@@ -380,7 +380,7 @@ void SceneMain::Render()
 			modelStack.Rotate(-90, 0, 0, 1);
 			modelStack.Translate(0, 0, 0);
 			modelStack.Scale(400, 400, 400);
-			RenderMesh(meshList[GEO_BOTTOM], light);
+			RenderMesh(meshList[GEO_BOTTOM], godlights);
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
