@@ -235,6 +235,8 @@ void Scene4::Init()
 	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//NPC_Hunter.tga");
 	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Shop.obj");
 	meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
+	meshList[GEO_NPC_LORE] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Lore.obj");
+	meshList[GEO_NPC_LORE]->textureID = LoadTGA("Image//NPC_Lore.tga");
 
 	meshList[GEO_PTERO1] = MeshBuilder::GenerateOBJ("ptero1", "OBJ//pterodactyl.obj");
 	meshList[GEO_PTERO1]->textureID = LoadTGA("Image//greendino.tga");
@@ -1562,6 +1564,11 @@ void Scene4::RenderNPC()
 					{
 						viewStack.Scale(4, 4, 4);
 						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+					}
+					else if (i == NPC_LORE)
+					{
+						viewStack.Scale(8, 8, 8);
+						RenderMesh(meshList[GEO_NPC_LORE], godlights);
 					}
 					else
 					{
