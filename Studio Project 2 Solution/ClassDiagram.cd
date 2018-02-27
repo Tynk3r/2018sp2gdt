@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Application">
+    <Position X="13.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAABACAAAAAIAAAwAAAAACABgAICgCAAAAIAY=</HashCode>
+      <FileName>Source\Application.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camera">
+    <Position X="16.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAAAAAAAABAAAYAAAIAAAAAAAAAAAAAACAgAAAAA=</HashCode>
+      <FileName>Source\Camera.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraFPV">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAAAAAAACARoEAAABAAAAAAAAIAAAAAAACBAgAEAA=</HashCode>
+      <FileName>Source\CameraFPV.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory">
+    <Position X="5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAAAAAAAAAAAAAAAgAAAAAAgBAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Source\Inventory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mesh">
+    <Position X="6.75" Y="1" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Mesh::DRAW_MODE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Mesh.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAEAAACAAAAgAAAACBAEABAAARAAAABAAAA=</HashCode>
+      <FileName>Source\Mesh.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeshBuilder">
+    <Position X="12" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYAIAAAAAAAAAgAAAAAAAAAAAAAAAAAAAgAAACAAAEA=</HashCode>
+      <FileName>Source\MeshBuilder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyPtero">
+    <Position X="29" Y="6.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MyPtero::PTERO_STATE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\MyPtero.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MyPtero::PTERO_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\MyPtero.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AZAIAIAAABgAgEQAAAABCACBAADAAAABBAABASgAAQA=</HashCode>
+      <FileName>Source\MyPtero.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPC">
+    <Position X="8.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABCSgAAQkAEAACAAAAAAIFBAAgAAIAgJBAQAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Object">
+    <Position X="30.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AHAIAAKAAYAAACigAAAAIAAAAAAIAIAAEACAAHAAAAA=</HashCode>
+      <FileName>Source\Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RingObject">
+    <Position X="32" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAICAAAAABAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Source\RingObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene">
+    <Position X="19.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAgAAAAAAAAAAAgAAAAAAAQAAAAAAAIBACAAAAAAA=</HashCode>
+      <FileName>Source\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene1">
+    <Position X="20" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene1::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgADIIgAAAAoAgABAAgAAARIAoAIAIBgCAABEABQ=</HashCode>
+      <FileName>Source\Scene1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene1_5">
+    <Position X="21.75" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene1_5::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1_5::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene1_5::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene1_5.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgADIIgAAAAoAAABAggBAARIBoAAAIBACAAAMABQ=</HashCode>
+      <FileName>Source\Scene1_5.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene2">
+    <Position X="23.5" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene2::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene2::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene2::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene2.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQIgABIIgAAAAoAkAAAAgAAABIAIAAAIBACAQAEQBc=</HashCode>
+      <FileName>Source\Scene2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene3">
+    <Position X="25.25" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene3::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene3::TRAP_STATE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene3.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oSaAkoBIIwgAAAqEoAoqAgAAABIAIAAAIBACAAAEABQ=</HashCode>
+      <FileName>Source\Scene3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Scene4">
+    <Position X="27" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Scene4::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene4::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="Scene4::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Scene4.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oGQIgIDIYgAAAAoApAAhAgAABFJgJAAAoBCzAAAEAAQ=</HashCode>
+      <FileName>Source\Scene4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneMain">
+    <Position X="18.25" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SceneMain::UNIFORM_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="SceneMain::GEOMETRY_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="SceneMain::OBJECTS" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneMain.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>oCQAgEBIIwAACAoAAAAAAgAAABIAIAAAIBACCEAEABQ=</HashCode>
+      <FileName>Source\SceneMain.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SceneManager">
+    <Position X="22.75" Y="1" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="SceneManager::SCENE_ID" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\SceneManager.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAAAAAAAAAAAAAAAIAAQhQAAAAAAAAAiBAAAQ=</HashCode>
+      <FileName>Source\SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SHOP">
+    <Position X="10.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASEAAAABAAAAEAAgAAAAAAAAABQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Source\Shop.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Light">
+    <Position X="13.25" Y="8" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Light::LIGHT_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Light.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAAAAAAAQIgAAAAERAACAAAAAAABAAAE=</HashCode>
+      <FileName>Source\Light.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Component">
+    <Position X="11.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQBBAAAAAAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Material">
+    <Position X="2.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAAAAAAAAAAAAAgAAAAAAAAAAACAAAAAAAAAAIAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Position">
+    <Position X="8" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Color">
+    <Position X="6.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQABgAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TexCoord">
+    <Position X="9.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAIAAAAAAAAAAAAAABIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex">
+    <Position X="4.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIgAAAAAAACAAAIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ITEMS">
+    <Position X="10.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAEAAIAABEAAAAAAAAAAAAAgAAAAAAIAA=</HashCode>
+      <FileName>Source\Inventory.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="NPC_TYPE">
+    <Position X="5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAACAAAAAAgAIAAAAAAIAAAABAAAAABAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOVE_DIRECTION">
+    <Position X="6.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQACCAAAAIAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOVE_AXIS">
+    <Position X="3.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABQAAAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SHOP_ACTION">
+    <Position X="8.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQAAAApkABECAAAAAAABAAAAAiAEgAAoAAiAACgAEAQ=</HashCode>
+      <FileName>Source\Shop.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
