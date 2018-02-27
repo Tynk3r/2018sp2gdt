@@ -271,15 +271,15 @@ void SceneMain::Update(double dt)
 			}
 		}
 	}
-	else if (camera.position.x <= -195.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
 	}
-	else if (camera.position.z >= 195.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	else if (camera.position.z >= 185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
 	}
-	else if (camera.position.x >= 195.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
+	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
@@ -306,6 +306,31 @@ void SceneMain::Update(double dt)
 			Race1 = false;
 		}
 	}
+	if (Application::IsKeyPressed(VK_NUMPAD5))
+	{
+		if (developerMode)
+		{
+			Inventory::instance()->items[ITEMS_CURRENCY] = 999;
+			Inventory::instance()->items[ITEMS_BLUFRUIT] = 999;
+			Inventory::instance()->items[ITEMS_REDFRUIT] = 999;
+			Inventory::instance()->items[ITEMS_MEAT] = 999;
+			Inventory::instance()->items[ITEMS_TRAP] = 999;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 999;
+		}
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD6))
+	{
+		if (developerMode)
+		{
+			Inventory::instance()->items[ITEMS_CURRENCY] = 0;
+			Inventory::instance()->items[ITEMS_BLUFRUIT] = 0;
+			Inventory::instance()->items[ITEMS_REDFRUIT] = 0;
+			Inventory::instance()->items[ITEMS_MEAT] = 0;
+			Inventory::instance()->items[ITEMS_TRAP] = 0;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 0;
+		}
+	}
+	
 	rotateMain++;
 }
 
@@ -474,7 +499,7 @@ void SceneMain::Render()
 
 	//Portals//
 	viewStack.PushMatrix(); // scene 1
-		viewStack.Translate(0, 20, -200);
+		viewStack.Translate(0, 20, -186);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
 			viewStack.Scale(3.75, 3.75, 3.75);
@@ -488,7 +513,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 2
-		viewStack.Translate(-200, 20, 0);
+		viewStack.Translate(-186, 20, 0);
 		viewStack.Rotate(90, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
@@ -503,7 +528,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 3
-		viewStack.Translate(0, 20, 200);
+		viewStack.Translate(0, 20, 186);
 		viewStack.Rotate(180, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
@@ -518,7 +543,7 @@ void SceneMain::Render()
 		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix(); // scene 4
-		viewStack.Translate(200, 20, 0);
+		viewStack.Translate(186, 20, 0);
 		viewStack.Rotate(-90, 0, 1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(-17.25, 30, 0);
