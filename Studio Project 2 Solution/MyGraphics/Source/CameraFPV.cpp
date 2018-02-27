@@ -61,7 +61,7 @@ void CameraFPV::Update(double dt)
 		{
 			target = target - Vector3(-up.x*pitch, -up.y*pitch, -up.z*pitch);
 		}
-
+		//Basic WASD Movement
 		if (Application::IsKeyPressed(VK_RIGHT) || Application::IsKeyPressed('D')) // right
 		{
 			position += right * (float)(MOVEMENT_SPEED * dt);
@@ -101,16 +101,7 @@ void CameraFPV::Update(double dt)
 				target += view1 * (float)(MOVEMENT_SPEED * dt);
 			}
 		}
-		if (Application::IsKeyPressed(' ')) // +y
-		{
-			position += up * (float)(MOVEMENT_SPEED * dt);
-			target += up * (float)(MOVEMENT_SPEED * dt);
-		}
-		if (Application::IsKeyPressed(17)) // -y
-		{
-			position -= up * (float)(MOVEMENT_SPEED * dt);
-			target -= up * (float)(MOVEMENT_SPEED * dt);
-		}
+		//Sprinting
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
 			MOVEMENT_SPEED = 100.0f;
@@ -119,6 +110,7 @@ void CameraFPV::Update(double dt)
 		{
 			MOVEMENT_SPEED = 30.0f;
 		}
+		//Reset
 		if (Application::IsKeyPressed('R'))
 		{
 			Reset();
@@ -128,9 +120,23 @@ void CameraFPV::Update(double dt)
 		{
 			Reset();
 		}
-
+		//Mouse Camera Control
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
+
+		//Archieved
+		/*
+		if (Application::IsKeyPressed(' '))
+		{
+			position += up * (float)(MOVEMENT_SPEED * dt);
+			target += up * (float)(MOVEMENT_SPEED * dt);
+		}
+		if (Application::IsKeyPressed(17))
+		{
+			position -= up * (float)(MOVEMENT_SPEED * dt);
+			target -= up * (float)(MOVEMENT_SPEED * dt);
+		}
+		*/
 	}
 
 	//////////////////            FLYING CAMERA              //////////////////////

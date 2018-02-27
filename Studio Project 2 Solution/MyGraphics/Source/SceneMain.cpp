@@ -191,8 +191,8 @@ void SceneMain::Init()
 
 	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
-	meshList[GEO_EASTER1] = MeshBuilder::Generate2DQuad("easter1", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_EASTER1]->textureID = LoadTGA("Image//easter1.tga");
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
 
 	meshList[GEO_DINOEGG] = MeshBuilder::GenerateOBJ("objs1", "OBJ//dinoegg.obj");
 	meshList[GEO_DINOEGG]->textureID = LoadTGA("Image//dinoegg.tga");
@@ -380,7 +380,7 @@ void SceneMain::Render()
 			modelStack.Rotate(-90, 0, 0, 1);
 			modelStack.Translate(0, 0, 0);
 			modelStack.Scale(400, 400, 400);
-			RenderMesh(meshList[GEO_BOTTOM], light);
+			RenderMesh(meshList[GEO_BOTTOM], godlights);
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
@@ -473,12 +473,65 @@ void SceneMain::Render()
 		}
 	}
 
-	//Easter Eggs//
-	viewStack.PushMatrix();
-		viewStack.Translate(-190, 10, -190);
-		viewStack.Scale(10, 10, 10);
-		viewStack.Rotate(45, 0, 1, 0);
-		RenderMesh(meshList[GEO_EASTER1], false);
+	//Portals//
+	viewStack.PushMatrix(); // scene 1
+		viewStack.Translate(0, 20, -186);
+		viewStack.PushMatrix();
+			viewStack.Translate(-17.25, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "PTERODACTYL", (1, 1, 1));
+			viewStack.Translate(0.15, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "RACING", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix(); // scene 2
+		viewStack.Translate(-186, 20, 0);
+		viewStack.Rotate(90, 0, 1, 0);
+		viewStack.PushMatrix();
+			viewStack.Translate(-17.25, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "PTERODACTYL", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "NURSERY", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix(); // scene 3
+		viewStack.Translate(0, 20, 186);
+		viewStack.Rotate(180, 0, 1, 0);
+		viewStack.PushMatrix();
+			viewStack.Translate(-17.25, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "HUNTING AND", (1, 1, 1));
+			viewStack.Translate(-2, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "FORAGING", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix(); // scene 4
+		viewStack.Translate(186, 20, 0);
+		viewStack.Rotate(-90, 0, 1, 0);
+		viewStack.PushMatrix();
+			viewStack.Translate(-17.25, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "PTERODACTYL", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "VILLAGE", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
 	//End of Environment//

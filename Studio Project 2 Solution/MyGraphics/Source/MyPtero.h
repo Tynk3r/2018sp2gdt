@@ -41,6 +41,7 @@ public:
 	float pteroSize;
 	float pteroLocationX = 0;
 	float pteroLocationZ = 62.5;
+	float pteroLocationY = 0;
 
 	void newPtero(void);
 	void setFlightSpeed(float);
