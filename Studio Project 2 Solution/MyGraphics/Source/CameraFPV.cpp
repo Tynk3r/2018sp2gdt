@@ -104,11 +104,25 @@ void CameraFPV::Update(double dt)
 		//Sprinting
 		if (Application::IsKeyPressed(VK_LSHIFT))
 		{
-			MOVEMENT_SPEED = 100.0f;
+			switch (SceneManager::instance()->GetSceneID()) {
+			case SceneManager::SCENEID_2:
+				MOVEMENT_SPEED = 50.0f;
+				break;
+			default:
+				MOVEMENT_SPEED = 100.0f;
+				break;
+			}
 		}
 		else
 		{
-			MOVEMENT_SPEED = 30.0f;
+			switch (SceneManager::instance()->GetSceneID()) {
+			case SceneManager::SCENEID_2:
+				MOVEMENT_SPEED = 25.0f;
+				break;
+			default:
+				MOVEMENT_SPEED = 50.0f;
+				break;
+			}
 		}
 		//Reset
 		if (Application::IsKeyPressed('R'))
@@ -124,7 +138,7 @@ void CameraFPV::Update(double dt)
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
 
-		//Archieved
+		//Archived
 		/*
 		if (Application::IsKeyPressed(' '))
 		{
