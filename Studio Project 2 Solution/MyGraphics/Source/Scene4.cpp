@@ -273,19 +273,19 @@ void Scene4::Update(double dt)
 
 	switch (giantFactionQuest)
 	{
-	case 1:
+	case 2:
 		if (Inventory::instance()->items[ITEMS_BLUFRUIT] >= 30)
 		{
 			giantQuestDone = true;
 		}
 		break;
-	case 2:
+	case 3:
 		if ((Inventory::instance()->items[ITEMS_MEAT] >= 25) && (Inventory::instance()->items[ITEMS_TRAP] >= 25))
 		{
 			giantQuestDone = true;
 		}
 		break;
-	case 3:
+	case 4:
 		if (Inventory::instance()->items[ITEMS_CURRENCY] >= 500)
 		{
 			giantQuestDone = true;
