@@ -16,7 +16,6 @@
 #include "Shop.h"
 #include "Inventory.h"
 
-
 #include <iostream>
 #include <fstream>
 
@@ -106,6 +105,7 @@ class Scene4 : public Scene
 		GEO_NPC_SHOP,
 
 		GEO_TREE,
+		GEO_FERN,
 		GEO_PORTAL,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////

@@ -82,6 +82,8 @@ class Scene2 : public Scene
 		GEO_MEAT,
 		GEO_PORTAL,
 		GEO_MONITOR,
+		GEO_TREE,
+		GEO_ROCK,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,

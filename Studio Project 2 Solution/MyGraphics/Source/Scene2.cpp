@@ -208,6 +208,9 @@ void Scene2::Init()
 	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
 
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("tree", "OBJ//tree.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
+
 	objs[OBJ_FENCE].setBox(Vector3(100.0, 0, 25), 400, 10, 10); // left most fence and sizeX spans whole level
 	objs[OBJ_CAMPFIRE].setBox(Vector3(50, 0, 0), 0.1);
 	objs[OBJ_SKELETON].setBox(Vector3(-70, 0, 70), 2);
@@ -591,9 +594,32 @@ void Scene2::Render()
 			modelStack.Rotate(-90, 1, 0, 0);
 			modelStack.Rotate(-90, 0, 0, 1);
 			modelStack.Translate(0, 0, 0);
-			modelStack.Scale(400, 400, 400);
+			modelStack.Scale(800, 800, 800);
 			RenderMesh(meshList[GEO_BOTTOM], light);
 		modelStack.PopMatrix();
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	for (int row = 0; row < 30; row++)
+	{
+		for (int col = 0; col < 30; col++)
+		{
+			int moveRow = (300 - (row * 20));
+			int moveCol = (300 - (col * 20));
+
+			if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
+			{
+				if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -80))
+				{
+					viewStack.PushMatrix();
+					viewStack.Translate((moveRow), -20, (moveCol));
+					viewStack.Scale(4, 4, 4);
+					RenderMesh(meshList[GEO_TREE], godlights);
+					viewStack.PopMatrix();
+				}
+			}
+		}
+	}
 	viewStack.PopMatrix();
 
 	// pterodactyl
