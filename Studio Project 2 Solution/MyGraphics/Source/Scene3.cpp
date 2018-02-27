@@ -24,6 +24,7 @@ void Scene3::Init()
 {	
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
+	godlights = true;
 
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
 
@@ -252,14 +253,16 @@ void Scene3::Init()
 	meshList[GEO_TOP] = MeshBuilder::Generate2DQuad("top", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 	meshList[GEO_TOP]->textureID = LoadTGA("Image//maintop.tga");
 	meshList[GEO_BOTTOM] = MeshBuilder::Generate2DQuad("bottom", 1.0f, 1.0f, 1.f, 1.f, 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//mainbottom.tga");
+	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
+
 	meshList[GEO_EXPLAINTEXT] = MeshBuilder::GenerateText("foragingInstruction", 16, 16);
 	meshList[GEO_EXPLAINTEXT]->textureID = LoadTGA("Image//calibri.tga");
 	meshList[GEO_INSTRUCTIONS] = MeshBuilder::Generate2DQuad("InstructionInterface", 1.0f, 1.0f, 1.0f, 1.0f, 1.0f);
 	meshList[GEO_INSTRUCTIONS]->textureID = LoadTGA("Image//instructionInterface.tga");
 
+	//Environment Mesh Codes
 	meshList[GEO_TRAPDEFAULT] = MeshBuilder::GenerateOBJ("defaultTrap", "OBJ//scene3Trap.obj");
 	meshList[GEO_TRAPDEFAULT]->textureID = LoadTGA("Image//scene3Trap.tga");
 	meshList[GEO_TRAPCAUGHT] = MeshBuilder::GenerateOBJ("caughtTrap", "OBJ//scene3Trapped.obj");
@@ -273,6 +276,22 @@ void Scene3::Init()
 
 	meshList[GEO_WHEELBARROW] = MeshBuilder::GenerateOBJ("wheelbarrow", "OBJ//wheelBarrow.obj");
 	meshList[GEO_WHEELBARROW]->textureID = LoadTGA("Image//wheelBarrow.tga");
+
+	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("fern", "OBJ//fern.obj");
+	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
+
+	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("tree", "OBJ//tree.obj");
+	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
+
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("border", "OBJ//border.obj");
+	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock", "OBJ//rock.obj");
+	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock1.tga");
+
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
+
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -295,7 +314,13 @@ void Scene3::Init()
 	meshList[GEO_PLACEHOLDER_UI_BLACK] = MeshBuilder::Generate2DQuad("placeholderTextBoxBlack", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT] = MeshBuilder::Generate2DQuad("placeholderGameObject", 1.0f, 1.0f, 1.f, 0.f, 0.f);
 
-
+	//Set Object Positions//
+	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
+	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
+	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
+	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 50);
+	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 50);
+	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 50);
 	objs[OBJ_WHEELBARROW].setBox(Vector3(95, 0, 0), 40, 10, 20);
 }
 
@@ -526,6 +551,7 @@ void Scene3::Update(double dt)
 	{
 		camera.Update(dt);
 	}
+	rotateMain++;
 }
 
 bool Scene3::getFruuts(int fruitsWon)
@@ -635,26 +661,101 @@ void Scene3::Render()
 	}
 
 	viewStack.PushMatrix();
-		viewStack.PushMatrix();
-			viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
-			RenderSkybox(500.0f, false);
-		viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
+	RenderSkybox(700.0f, false);
+	viewStack.PopMatrix();
 
-		modelStack.PushMatrix();
-			modelStack.Rotate(-90, 1, 0, 0);
-			modelStack.Rotate(-90, 0, 0, 1);
-			modelStack.Translate(0, 0, 0);
-			modelStack.Scale(400, 400, 400);
-			RenderMesh(meshList[GEO_BOTTOM], light);
-		modelStack.PopMatrix();
-	viewStack.PopMatrix();	
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(400, 400, 400);
+	RenderMesh(meshList[GEO_BOTTOM], godlights);
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	
+	//Environment//
+	//Trees//
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[1].getPos().x, objs[1].getPos().y, objs[1].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(270, 0, 1, 0);
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
 
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[2].getPos().x, objs[2].getPos().y, objs[2].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[3].getPos().x, objs[3].getPos().y, objs[3].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(90, 0, 1, 0);
+	RenderMesh(meshList[GEO_TREE], godlights);
+	viewStack.PopMatrix();
+
+	//Rocks//
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[4].getPos().x, objs[4].getPos().y, objs[4].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[5].getPos().x, objs[5].getPos().y, objs[5].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(objs[6].getPos().x, objs[6].getPos().y, objs[6].getPos().z);
+	viewStack.Scale(4, 4, 4);
+	viewStack.Rotate(0, 0, 1, 0);
+	RenderMesh(meshList[GEO_ROCK], godlights);
+	viewStack.PopMatrix();
+
+	//BORDER//
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 0, -10);
+	viewStack.Scale(30, 40, 30);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 0, -10);
+	viewStack.Scale(35, 50, 35);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
+
+	//Fern//
+	for (int i = 0; i < 6; i++)
+	{
+		for (int j = 1; j < 6; j++)
+		{
+			viewStack.PushMatrix();
+			//viewStack.Rotate(12.5*i, 0, 1, 0);
+			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
+			viewStack.Scale(8, 8, 8);
+			viewStack.Rotate(12.5*i, 0, 1, 0);
+			RenderMesh(meshList[GEO_FERN], godlights);
+			viewStack.PopMatrix();
+		}
+	}
+	//End of environment//
+	
 	// BUSH 1 // 
 	viewStack.PushMatrix();
 	viewStack.Translate(110, 0, 70);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(70, 0, 1, 0);
-	RenderMesh(meshList[GEO_BUSH], light);
+	RenderMesh(meshList[GEO_BUSH], godlights);
 	viewStack.PopMatrix();
 
 	if (bushesHarvested[0] == false) // Bush 1 With fruits
@@ -662,7 +763,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(110, 30, 70);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_REDFRUIT], light);
+		RenderMesh(meshList[GEO_REDFRUIT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -672,7 +773,7 @@ void Scene3::Render()
 		viewStack.Translate(90, 0, 70);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(70, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -682,7 +783,7 @@ void Scene3::Render()
 		viewStack.Translate(90, 0, 70);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(70, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -691,7 +792,7 @@ void Scene3::Render()
 	viewStack.Translate(-30, 0, 50);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(120, 0, 1, 0);
-	RenderMesh(meshList[GEO_BUSH], light);
+	RenderMesh(meshList[GEO_BUSH], godlights);
 	viewStack.PopMatrix();
 
 	if (bushesHarvested[1] == false) // Bush 2 With fruits
@@ -699,7 +800,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(-30, 30, 50);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_REDFRUIT], light);
+		RenderMesh(meshList[GEO_REDFRUIT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -709,7 +810,7 @@ void Scene3::Render()
 		viewStack.Translate(-18, 0, 36);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-50, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -719,7 +820,7 @@ void Scene3::Render()
 		viewStack.Translate(-18, 0, 36);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-50, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -728,7 +829,7 @@ void Scene3::Render()
 	viewStack.Translate(150, 0, -90);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(10, 0, 1, 0);
-	RenderMesh(meshList[GEO_BUSH], light);
+	RenderMesh(meshList[GEO_BUSH], godlights);
 	viewStack.PopMatrix();
 
 	if (bushesHarvested[2] == false) // Bush 3 With fruits
@@ -736,7 +837,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(150, 30, -90);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_REDFRUIT], light);
+		RenderMesh(meshList[GEO_REDFRUIT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -746,7 +847,7 @@ void Scene3::Render()
 		viewStack.Translate(130, 0, -77);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-230, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -756,7 +857,7 @@ void Scene3::Render()
 		viewStack.Translate(130, 0, -77);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-230, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -766,14 +867,14 @@ void Scene3::Render()
 	viewStack.Translate(80, 0, -150);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(90, 0, 1, 0);
-	RenderMesh(meshList[GEO_BUSH], light);
+	RenderMesh(meshList[GEO_BUSH], godlights);
 	viewStack.PopMatrix();
 	if (bushesHarvested[3] == false) // Bush 4 With fruits
 	{
 		viewStack.PushMatrix();
 		viewStack.Translate(80, 30, -150);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_REDFRUIT], light);
+		RenderMesh(meshList[GEO_REDFRUIT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -783,7 +884,7 @@ void Scene3::Render()
 		viewStack.Translate(66, 0, -137);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-230, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -793,7 +894,7 @@ void Scene3::Render()
 		viewStack.Translate(66, 0, -137);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-230, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -802,7 +903,7 @@ void Scene3::Render()
 	viewStack.Translate(-70, 0, -100);
 	viewStack.Scale(15, 15, 15);
 	viewStack.Rotate(50, 0, 1, 0);
-	RenderMesh(meshList[GEO_BUSH], light);
+	RenderMesh(meshList[GEO_BUSH], godlights);
 	viewStack.PopMatrix();
 
 	if (bushesHarvested[4] == false) // Bush 5 With fruits
@@ -810,7 +911,7 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 		viewStack.Translate(-70, 30, -100);
 		viewStack.Scale(15, 15, 15);
-		RenderMesh(meshList[GEO_REDFRUIT], light);
+		RenderMesh(meshList[GEO_REDFRUIT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -820,7 +921,7 @@ void Scene3::Render()
 		viewStack.Translate(-91, 0, -95);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-100, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPDEFAULT], light);
+		RenderMesh(meshList[GEO_TRAPDEFAULT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -830,7 +931,7 @@ void Scene3::Render()
 		viewStack.Translate(-91, 0, -95);
 		viewStack.Scale(15, 15, 15);
 		viewStack.Rotate(-100, 0, 1, 0);
-		RenderMesh(meshList[GEO_TRAPCAUGHT], light);
+		RenderMesh(meshList[GEO_TRAPCAUGHT], godlights);
 		viewStack.PopMatrix();
 	}
 
@@ -838,8 +939,25 @@ void Scene3::Render()
 	viewStack.Translate(100, 8, 0);
 	viewStack.Scale(15, 15, 15);
 	//viewStack.Rotate(72, 0, 1, 0);
-	RenderMesh(meshList[GEO_WHEELBARROW], false);
+	RenderMesh(meshList[GEO_WHEELBARROW], godlights);
 	viewStack.PopMatrix();
+
+	// portal
+	viewStack.PushMatrix();
+		viewStack.Translate(0, 20, -186);
+		viewStack.PushMatrix();
+			viewStack.Translate(-10, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+
 
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);
@@ -1006,6 +1124,14 @@ void Scene3::RenderSkybox(float d, bool light)
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_TOP], light);
 	modelStack.PopMatrix();
+
+	/*modelStack.PushMatrix();
+	modelStack.Rotate(-90, 1, 0, 0);
+	modelStack.Rotate(-90, 0, 0, 1);
+	modelStack.Translate(0, 0, 0);
+	modelStack.Scale(d, d, d);
+	RenderMesh(meshList[GEO_BOTTOM], light);
+	modelStack.PopMatrix();*/
 }
 
 void Scene3::RenderText(Mesh* mesh, std::string text, Color color)
@@ -1092,7 +1218,7 @@ void Scene3::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
 	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); // UI should not have light
+	RenderMesh(mesh, godlights); // UI should not have light, but i added for fun
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

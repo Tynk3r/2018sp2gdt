@@ -270,7 +270,7 @@ void Scene1::Init()
 		objs[i].setID(i);
 	}
 	//Last Ring
-	objs[OBJ_RING20].setBox(Vector3(0, 100, 0), 5);
+	objs[OBJ_RING20].setBox(Vector3(0, 100, 0), 8);
 	objs[OBJ_RING20].setID(20);
 
 	camera.horizMove = 0.0;

@@ -92,7 +92,7 @@ class SceneMain : public Scene
 		GEO_FIREBASE,
 		GEO_FIREWOOD,
 		GEO_BORDER,
-		GEO_EASTER1,
+		GEO_PORTAL,
 		
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,

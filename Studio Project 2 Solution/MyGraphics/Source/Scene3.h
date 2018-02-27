@@ -93,6 +93,7 @@ class Scene3 : public Scene
 		GEO_WHEELBARROW,
 		GEO_EXPLAINTEXT,
 		GEO_INSTRUCTIONS,
+		GEO_PORTAL,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -109,12 +110,24 @@ class Scene3 : public Scene
 		GEO_PLACEHOLDER_UI_WHITE,
 		GEO_PLACEHOLDER_UI_BLACK,
 		GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT,
+
+		GEO_FERN,
+		GEO_TREE,
+		GEO_ROCK,
+		GEO_BORDER,
+
 		NUM_GEOMETRY,
 	};
 
 	enum OBJECTS
 	{
 		OBJ_WHEELBARROW,
+		OBJ_TREE1,
+		OBJ_TREE2,
+		OBJ_TREE3,
+		OBJ_ROCK1,
+		OBJ_ROCK2,
+		OBJ_ROCK3,
 
 		NUM_OBJECTS,
 	};

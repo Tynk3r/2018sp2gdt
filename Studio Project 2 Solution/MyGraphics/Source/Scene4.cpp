@@ -206,6 +206,9 @@ void Scene4::Init()
 	meshList[GEO_TREE] = MeshBuilder::GenerateOBJ("Tree", "OBJ//tree.obj");
 	meshList[GEO_TREE]->textureID = LoadTGA("Image//tree.tga");
 
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
+
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
 	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
@@ -521,6 +524,7 @@ void Scene4::Update(double dt)
 		}
 	}
 	////////////////////////////////////////////////////////////////// END OF SHOP CODE ////////////////////////////////////////////////////////////////////
+	rotateMain++;
 }
 
 void Scene4::Render()
@@ -682,6 +686,22 @@ void Scene4::Render()
 
 	viewStack.PushMatrix();
 		RenderNPC();
+	viewStack.PopMatrix();
+
+	// portal
+	viewStack.PushMatrix();
+		viewStack.Translate(0, 20, -186);
+		viewStack.PushMatrix();
+			viewStack.Translate(-10, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
 	std::ostringstream ah;
