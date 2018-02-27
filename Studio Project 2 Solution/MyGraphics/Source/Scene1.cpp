@@ -8,6 +8,7 @@
 #include "LoadTGA.h"
 #include <string>
 #include <sstream>
+#include "Inventory.h"
 
 Scene1::Scene1()
 {
@@ -775,6 +776,8 @@ void Scene1::HandleRingCollide(int id)
 			if (id == objs[i].getID())
 			{
 				points += 10;
+				Inventory::instance()->items[ITEMS_CURRENCY] += 10;
+				if (Inventory::instance()->items[ITEMS_CURRENCY] >= 999) { Inventory::instance()->items[ITEMS_CURRENCY] = 999; };
 				currentRing.setID(i+1);
 			}
 		}
@@ -784,6 +787,8 @@ void Scene1::HandleRingCollide(int id)
 		if (id == objs[OBJ_RING20].getID())
 		{
 			points += 50;
+			Inventory::instance()->items[ITEMS_CURRENCY] += 50;
+			if (Inventory::instance()->items[ITEMS_CURRENCY] >= 999) { Inventory::instance()->items[ITEMS_CURRENCY] = 999; };
 			currentRing.setID(-1);
 		}
 	}

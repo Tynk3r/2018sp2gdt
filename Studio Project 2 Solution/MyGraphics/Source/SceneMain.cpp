@@ -246,7 +246,7 @@ void SceneMain::Update(double dt)
 	Inventory::instance()->Update();
 
 	// Portals
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != MyPtero::instance()->P_EGG)
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage != (MyPtero::instance()->P_BABY || MyPtero::instance()->P_EGG))
 	{
 		if (!developerMode)
 		{
@@ -306,6 +306,30 @@ void SceneMain::Update(double dt)
 		if (developerMode)
 		{
 			Race1 = false;
+		}
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD5))
+	{
+		if (developerMode)
+		{
+			Inventory::instance()->items[ITEMS_CURRENCY] = 999;
+			Inventory::instance()->items[ITEMS_BLUFRUIT] = 999;
+			Inventory::instance()->items[ITEMS_REDFRUIT] = 999;
+			Inventory::instance()->items[ITEMS_MEAT] = 999;
+			Inventory::instance()->items[ITEMS_TRAP] = 999;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 999;
+		}
+	}
+	if (Application::IsKeyPressed(VK_NUMPAD6))
+	{
+		if (developerMode)
+		{
+			Inventory::instance()->items[ITEMS_CURRENCY] = 0;
+			Inventory::instance()->items[ITEMS_BLUFRUIT] = 0;
+			Inventory::instance()->items[ITEMS_REDFRUIT] = 0;
+			Inventory::instance()->items[ITEMS_MEAT] = 0;
+			Inventory::instance()->items[ITEMS_TRAP] = 0;
+			Inventory::instance()->items[ITEMS_INCUBATOR] = 0;
 		}
 	}
 	
@@ -611,7 +635,7 @@ void SceneMain::Render()
 	std::string str = ah.str();
 	RenderTextOnScreen(meshList[GEO_TEXT], "FPS:" + str, Color(0, 1, 0), 2, 33, 29);
 
-	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG)
+	if (camera.position.z <= -185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f && (MyPtero::instance()->pteroStage == MyPtero::instance()->P_EGG || MyPtero::instance()->pteroStage == MyPtero::instance()->P_BABY))
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "Your Pterodactyl can't fly yet!", Color(1, 0.1, 0.1), 2.3, 4, 11);
 	}

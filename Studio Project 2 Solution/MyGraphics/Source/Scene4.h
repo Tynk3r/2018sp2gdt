@@ -107,6 +107,12 @@ class Scene4 : public Scene
 		GEO_TREE,
 		GEO_FERN,
 		GEO_PORTAL,
+		GEO_BORDER,
+
+		GEO_PTERO1,
+		GEO_PTERO2,
+		GEO_PTERO3,
+		GEO_PTERO4,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -171,6 +177,19 @@ private:
 
 	bool godlights = false;
 	float rotateMain = 0;
+
+	float ptero1LocationX = 0;
+	float ptero1LocationZ = 0;
+	float ptero1Direction = 0;
+	float ptero2LocationX = 0;
+	float ptero2LocationZ = 0;
+	float ptero2Direction = 90;
+	float ptero3LocationX = 0;
+	float ptero3LocationZ = 0;
+	float ptero3Direction = 180;
+	float ptero4LocationX = 0;
+	float ptero4LocationZ = 0;
+	float ptero4Direction = 270;
 
 	// For shop
 	SHOP shop;

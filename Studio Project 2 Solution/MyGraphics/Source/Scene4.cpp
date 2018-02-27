@@ -208,6 +208,9 @@ void Scene4::Init()
 	meshList[GEO_FERN] = MeshBuilder::GenerateOBJ("fern", "OBJ//fern.obj");
 	meshList[GEO_FERN]->textureID = LoadTGA("Image//fern.tga");
 
+	meshList[GEO_BORDER] = MeshBuilder::GenerateOBJ("border", "OBJ//border.obj");
+	meshList[GEO_BORDER]->textureID = LoadTGA("Image//rock1.tga");
+
 	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
 
@@ -232,6 +235,15 @@ void Scene4::Init()
 	meshList[GEO_NPC_HUNTER]->textureID = LoadTGA("Image//NPC_Hunter.tga");
 	meshList[GEO_NPC_SHOP] = MeshBuilder::GenerateOBJ("npc_shop", "OBJ//NPC_Shop.obj");
 	meshList[GEO_NPC_SHOP]->textureID = LoadTGA("Image//NPC_Shop.tga");
+
+	meshList[GEO_PTERO1] = MeshBuilder::GenerateOBJ("ptero1", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO1]->textureID = LoadTGA("Image//greendino.tga");
+	meshList[GEO_PTERO2] = MeshBuilder::GenerateOBJ("ptero2", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO2]->textureID = LoadTGA("Image//reddino.tga");
+	meshList[GEO_PTERO3] = MeshBuilder::GenerateOBJ("ptero3", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO3]->textureID = LoadTGA("Image//purpledino.tga");
+	meshList[GEO_PTERO4] = MeshBuilder::GenerateOBJ("ptero4", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO4]->textureID = LoadTGA("Image//reddino.tga");
 
 	meshList[GEO_PLACEHOLDER_NPC] = MeshBuilder::GenerateCube("placeholderNPC", Color(1, 1, 1), 1, 5, 1);
 	meshList[GEO_PLACEHOLDER_TEXT_BOX1] = MeshBuilder::Generate2DQuad("placeholderTextBox", 1.0f, 1.0f, 1.f, 1.f, 1.f);
@@ -526,6 +538,616 @@ void Scene4::Update(double dt)
 		}
 	}
 	////////////////////////////////////////////////////////////////// END OF SHOP CODE ////////////////////////////////////////////////////////////////////
+	
+	// Ptero movement
+	int r = rand() % 200 + 1;
+	switch ((int)ptero1Direction)
+	{
+	case 180:	// Front
+		switch (r)
+		{
+		case 1: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r)
+		{
+		case 1: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		default: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero1Direction = 180;
+		break;
+	}
+	r = rand() % 300 + 1;
+	switch ((int)ptero2Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 2: // front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r)
+		{
+		case 1: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		default: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero2Direction = 180;
+		break;
+	}
+	r = rand() % 400 + 1;
+	switch ((int)ptero3Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r)
+		{
+		case 1: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		default: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero3Direction = 180;
+		break;
+	}
+	r = rand() % 500 + 1;
+	switch ((int)ptero4Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		default: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero4Direction = 180;
+		break;
+	}
 	rotateMain++;
 }
 
@@ -659,27 +1281,77 @@ void Scene4::Render()
 				viewStack.PopMatrix();
 			}
 		}
+<<<<<<< HEAD
 		// End of environment //
+=======
+
+		//BORDER//
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 0, -10);
+		viewStack.Scale(35, 45, 35);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.PopMatrix();
+
+		viewStack.PushMatrix();
+		viewStack.Translate(0, 0, -10);
+		viewStack.Scale(40, 60, 40);
+		viewStack.Rotate(45, 0, 1, 0);
+		RenderMesh(meshList[GEO_BORDER], godlights);
+		viewStack.PopMatrix();
+
+		//End of environment//
+>>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
+	viewStack.PopMatrix();
+
+	// portal
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 20, -200);
+	viewStack.PushMatrix();
+	viewStack.Translate(-10, 30, 0);
+	viewStack.Scale(3.75, 3.75, 3.75);
+	RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+	viewStack.Translate(-0.5, -1.4, 0);
+	viewStack.Scale(2, 2, 2);
+	RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+	viewStack.PopMatrix();
+	viewStack.Rotate(rotateMain, 0, 0, 1);
+	viewStack.Scale(20, 20, 20);
+	RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+
+<<<<<<< HEAD
+	// Portal
+=======
+	// pterodactyls
+>>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero1LocationX, 100, ptero1LocationZ);
+	viewStack.Rotate(ptero1Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO1], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero2LocationX, 75, ptero2LocationZ);
+	viewStack.Rotate(ptero2Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO2], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero3LocationX, 50, ptero3LocationZ);
+	viewStack.Rotate(ptero3Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO3], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero4LocationX, 50, ptero4LocationZ);
+	viewStack.Rotate(ptero4Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO4], godlights);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 		RenderNPC();
-	viewStack.PopMatrix();
-
-	// Portal
-	viewStack.PushMatrix();
-		viewStack.Translate(0, 20, -200);
-		viewStack.PushMatrix();
-			viewStack.Translate(-10, 30, 0);
-			viewStack.Scale(3.75, 3.75, 3.75);
-			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
-			viewStack.Translate(-0.5, -1.4, 0);
-			viewStack.Scale(2, 2, 2);
-			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
-		viewStack.PopMatrix();
-		viewStack.Rotate(rotateMain, 0, 0, 1);
-		viewStack.Scale(20, 20, 20);
-		RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
 	std::ostringstream ah;
@@ -1667,7 +2339,11 @@ void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 		modelStack.LoadIdentity();
 		modelStack.Translate(x, y, 0);
 		modelStack.Scale(sizex, sizey, 1);
+<<<<<<< HEAD
 		RenderMesh(mesh, false); // UI should not have light
+=======
+		RenderMesh(mesh, godlights); //UI should not have light
+>>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

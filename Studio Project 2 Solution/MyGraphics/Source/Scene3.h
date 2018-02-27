@@ -111,6 +111,10 @@ class Scene3 : public Scene
 		GEO_TREE,
 		GEO_ROCK,
 		GEO_BORDER,
+		GEO_PTERO1,
+		GEO_PTERO2,
+		GEO_PTERO3,
+		GEO_PTERO4,
 
 		NUM_GEOMETRY,
 	};
@@ -183,6 +187,19 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey);
 	bool collision(Vector3);
 	float rotateMain = 0;
+	
+	float ptero1LocationX = 0;
+	float ptero1LocationZ = 0;
+	float ptero1Direction = 0;
+	float ptero2LocationX = 0;
+	float ptero2LocationZ = 0;
+	float ptero2Direction = 90;
+	float ptero3LocationX = 0;
+	float ptero3LocationZ = 0;
+	float ptero3Direction = 180;
+	float ptero4LocationX = 0;
+	float ptero4LocationZ = 0;
+	float ptero4Direction = 270;
 
 	int fruitsWon = 0;					// Number of fruits won in a game
 	int gameStartDelay = 0;				// Stop instant press at the start

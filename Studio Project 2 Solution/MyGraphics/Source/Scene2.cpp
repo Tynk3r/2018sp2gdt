@@ -11,7 +11,6 @@
 #include <sstream>
 #include "Inventory.h"
 
-
 Scene2::Scene2()
 {
 	MyPtero::instance()->pteroStage = MyPtero::P_BABY;
@@ -651,13 +650,14 @@ void Scene2::Render()
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
+	// border
 	viewStack.PushMatrix();
-	for (int row = 0; row < 30; row++)
+	for (int row = 0; row < 20; row++)
 	{
-		for (int col = 0; col < 30; col++)
+		for (int col = 0; col < 20; col++)
 		{
-			int moveRow = (300 - (row * 20));
-			int moveCol = (300 - (col * 20));
+			int moveRow = (200 - (row * 20));
+			int moveCol = (200 - (col * 20));
 
 			if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
 			{
@@ -665,7 +665,7 @@ void Scene2::Render()
 				{
 					viewStack.PushMatrix();
 					viewStack.Translate((moveRow), -20, (moveCol));
-					viewStack.Scale(4, 4, 4);
+					viewStack.Scale(2, 4, 2);
 					RenderMesh(meshList[GEO_TREE], godlights);
 					viewStack.PopMatrix();
 				}

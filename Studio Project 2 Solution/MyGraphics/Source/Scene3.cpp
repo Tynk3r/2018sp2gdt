@@ -23,7 +23,7 @@ void Scene3::Init()
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 	godlights = true;
 
-	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
+	camera.Init(Vector3(0, 20, 20), Vector3(0, 20, 1), Vector3(0, 1, 0)); // Init camera
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -289,6 +289,15 @@ void Scene3::Init()
 	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
 
+	meshList[GEO_PTERO1] = MeshBuilder::GenerateOBJ("ptero1", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO1]->textureID = LoadTGA("Image//greendino.tga");
+	meshList[GEO_PTERO2] = MeshBuilder::GenerateOBJ("ptero2", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO2]->textureID = LoadTGA("Image//reddino.tga");
+	meshList[GEO_PTERO3] = MeshBuilder::GenerateOBJ("ptero3", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO3]->textureID = LoadTGA("Image//purpledino.tga");
+	meshList[GEO_PTERO4] = MeshBuilder::GenerateOBJ("ptero4", "OBJ//pterodactyl.obj");
+	meshList[GEO_PTERO4]->textureID = LoadTGA("Image//reddino.tga");
+
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -311,13 +320,13 @@ void Scene3::Init()
 	meshList[GEO_PLACEHOLDER_UI_BLACK] = MeshBuilder::Generate2DQuad("placeholderTextBoxBlack", 1.0f, 1.0f, 0.f, 0.f, 0.f);
 	meshList[GEO_PLACEHOLDER_GETTING_FRUITS_GAME_OBJECT] = MeshBuilder::Generate2DQuad("placeholderGameObject", 1.0f, 1.0f, 1.f, 0.f, 0.f);
 
-	// Set Object Positions//
-	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 8, 40, 8);
-	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 8, 40, 8);
-	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 8, 40, 8);
-	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 50);
-	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 50);
-	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 50);
+	// Set Object Positions //
+	objs[OBJ_TREE1].setBox(Vector3(-50, -16, -30), 20, 40, 20);
+	objs[OBJ_TREE2].setBox(Vector3(-80, -16, -100), 20, 40, 20);
+	objs[OBJ_TREE3].setBox(Vector3(50, -16, -10), 20, 40, 20);
+	objs[OBJ_ROCK1].setBox(Vector3(100, 0, -80), 60);
+	objs[OBJ_ROCK2].setBox(Vector3(-140, 0, 80), 60);
+	objs[OBJ_ROCK3].setBox(Vector3(-80, 0, -30), 60);
 	objs[OBJ_WHEELBARROW].setBox(Vector3(95, 0, 0), 40, 10, 20);
 }
 
@@ -547,6 +556,616 @@ void Scene3::Update(double dt)
 	else
 	{
 		camera.Update(dt);
+	}
+
+	// Ptero movement
+	int r = rand() % 200 + 1;
+	switch ((int)ptero1Direction)
+	{
+	case 180:	// Front
+		switch (r)
+		{
+		case 1: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r)
+		{
+		case 1: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		default: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero1LocationX += 1.0f;
+			if (ptero1LocationX <= -200.0f || ptero1LocationX >= 200.0f)
+			{
+				ptero1LocationX -= 1.0f;
+			}
+			ptero1Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero1LocationZ -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ += 1.0f;
+			}
+			ptero1Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero1LocationZ += 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationZ -= 1.0f;
+			}
+			ptero1Direction = 0.0f;
+			break;
+		default: // Left
+			ptero1LocationX -= 1.0f;
+			if (ptero1LocationZ <= -200.0f || ptero1LocationZ >= 200.0f)
+			{
+				ptero1LocationX += 1.0f;
+			}
+			ptero1Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero1Direction = 180;
+		break;
+	}
+	r = rand() % 300 + 1;
+	switch ((int)ptero2Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 2: // front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		default: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r)
+		{
+		case 1: // Right
+			ptero2LocationX += 1.0f;
+			if (ptero2LocationX <= -200.0f || ptero2LocationX >= 200.0f)
+			{
+				ptero2LocationX -= 1.0f;
+			}
+			ptero2Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero2LocationZ -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ += 1.0f;
+			}
+			ptero2Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero2LocationZ += 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationZ -= 1.0f;
+			}
+			ptero2Direction = 0.0f;
+			break;
+		default: // Left
+			ptero2LocationX -= 1.0f;
+			if (ptero2LocationZ <= -200.0f || ptero2LocationZ >= 200.0f)
+			{
+				ptero2LocationX += 1.0f;
+			}
+			ptero2Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero2Direction = 180;
+		break;
+	}
+	r = rand() % 400 + 1;
+	switch ((int)ptero3Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r)
+		{
+		case 1: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		default: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero3LocationX += 1.0f;
+			if (ptero3LocationX <= -200.0f || ptero3LocationX >= 200.0f)
+			{
+				ptero3LocationX -= 1.0f;
+			}
+			ptero3Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero3LocationZ -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ += 1.0f;
+			}
+			ptero3Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero3LocationZ += 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationZ -= 1.0f;
+			}
+			ptero3Direction = 0.0f;
+			break;
+		default: // Left
+			ptero3LocationX -= 1.0f;
+			if (ptero3LocationZ <= -200.0f || ptero3LocationZ >= 200.0f)
+			{
+				ptero3LocationX += 1.0f;
+			}
+			ptero3Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero3Direction = 180;
+		break;
+	}
+	r = rand() % 500 + 1;
+	switch ((int)ptero4Direction)
+	{
+	case 180:	// Front
+		switch (r) {
+		case 1: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		case 2: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		}
+		break;
+	case 90:	// Right
+		switch (r) {
+		case 1: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		}
+		break;
+	case 0:		// Back
+		switch (r) {
+		case 1: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		default: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		}
+		break;
+	case 270:	// Left
+		switch (r) {
+		case 1: // Right
+			ptero4LocationX += 1.0f;
+			if (ptero4LocationX <= -200.0f || ptero4LocationX >= 200.0f)
+			{
+				ptero4LocationX -= 1.0f;
+			}
+			ptero4Direction = 90.0f;
+			break;
+		case 2: // Front
+			ptero4LocationZ -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ += 1.0f;
+			}
+			ptero4Direction = 180.0f;
+			break;
+		case 3: // Back
+			ptero4LocationZ += 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationZ -= 1.0f;
+			}
+			ptero4Direction = 0.0f;
+			break;
+		default: // Left
+			ptero4LocationX -= 1.0f;
+			if (ptero4LocationZ <= -200.0f || ptero4LocationZ >= 200.0f)
+			{
+				ptero4LocationX += 1.0f;
+			}
+			ptero4Direction = 270.0f;
+			break;
+		}
+		break;
+	default:
+		ptero4Direction = 180;
+		break;
 	}
 	rotateMain++;
 }
@@ -960,7 +1579,37 @@ void Scene3::Render()
 	RenderMesh(meshList[GEO_WHEELBARROW], godlights);
 	viewStack.PopMatrix();
 
+<<<<<<< HEAD
 	// Portal
+=======
+	// pterodactyls
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero1LocationX, 50, ptero1LocationZ);
+	viewStack.Rotate(ptero1Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO1], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero2LocationX, 50, ptero2LocationZ);
+	viewStack.Rotate(ptero2Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO2], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero3LocationX, 75, ptero3LocationZ);
+	viewStack.Rotate(ptero3Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO3], godlights);
+	viewStack.PopMatrix();
+	viewStack.PushMatrix();
+	viewStack.Translate(ptero4LocationX, 100, ptero4LocationZ);
+	viewStack.Rotate(ptero4Direction, 0, 1, 0);
+	viewStack.Scale(40, 40, 40);
+	RenderMesh(meshList[GEO_PTERO4], godlights);
+	viewStack.PopMatrix();
+
+	// portal
+>>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
