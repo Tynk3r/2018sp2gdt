@@ -217,21 +217,25 @@ void Scene2::Init()
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->incubating = false;
+		MyPtero::instance()->pteroLocationY = 0;
 		break;
 	case MyPtero::P_BABY:
 		if (!MyPtero::instance()->hungry) {
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->hungry = true;
+		MyPtero::instance()->pteroLocationY = 10;
 		break;
 	case MyPtero::P_ADOLESCENT:
 		if (!MyPtero::instance()->hungry) {
 			MyPtero::instance()->pteroStage++;
 		}
 		MyPtero::instance()->hungry = true;
+		MyPtero::instance()->pteroLocationY = 15;
 		break;
 	case MyPtero::P_ADULT:
 		MyPtero::instance()->hungry = true;
+		MyPtero::instance()->pteroLocationY = 25;
 		break;
 	default:
 		break;
@@ -268,7 +272,7 @@ void Scene2::Update(double dt)
 	// feed/incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
-		//feeding = true;
+		feeding = true;
 		meatLocationX = camera.position.x;
 		meatLocationY = camera.position.y;
 		meatLocationZ = camera.position.z;
@@ -306,6 +310,24 @@ void Scene2::Update(double dt)
 	// ptero movement
 	int r = rand() % 200 + 1;
 	if (!feeding && feedingDelay == 0) {
+		//reset Y pos
+		switch (MyPtero::instance()->pteroStage) {
+		case MyPtero::P_EGG:
+			MyPtero::instance()->pteroLocationY = 0;
+			break;
+		case MyPtero::P_BABY:
+			MyPtero::instance()->pteroLocationY = 10;
+			break;
+		case MyPtero::P_ADOLESCENT:
+			MyPtero::instance()->pteroLocationY = 15;
+			break;
+		case MyPtero::P_ADULT:
+			MyPtero::instance()->pteroLocationY = 25;
+			break;
+		default:
+			break;
+		}
+		//change X and Z pos
 		switch ((int)MyPtero::instance()->pteroDirection) {
 		case 180:	// front
 			switch (r) {
@@ -507,6 +529,9 @@ void Scene2::Update(double dt)
 			meatLocationZ++;
 		}
 	}
+	if (MyPtero::instance()->pteroLocationX == meatLocationX && MyPtero::instance()->pteroLocationZ == meatLocationZ && MyPtero::instance()->pteroLocationY != meatLocationY + 5) {
+		MyPtero::instance()->pteroLocationY -= MyPtero::instance()->pteroMovementSpeed;
+	}
 }
 
 void Scene2::Render()
@@ -556,20 +581,21 @@ void Scene2::Render()
 	switch (MyPtero::instance()->pteroStage) {
 	case MyPtero::P_EGG:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 0, MyPtero::instance()->pteroLocationZ);
-		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
 		if (MyPtero::instance()->incubating) { RenderMesh(meshList[GEO_NEST], godlights); }
+		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
 		viewStack.Scale(10, 10, 10);
 		RenderMesh(meshList[GEO_DINOEGG], godlights);
 		viewStack.PopMatrix();
 		break;
 	case MyPtero::P_BABY:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 10, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.PushMatrix();
 		viewStack.Translate(0, 1, 0);
 		viewStack.Rotate(90, 0, 1, 0);
+		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
 		if(!MyPtero::instance()->hungry && feedingDelay == 0){ RenderMesh(meshList[GEO_HEART], godlights); }
 		viewStack.PopMatrix();
 		viewStack.Scale(10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize, 10 * MyPtero::instance()->pteroSize);
@@ -578,12 +604,13 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADOLESCENT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 15, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.PushMatrix();
-		viewStack.Translate(0, 1, 0);
+		viewStack.Translate(0, 5, 0);
 		viewStack.Rotate(90, 0, 1, 0);
 		viewStack.Scale(2.5, 2.5, 2.5);
+		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
 		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
 		viewStack.PopMatrix();
 		viewStack.Scale(25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize, 25 * MyPtero::instance()->pteroSize);
@@ -592,12 +619,13 @@ void Scene2::Render()
 		break;
 	case MyPtero::P_ADULT:
 		viewStack.PushMatrix();
-		viewStack.Translate(MyPtero::instance()->pteroLocationX, 25, MyPtero::instance()->pteroLocationZ);
+		viewStack.Translate(MyPtero::instance()->pteroLocationX, MyPtero::instance()->pteroLocationY, MyPtero::instance()->pteroLocationZ);
 		viewStack.Rotate(MyPtero::instance()->pteroDirection, 0, 1, 0);
 		viewStack.PushMatrix();
-		viewStack.Translate(0, 1, 0);
+		viewStack.Translate(0, 5, 0);
 		viewStack.Rotate(90, 0, 1, 0);
 		viewStack.Scale(4, 4, 4);
+		viewStack.Scale(MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize, MyPtero::instance()->pteroSize);
 		if (!MyPtero::instance()->hungry && feedingDelay == 0) { RenderMesh(meshList[GEO_HEART], godlights); }
 		viewStack.PopMatrix();
 		viewStack.Scale(40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize, 40 * MyPtero::instance()->pteroSize);
