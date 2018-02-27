@@ -8,6 +8,8 @@
 #include "LoadTGA.h"
 #include <string>
 #include <sstream>
+#include "Inventory.h"
+
 
 
 Scene1_5::Scene1_5()
@@ -767,6 +769,7 @@ void Scene1_5::collideRing(Vector3 c)
 		ActualYpos >= objs[OBJ_GOAL].minY && ActualYpos <= objs[OBJ_GOAL].maxY)
 	{
 		reachedGoal = true;
+		Inventory::instance()->items[ITEMS_CURRENCY] += 50;
 	}
 	else
 	reachedGoal = false;

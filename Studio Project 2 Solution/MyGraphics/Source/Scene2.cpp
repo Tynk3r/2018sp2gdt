@@ -11,7 +11,6 @@
 #include <sstream>
 #include "Inventory.h"
 
-
 Scene2::Scene2()
 {
 	MyPtero::instance()->pteroStage = MyPtero::P_BABY;
@@ -153,6 +152,9 @@ void Scene2::Init()
 
 	meshList[GEO_QUAD] = MeshBuilder::Generate2DQuad("genericquad", 1.0f, 1.0f, 1.f, 1.f, 1.f);
 
+	meshList[GEO_MONITOR] = MeshBuilder::Generate2DQuad("monitor", 1.0f, 1.0f, 1.f, 1.f, 1.f);
+	meshList[GEO_MONITOR]->textureID = LoadTGA("Image//monitor.tga");
+
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
 	meshList[GEO_INV_REDFRUIT]->textureID = LoadTGA("Image//calibri.tga");
@@ -270,14 +272,13 @@ void Scene2::Update(double dt)
 	camera.Update(dt);
 	Inventory::instance()->Update();
 
-	if (camera.position.z <= -85.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
+	if (camera.position.z <= -95.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	// feed/incubate
 	if (Application::IsKeyPressed('X') && camera.position.z > 0.0f)
 	{
-		feeding = true;
 		meatLocationX = camera.position.x;
 		meatLocationY = camera.position.y;
 		meatLocationZ = camera.position.z;
@@ -597,13 +598,14 @@ void Scene2::Render()
 		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
+	// border
 	viewStack.PushMatrix();
-	for (int row = 0; row < 30; row++)
+	for (int row = 0; row < 20; row++)
 	{
-		for (int col = 0; col < 30; col++)
+		for (int col = 0; col < 20; col++)
 		{
-			int moveRow = (300 - (row * 20));
-			int moveCol = (300 - (col * 20));
+			int moveRow = (200 - (row * 20));
+			int moveCol = (200 - (col * 20));
 
 			if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
 			{
@@ -611,7 +613,7 @@ void Scene2::Render()
 				{
 					viewStack.PushMatrix();
 					viewStack.Translate((moveRow), -20, (moveCol));
-					viewStack.Scale(4, 4, 4);
+					viewStack.Scale(2, 4, 2);
 					RenderMesh(meshList[GEO_TREE], godlights);
 					viewStack.PopMatrix();
 				}
@@ -739,32 +741,32 @@ void Scene2::Render()
 		break;
 	}
 	viewStack.PushMatrix();
-		viewStack.Translate(40, 25, -99.9);
+		viewStack.Translate(40, 31, -99.99999999999999);
 		viewStack.Rotate(0, 0, 1, 0);
 		viewStack.Scale(2, 2, 2);
 		viewStack.PushMatrix();
-			viewStack.Translate(8, -4.5, 0);
-			viewStack.Scale(16, 7, 1);
-			RenderMesh(meshList[GEO_QUAD], godlights);
+			viewStack.Translate(8, -6.5, 0);
+			viewStack.Scale(16, 9, 1);
+			RenderMesh(meshList[GEO_MONITOR], godlights);
 		viewStack.PopMatrix();
 		viewStack.Translate(-5, 0, 0);
 		viewStack.Scale(3, 3, 3);
-		RenderText(meshList[GEO_TEXT], "Speed:" + sp.str(), Color(1, 0, 0));
+		RenderText(meshList[GEO_TEXT], "Speed:" + sp.str(), Color(1, 1, 1));
 		viewStack.Translate(0, -1, 0);
-		RenderText(meshList[GEO_TEXT], "Size: " + sh.str(), Color(1, 0, 0));
+		RenderText(meshList[GEO_TEXT], "Size: " + sh.str(), Color(1, 1, 1));
 		viewStack.Translate(0, -1, 0);
 		viewStack.PushMatrix();
 			viewStack.Translate(0, 0, 0);
 			viewStack.Scale(0.5, 0.5, 0.5);
-			RenderText(meshList[GEO_TEXT], "Needed to Progress: ", Color(1, 0, 0));
+			RenderText(meshList[GEO_TEXT], "Needed to Progress: ", Color(1, 1, 1));
 		viewStack.PopMatrix();
 		viewStack.Translate(0.5, -1, 0);
-		RenderText(meshList[GEO_TEXT], sg, Color(1, 0, 0));
+		RenderText(meshList[GEO_TEXT], sg, Color(1, 1, 1));
 	viewStack.PopMatrix();
 	// reset button
 	if (camera.position.x > 25.0f && camera.position.z < -25.0f && Inventory::instance()->items[ITEMS_CURRENCY] >= 25) {
 		viewStack.PushMatrix();
-			viewStack.Translate(99.9, 15, -70);
+			viewStack.Translate(99.99999999999999, 15, -70);
 			viewStack.Rotate(-90, 0, 1, 0);
 			viewStack.Scale(2, 2, 2);
 			viewStack.PushMatrix();
@@ -774,15 +776,15 @@ void Scene2::Render()
 			viewStack.PopMatrix();
 			viewStack.Translate(-9.25, 0, 0);
 			viewStack.Scale(0.9, 1, 1);
-			RenderText(meshList[GEO_TEXT], "       PRESS X", Color(1, 0, 0));
+			RenderText(meshList[GEO_TEXT], "       PRESS X", Color(0, 0, 0));
 			viewStack.Translate(1, -1, 0);
-			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(1, 0, 0));
+			RenderText(meshList[GEO_TEXT], "TO RESET PTERODACTYL", Color(0, 0, 0));
 		viewStack.PopMatrix();
 	}
 
 	// portal
 	viewStack.PushMatrix();
-		viewStack.Translate(0, 10, -86);
+		viewStack.Translate(0, 10, -100);
 		viewStack.PushMatrix();
 			viewStack.Translate(-5, 15, 0);
 			viewStack.Scale(1.9, 1.9, 1.9);

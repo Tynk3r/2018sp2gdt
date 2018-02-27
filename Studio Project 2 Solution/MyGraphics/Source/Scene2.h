@@ -81,6 +81,7 @@ class Scene2 : public Scene
 		GEO_NEST,
 		GEO_MEAT,
 		GEO_PORTAL,
+		GEO_MONITOR,
 		GEO_TREE,
 		GEO_ROCK,
 
