@@ -25,7 +25,7 @@ void Scene3::Init()
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
-	camera.Init(Vector3(0, 20, 0), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
+	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // init camera
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -493,11 +493,11 @@ void Scene3::Update(double dt)
 			gameStartDelay++;
 		}
 
-		if (fruitMovingPosition <= 2)
+		if (fruitMovingPosition <= 3)
 		{
 			fruitMoveTowardsLeft = false;
 		}
-		if (fruitMovingPosition >= 79)
+		if (fruitMovingPosition >= 78)
 		{
 			fruitMoveTowardsLeft = true;
 		}

@@ -364,6 +364,7 @@ void CameraFPV::Update(double dt)
 		{
 			Reset();
 		}
+
 		prevX = Application::GetCursorX();
 		prevY = Application::GetCursorY();
 	}

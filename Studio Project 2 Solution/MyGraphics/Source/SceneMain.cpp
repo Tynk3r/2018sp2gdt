@@ -370,8 +370,18 @@ void SceneMain::Render()
 	}
 
 	viewStack.PushMatrix();
-		viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
-		RenderSkybox(200.0f, godlights);
+		viewStack.PushMatrix();
+			viewStack.Translate(camera.position.x, camera.position.y - 20, camera.position.z - 20);
+			RenderSkybox(500.0f, false);
+		viewStack.PopMatrix();
+
+		modelStack.PushMatrix();
+			modelStack.Rotate(-90, 1, 0, 0);
+			modelStack.Rotate(-90, 0, 0, 1);
+			modelStack.Translate(0, 0, 0);
+			modelStack.Scale(400, 400, 400);
+			RenderMesh(meshList[GEO_BOTTOM], light);
+		modelStack.PopMatrix();
 	viewStack.PopMatrix();
 
 	//Environment//
@@ -634,14 +644,6 @@ void SceneMain::RenderSkybox(float d, bool light)
 	modelStack.Translate(0, 0, -d);
 	modelStack.Scale(d, d, d);
 	RenderMesh(meshList[GEO_TOP], light);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Rotate(-90, 1, 0, 0);
-	modelStack.Rotate(-90, 0, 0, 1);
-	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(d, d, d);
-	RenderMesh(meshList[GEO_BOTTOM], light);
 	modelStack.PopMatrix();
 }
 
