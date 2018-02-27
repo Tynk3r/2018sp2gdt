@@ -289,6 +289,9 @@ void Scene3::Init()
 	meshList[GEO_ROCK] = MeshBuilder::GenerateOBJ("rock", "OBJ//rock.obj");
 	meshList[GEO_ROCK]->textureID = LoadTGA("Image//rock1.tga");
 
+	meshList[GEO_PORTAL] = MeshBuilder::Generate2DQuad("portal", 1.0f, 1.0f, 0.f, 0.f, 0.f);
+	meshList[GEO_PORTAL]->textureID = LoadTGA("Image//portal1.tga");
+
 
 	///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 	meshList[GEO_INV_REDFRUIT] = MeshBuilder::GenerateText("invRedFruit", 16, 16);
@@ -548,6 +551,7 @@ void Scene3::Update(double dt)
 	{
 		camera.Update(dt);
 	}
+	rotateMain++;
 }
 
 bool Scene3::getFruuts(int fruitsWon)
@@ -937,6 +941,23 @@ void Scene3::Render()
 	//viewStack.Rotate(72, 0, 1, 0);
 	RenderMesh(meshList[GEO_WHEELBARROW], godlights);
 	viewStack.PopMatrix();
+
+	// portal
+	viewStack.PushMatrix();
+		viewStack.Translate(0, 20, -186);
+		viewStack.PushMatrix();
+			viewStack.Translate(-10, 30, 0);
+			viewStack.Scale(3.75, 3.75, 3.75);
+			RenderText(meshList[GEO_TEXT], "BACK TO", (1, 1, 1));
+			viewStack.Translate(-0.5, -1.4, 0);
+			viewStack.Scale(2, 2, 2);
+			RenderText(meshList[GEO_TEXT], "START", (1, 1, 1));
+		viewStack.PopMatrix();
+		viewStack.Rotate(rotateMain, 0, 0, 1);
+		viewStack.Scale(20, 20, 20);
+		RenderMesh(meshList[GEO_PORTAL], false);
+	viewStack.PopMatrix();
+
 
 	RenderMeshOnScreen(meshList[GEO_INSTRUCTIONS], 64, 57, 16, 3);
 	RenderTextOnScreen(meshList[GEO_EXPLAINTEXT], "<E> to pick fruits", Color(1, 1, 1), 1.5, 33, 38);

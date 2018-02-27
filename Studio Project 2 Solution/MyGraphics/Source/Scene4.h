@@ -106,6 +106,7 @@ class Scene4 : public Scene
 		GEO_NPC_SHOP,
 
 		GEO_TREE,
+		GEO_PORTAL,
 
 		///////////////////////////////////////////////////////// START OF INVENTORY MESH CODE /////////////////////////////////////////////////////////
 		GEO_INV_REDFRUIT,
@@ -169,6 +170,7 @@ private:
 	void loadText(int npc_type, std::string text[3]);
 
 	bool godlights = false;
+	float rotateMain = 0;
 
 	// For shop
 	SHOP shop;
