@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Struct Name="Light">
+    <Position X="19.75" Y="4.5" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="Light::LIGHT_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\Light.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAgAAAAAAAQIgAAAAERAACAAAAAAABAAAE=</HashCode>
+      <FileName>Source\Light.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Component">
+    <Position X="18" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQBBAAAAAAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Material">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IEAAAAAAAAAAAAAAAgAAAAAAAAAAACAAAAAAAAAAIAA=</HashCode>
+      <FileName>Source\Material.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Position">
+    <Position X="14.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAgAAAAAAAAAAAAAAAAAABgAQAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Color">
+    <Position X="12.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAIAQABgAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="TexCoord">
+    <Position X="16.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAIAAAAAAAAAAAAAABIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Vertex">
+    <Position X="11" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIgAAAAAAACAAAIAAAAAAAA=</HashCode>
+      <FileName>Source\Vertex.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="ITEMS">
+    <Position X="16.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAEAAIAABEAAAAAAAAAAAAAgAAAAAAIAA=</HashCode>
+      <FileName>Source\Inventory.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="NPC_TYPE">
+    <Position X="11" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAACAAAAAAgAIAAAAAAIAAAABAAAAABAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOVE_DIRECTION">
+    <Position X="12.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQACCAAAAIAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MOVE_AXIS">
+    <Position X="9.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABQAAAAAAA=</HashCode>
+      <FileName>Source\NPC.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="SHOP_ACTION">
+    <Position X="14.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQAAAApkABECAAAAAAABAAAAAiAEgAAoAAiAACgAEAQ=</HashCode>
+      <FileName>Source\Shop.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

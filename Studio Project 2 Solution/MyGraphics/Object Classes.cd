@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="MyPtero">
+    <Position X="32.25" Y="6.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="MyPtero::PTERO_STATE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\MyPtero.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Enum Name="MyPtero::PTERO_TYPE" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Source\MyPtero.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AZAIAIAAABgAgEQAAAABCACBAADAAAABBAABASgAAQA=</HashCode>
+      <FileName>Source\MyPtero.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Object">
+    <Position X="33.75" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AHAIAAKAAYAAACigAAAAIAAAAAAIAIAAEACAAHAAAAA=</HashCode>
+      <FileName>Source\Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RingObject">
+    <Position X="35.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAICAAAAABAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Source\RingObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
