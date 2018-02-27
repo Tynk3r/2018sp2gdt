@@ -670,9 +670,32 @@ void Scene3::Render()
 	modelStack.Rotate(-90, 1, 0, 0);
 	modelStack.Rotate(-90, 0, 0, 1);
 	modelStack.Translate(0, 0, 0);
-	modelStack.Scale(400, 400, 400);
+	modelStack.Scale(800, 800, 800);
 	RenderMesh(meshList[GEO_BOTTOM], godlights);
 	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+		for (int row = 0; row < 30; row++)
+		{
+			for (int col = 0; col < 30; col++)
+			{
+				int moveRow = (300 - (row * 20));
+				int moveCol = (300 - (col * 20));
+
+				if ((moveRow > 200) || (moveRow < -200) || (moveCol > 200) || (moveCol < -200))
+				{
+					if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -180))
+					{
+						viewStack.PushMatrix();
+						viewStack.Translate((moveRow), -20, (moveCol));
+						viewStack.Scale(4, 4, 4);
+						RenderMesh(meshList[GEO_TREE], godlights);
+						viewStack.PopMatrix();
+					}
+				}
+			}
+		}
 	viewStack.PopMatrix();
 	
 	//Environment//
