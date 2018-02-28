@@ -1283,28 +1283,24 @@ void Scene4::Render()
 				viewStack.PopMatrix();
 			}
 		}
-<<<<<<< HEAD
 		// End of environment //
-=======
 
-		//BORDER//
-		viewStack.PushMatrix();
-		viewStack.Translate(0, 0, -10);
-		viewStack.Scale(35, 45, 35);
-		viewStack.Rotate(45, 0, 1, 0);
-		RenderMesh(meshList[GEO_BORDER], godlights);
-		viewStack.PopMatrix();
-
-		viewStack.PushMatrix();
-		viewStack.Translate(0, 0, -10);
-		viewStack.Scale(40, 60, 40);
-		viewStack.Rotate(45, 0, 1, 0);
-		RenderMesh(meshList[GEO_BORDER], godlights);
-		viewStack.PopMatrix();
-
-		//End of environment//
->>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
+	//BORDER//
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 0, -10);
+	viewStack.Scale(35, 45, 35);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
 	viewStack.PopMatrix();
+
+	viewStack.PushMatrix();
+	viewStack.Translate(0, 0, -10);
+	viewStack.Scale(40, 60, 40);
+	viewStack.Rotate(45, 0, 1, 0);
+	RenderMesh(meshList[GEO_BORDER], godlights);
+	viewStack.PopMatrix();
+
+	//End of environment//
 
 	// portal
 	viewStack.PushMatrix();
@@ -1322,11 +1318,7 @@ void Scene4::Render()
 	RenderMesh(meshList[GEO_PORTAL], false);
 	viewStack.PopMatrix();
 
-<<<<<<< HEAD
-	// Portal
-=======
 	// pterodactyls
->>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
 	viewStack.PushMatrix();
 	viewStack.Translate(ptero1LocationX, 100, ptero1LocationZ);
 	viewStack.Rotate(ptero1Direction, 0, 1, 0);
@@ -2346,11 +2338,8 @@ void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 		modelStack.LoadIdentity();
 		modelStack.Translate(x, y, 0);
 		modelStack.Scale(sizex, sizey, 1);
-<<<<<<< HEAD
 		RenderMesh(mesh, false); // UI should not have light
-=======
 		RenderMesh(mesh, godlights); //UI should not have light
->>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();

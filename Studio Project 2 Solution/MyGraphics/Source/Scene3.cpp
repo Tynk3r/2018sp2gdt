@@ -1578,10 +1578,8 @@ void Scene3::Render()
 	viewStack.Scale(15, 15, 15);
 	RenderMesh(meshList[GEO_WHEELBARROW], godlights);
 	viewStack.PopMatrix();
-
-<<<<<<< HEAD
 	// Portal
-=======
+
 	// pterodactyls
 	viewStack.PushMatrix();
 	viewStack.Translate(ptero1LocationX, 50, ptero1LocationZ);
@@ -1609,7 +1607,6 @@ void Scene3::Render()
 	viewStack.PopMatrix();
 
 	// portal
->>>>>>> ae702d2842903199cac0ded7b6103f5756d4d09b
 	viewStack.PushMatrix();
 		viewStack.Translate(0, 20, -200);
 		viewStack.PushMatrix();
