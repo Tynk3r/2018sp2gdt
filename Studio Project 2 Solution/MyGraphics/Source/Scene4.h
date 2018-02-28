@@ -144,6 +144,8 @@ class Scene4 : public Scene
 	};
 
 public:
+	bool isLoading;
+
 	Scene4();
 	~Scene4();
 

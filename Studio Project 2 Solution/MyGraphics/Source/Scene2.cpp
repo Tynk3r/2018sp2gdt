@@ -23,6 +23,8 @@ Scene2::~Scene2()
 
 void Scene2::Init()
 {
+	isLoading = false;
+
 	srand(time(NULL));
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
@@ -279,6 +281,7 @@ void Scene2::Update(double dt)
 
 	if (camera.position.z <= -95.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	// Feed or incubate
@@ -977,6 +980,11 @@ void Scene2::Render()
 		RenderTextOnScreen(meshList[GEO_INV_CURRENCY], cur, Color(0, 0, 0), 3, 17.6, 5.9);
 	}
 	///////////////////////////////////////////////////////// END OF INVENTORY DISPLAY CODE /////////////////////////////////////////////////////////
+	
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
+	}
 }
 
 void Scene2::Exit()

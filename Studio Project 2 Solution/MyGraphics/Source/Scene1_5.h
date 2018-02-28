@@ -147,6 +147,8 @@ class Scene1_5 : public Scene
 	Mesh* meshList[NUM_GEOMETRY];
 
 public:
+	bool isLoading;
+
 	Scene1_5();
 	~Scene1_5();
 

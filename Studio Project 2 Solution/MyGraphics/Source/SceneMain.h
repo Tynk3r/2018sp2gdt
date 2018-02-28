@@ -123,6 +123,8 @@ class SceneMain : public Scene
 	};
 
 public:
+	bool isLoading;
+
 	SceneMain();
 	~SceneMain();
 

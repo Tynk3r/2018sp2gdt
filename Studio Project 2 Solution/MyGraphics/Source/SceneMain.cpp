@@ -25,6 +25,7 @@ void SceneMain::Init()
 
 	developerMode = false;
 	Race1 = true;
+	isLoading = false;
 
 	camera.Init(Vector3(0, 20, 20), Vector3(0, 0, 1), Vector3(0, 1, 0)); // Init camera
 
@@ -254,10 +255,12 @@ void SceneMain::Update(double dt)
 			int track = rand() % 3 + 1;
 			if (track == 1)
 			{
+				isLoading = true;
 				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 			}
 			else
 			{
+				isLoading = true;
 				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
 			}
 		}
@@ -265,24 +268,29 @@ void SceneMain::Update(double dt)
 		{
 			if (Race1)
 			{
+				isLoading = true;
 				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1);
 			}
 			else
 			{
+				isLoading = true;
 				SceneManager::instance()->SetNextScene(SceneManager::SCENEID_1_5);
 			}
 		}
 	}
 	else if (camera.position.x <= -185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_2);
 	}
 	else if (camera.position.z >= 185.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_3);
 	}
 	else if (camera.position.x >= 185.0f && camera.position.z >= -15.0f && camera.position.z <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_4);
 	}
 
@@ -647,6 +655,11 @@ void SceneMain::Render()
 		oh << Race1;
 		std::string str2 = oh.str();
 		RenderTextOnScreen(meshList[GEO_TEXT], "Is Race Track 1:" + str2, Color(1, 1, 0), 2, 1, 2);
+	}
+
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
 	}
 }
 

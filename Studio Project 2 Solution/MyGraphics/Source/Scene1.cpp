@@ -20,6 +20,8 @@ Scene1::~Scene1()
 
 void Scene1::Init()
 {
+	isLoading = false;
+
 	currentRing.setID(0);
 	points = 0;
 	ringpos = Vector3(0, -23, 0);
@@ -296,6 +298,7 @@ void Scene1::Update(double dt)
 
 	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || currentRing.getID() == -1)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	if (Application::IsKeyPressed('Q')) // Turn on global light
@@ -321,8 +324,6 @@ void Scene1::Update(double dt)
 		HandleRingCollide(collideRing(camera.position));
 	}
 	totalTime -= timer.getElapsedTime();
-
-	std::cout << (camera.horizMove) * 10 << std::endl;
 }
 
 void Scene1::Render()
@@ -560,6 +561,10 @@ void Scene1::Render()
 		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
 	}
 
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
+	}
 }
 
 void Scene1::Exit()

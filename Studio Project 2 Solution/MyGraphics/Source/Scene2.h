@@ -110,6 +110,8 @@ class Scene2 : public Scene
 	};
 
 public:
+	bool isLoading;
+
 	Scene2();
 	~Scene2();
 

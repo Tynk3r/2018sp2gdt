@@ -21,6 +21,8 @@ Scene4::~Scene4()
 
 void Scene4::Init()
 {
+	isLoading = false;
+
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 
@@ -288,6 +290,9 @@ void Scene4::Update(double dt)
 			speedQuestDone = true;
 		}
 		break;
+	case 5:
+		MyPtero::instance()->pteroSpeedModifier = 4;
+		break;
 	default:
 		break;
 	}
@@ -312,11 +317,13 @@ void Scene4::Update(double dt)
 			giantQuestDone = true;
 		}
 		break;
+	case 5:
+		MyPtero::instance()->pteroSize = 3;
+		break;
 	default:
 		break;
 	}
 	////////////////////////////////////////////////////////////////// END OF QUEST CODE //////////////////////////////////////////////////////////////////
-
 
 	if (shopping == false)
 	{
@@ -325,15 +332,8 @@ void Scene4::Update(double dt)
 
 	if (camera.position.z <= -195.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
-	}
-	if (Application::IsKeyPressed('Q')) // Turn on global light
-	{
-			godlights = false;
-	}
-	if (Application::IsKeyPressed('E')) // Turn off global light
-	{
-			godlights = true;
 	}
 
 	////////////////////////////////////////////////////////////////// START OF SHOP CODE //////////////////////////////////////////////////////////////////
@@ -1265,7 +1265,7 @@ void Scene4::Render()
 						viewStack.PushMatrix();
 							viewStack.Translate((moveRow), -20, (moveCol));
 							viewStack.Scale(4, 4, 4);
-							RenderMesh(meshList[GEO_TREE], godlights);
+							RenderMesh(meshList[GEO_TREE], true);
 						viewStack.PopMatrix();
 					}
 				}
@@ -1281,7 +1281,7 @@ void Scene4::Render()
 					viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
 					viewStack.Scale(8, 8, 8);
 					viewStack.Rotate(12.5*i, 0, 1, 0);
-					RenderMesh(meshList[GEO_FERN], godlights);
+					RenderMesh(meshList[GEO_FERN], true);
 				viewStack.PopMatrix();
 			}
 		}
@@ -1292,14 +1292,14 @@ void Scene4::Render()
 	viewStack.Translate(0, 0, -10);
 	viewStack.Scale(35, 45, 35);
 	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
+	RenderMesh(meshList[GEO_BORDER], true);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
 	viewStack.Translate(0, 0, -10);
 	viewStack.Scale(40, 60, 40);
 	viewStack.Rotate(45, 0, 1, 0);
-	RenderMesh(meshList[GEO_BORDER], godlights);
+	RenderMesh(meshList[GEO_BORDER], true);
 	viewStack.PopMatrix();
 
 	//End of environment//
@@ -1325,25 +1325,25 @@ void Scene4::Render()
 	viewStack.Translate(ptero1LocationX, 100, ptero1LocationZ);
 	viewStack.Rotate(ptero1Direction, 0, 1, 0);
 	viewStack.Scale(40, 40, 40);
-	RenderMesh(meshList[GEO_PTERO1], godlights);
+	RenderMesh(meshList[GEO_PTERO1], true);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix();
 	viewStack.Translate(ptero2LocationX, 75, ptero2LocationZ);
 	viewStack.Rotate(ptero2Direction, 0, 1, 0);
 	viewStack.Scale(40, 40, 40);
-	RenderMesh(meshList[GEO_PTERO2], godlights);
+	RenderMesh(meshList[GEO_PTERO2], true);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix();
 	viewStack.Translate(ptero3LocationX, 50, ptero3LocationZ);
 	viewStack.Rotate(ptero3Direction, 0, 1, 0);
 	viewStack.Scale(40, 40, 40);
-	RenderMesh(meshList[GEO_PTERO3], godlights);
+	RenderMesh(meshList[GEO_PTERO3], true);
 	viewStack.PopMatrix();
 	viewStack.PushMatrix();
 	viewStack.Translate(ptero4LocationX, 50, ptero4LocationZ);
 	viewStack.Rotate(ptero4Direction, 0, 1, 0);
 	viewStack.Scale(40, 40, 40);
-	RenderMesh(meshList[GEO_PTERO4], godlights);
+	RenderMesh(meshList[GEO_PTERO4], true);
 	viewStack.PopMatrix();
 
 	viewStack.PushMatrix();
@@ -1519,6 +1519,11 @@ void Scene4::Render()
 			RenderTextOnScreen(meshList[GEO_INV_INCUBATOR], "SOLD OUT", Color(0.7, 0.7, 0), 1, 46.9, 20);
 		}
 	}
+
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
+	}
 }
 
 
@@ -1619,7 +1624,7 @@ void Scene4::RenderNPC()
 				if (i == NPC_SHOP)
 				{
 					viewStack.Scale(8, 8, 8);
-					RenderMesh(meshList[GEO_NPC_SHOP], godlights);
+					RenderMesh(meshList[GEO_NPC_SHOP], true);
 				}
 				else
 				{
@@ -1628,27 +1633,27 @@ void Scene4::RenderNPC()
 					if (i == NPC_FACTION_GIANT)
 					{
 						viewStack.Scale(14, 14, 14);
-						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+						RenderMesh(meshList[GEO_NPC_HUNTER], true);
 					}
 					else if (i == NPC_FACTION_SPEED)
 					{
 						viewStack.Scale(4, 4, 4);
-						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+						RenderMesh(meshList[GEO_NPC_HUNTER], true);
 					}
 					else if (i == NPC_LORE)
 					{
 						viewStack.Scale(8, 8, 8);
-						RenderMesh(meshList[GEO_NPC_LORE], godlights);
+						RenderMesh(meshList[GEO_NPC_LORE], true);
 					}
 					else if (i == NPC_JOKER)
 					{
 						viewStack.Scale(8, 8, 8);
-						RenderMesh(meshList[GEO_NPC_JOKER], godlights);
+						RenderMesh(meshList[GEO_NPC_JOKER], true);
 					}
 					else
 					{
 						viewStack.Scale(8, 8, 8);
-						RenderMesh(meshList[GEO_NPC_HUNTER], godlights);
+						RenderMesh(meshList[GEO_NPC_HUNTER], true);
 					}
 				}
 			viewStack.PopMatrix();

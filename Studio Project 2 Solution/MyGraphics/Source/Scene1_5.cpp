@@ -21,6 +21,8 @@ Scene1_5::~Scene1_5()
 
 void Scene1_5::Init()
 {
+	isLoading = false;
+
 	reachedGoal = false;
 	goalpos = Vector3(0, 100, 490);
 	totalTime = 800;
@@ -296,6 +298,7 @@ void Scene1_5::Update(double dt)
 
 	if (Application::IsKeyPressed('6') || camera.position.y <= -495 || totalTime <= 0 || reachedGoal)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 	if (Application::IsKeyPressed('Q')) // Turn on global light
@@ -316,8 +319,6 @@ void Scene1_5::Update(double dt)
 
 	collideRing(camera.position);
 	totalTime -= timer.getElapsedTime();
-
-	std::cout << (camera.horizMove) * 10 << std::endl;
 }
 
 void Scene1_5::Render()
@@ -529,6 +530,11 @@ void Scene1_5::Render()
 	if (reachedGoal == true)
 	{
 		RenderTextOnScreen(meshList[GEO_TEXT], "You passed the trial!", Color(1, 0.1, 1), 3, 5, 9);
+	}
+
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
 	}
 }
 

@@ -19,6 +19,8 @@ Scene3::~Scene3()
 
 void Scene3::Init()
 {	
+	isLoading = false;
+
 	framerate = 0.0f;
 	glClearColor(0.05f, 0.05f, 0.05f, 0.0f);
 	godlights = true;
@@ -342,6 +344,7 @@ void Scene3::Update(double dt)
 
 	if (camera.position.z <= -195.0f && camera.position.x >= -15.0f && camera.position.x <= 15.0f)
 	{
+		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
 
@@ -1664,6 +1667,11 @@ void Scene3::Render()
 		viewStack.PushMatrix();
 			RenderGettingFruitsGameUI();
 		viewStack.PopMatrix();
+	}
+
+	if (isLoading)
+	{
+		RenderTextOnScreen(meshList[GEO_TEXT], "LOADING...", Color(0, 1, 0), 5, 4, 6);
 	}
 }
 
