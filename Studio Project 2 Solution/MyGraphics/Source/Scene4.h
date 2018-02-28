@@ -105,6 +105,7 @@ class Scene4 : public Scene
 		GEO_NPC_SHOP,
 		GEO_NPC_LORE,
 		GEO_NPC_JOKER,
+		GEO_NPC_RACING,
 
 		GEO_TREE,
 		GEO_FERN,

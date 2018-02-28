@@ -49,7 +49,12 @@ void CameraFPV::Update(double dt)
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, up.x, up.y, up.z);
 		view = rotation*view;
+	
+		
 		target = position + view;
+
+		up = rotation * up;
+
 		double pitch = (vertMove*dt) / 25.0f;
 		target = target + Vector3(-up.x*pitch, -up.y*pitch, -up.z*pitch);
 

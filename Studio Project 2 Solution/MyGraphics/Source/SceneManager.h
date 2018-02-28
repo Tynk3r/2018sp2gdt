@@ -1,7 +1,7 @@
 #ifndef SCENE_MANAGER_H
 #define SCENE_MANAGER_H
 #include <vector>
-#include <iostream> // To print out errors/warnings
+#include <iostream>
 #include "Scene.h"
 #include "timer.h"
 class SceneManager
@@ -16,7 +16,7 @@ private:
 public:
 	std::vector<Scene*> SC_SceneList;
 	static SceneManager* instance(void);
-	void AddScene(Scene *scene); // SCENE POINTER HAS TO ALREADY BE NEWED
+	void AddScene(Scene *scene);
 	void SetNextScene(int sceneID);
 	void Update(StopWatch*, bool Exiting = false);
 	int GetSceneID();
@@ -29,7 +29,7 @@ public:
 		SCENEID_4,
 		SCENEID_1_5,
 
-		SCENEID_AMTOFSCENES
+		SCENEID_AMTOFSCENES,
 	};
 };
 #endif

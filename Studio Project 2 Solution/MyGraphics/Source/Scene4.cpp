@@ -241,6 +241,8 @@ void Scene4::Init()
 	meshList[GEO_NPC_LORE]->textureID = LoadTGA("Image//NPC_Lore.tga");
 	meshList[GEO_NPC_JOKER] = MeshBuilder::GenerateOBJ("npc_joker", "OBJ//NPC_Joker.obj");
 	meshList[GEO_NPC_JOKER]->textureID = LoadTGA("Image//NPC_Joker.tga");
+	meshList[GEO_NPC_RACING] = MeshBuilder::GenerateOBJ("npc_Racing", "OBJ//NPC_Racing.obj");
+	meshList[GEO_NPC_RACING]->textureID = LoadTGA("Image//NPC_Racing.tga");
 
 	meshList[GEO_PTERO1] = MeshBuilder::GenerateOBJ("ptero1", "OBJ//pterodactyl.obj");
 	meshList[GEO_PTERO1]->textureID = LoadTGA("Image//greendino.tga");
@@ -1649,6 +1651,11 @@ void Scene4::RenderNPC()
 					{
 						viewStack.Scale(8, 8, 8);
 						RenderMesh(meshList[GEO_NPC_JOKER], true);
+					}
+					else if (i == NPC_RACING)
+					{
+						viewStack.Scale(8, 8, 8);
+						RenderMesh(meshList[GEO_NPC_RACING], godlights);
 					}
 					else
 					{
