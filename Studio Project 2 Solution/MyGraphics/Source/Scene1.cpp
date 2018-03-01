@@ -301,14 +301,6 @@ void Scene1::Update(double dt)
 		isLoading = true;
 		SceneManager::instance()->SetNextScene(SceneManager::SCENEID_MAIN);
 	}
-	if (Application::IsKeyPressed('Q')) // Turn on global light
-	{
-			godlights = false;
-	}
-	if (Application::IsKeyPressed('E')) // Turn off global light
-	{
-			godlights = true;
-	}
 	if (Application::IsKeyPressed('R')) // Reset Points
 	{
 		currentRing.setID(0);
