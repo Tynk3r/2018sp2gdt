@@ -2370,7 +2370,6 @@ void Scene4::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 		modelStack.Translate(x, y, 0);
 		modelStack.Scale(sizex, sizey, 1);
 		RenderMesh(mesh, false); // UI should not have light
-		RenderMesh(mesh, godlights); //UI should not have light
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
