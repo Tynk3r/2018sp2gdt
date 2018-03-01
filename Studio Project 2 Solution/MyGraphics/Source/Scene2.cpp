@@ -655,22 +655,25 @@ void Scene2::Render()
 
 	// border
 	viewStack.PushMatrix();
-	for (int row = 0; row < 20; row++)
+	for (int row = 0; row < 13; row++)
 	{
-		for (int col = 0; col < 20; col++)
+		for (int col = 0; col < 13; col++)
 		{
-			int moveRow = (200 - (row * 20));
-			int moveCol = (200 - (col * 20));
-
-			if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
+			if ((col % 2) == 0)
 			{
-				if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -80))
+				int moveRow = (120 - (row * 20));
+				int moveCol = (120 - (col * 20));
+
+				if ((moveRow > 100) || (moveRow < -100) || (moveCol > 100) || (moveCol < -100))
 				{
-					viewStack.PushMatrix();
-					viewStack.Translate((moveRow), -20, (moveCol));
-					viewStack.Scale(2, 4, 2);
-					RenderMesh(meshList[GEO_TREE], godlights);
-					viewStack.PopMatrix();
+					if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -80))
+					{
+						viewStack.PushMatrix();
+						viewStack.Translate((moveRow), -20, (moveCol));
+						viewStack.Scale(2, 4, 2);
+						RenderMesh(meshList[GEO_TREE], godlights);
+						viewStack.PopMatrix();
+					}
 				}
 			}
 		}

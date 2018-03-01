@@ -1297,20 +1297,26 @@ void Scene3::Render()
 	viewStack.PushMatrix();
 		for (int row = 0; row < 30; row++)
 		{
-			for (int col = 0; col < 30; col++)
+			if ((row % 3) == 0)
 			{
-				int moveRow = (300 - (row * 20));
-				int moveCol = (300 - (col * 20));
-
-				if ((moveRow > 200) || (moveRow < -200) || (moveCol > 200) || (moveCol < -200))
+				for (int col = 0; col < 30; col++)
 				{
-					if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -180))
+					if ((col % 3) == 0)
 					{
-						viewStack.PushMatrix();
-						viewStack.Translate((moveRow), -20, (moveCol));
-						viewStack.Scale(4, 4, 4);
-						RenderMesh(meshList[GEO_TREE], godlights);
-						viewStack.PopMatrix();
+						int moveRow = (300 - (row * 20));
+						int moveCol = (300 - (col * 20));
+
+						if ((moveRow > 200) || (moveRow < -200) || (moveCol > 200) || (moveCol < -200))
+						{
+							if (((moveRow > 20) || (moveRow < -20)) || (moveCol > -180))
+							{
+								viewStack.PushMatrix();
+									viewStack.Translate((moveRow), -20, (moveCol));
+									viewStack.Scale(4, 4, 4);
+									RenderMesh(meshList[GEO_TREE], godlights);
+								viewStack.PopMatrix();
+							}
+						}
 					}
 				}
 			}
@@ -1379,14 +1385,20 @@ void Scene3::Render()
 	// Fern //
 	for (int i = 0; i < 6; i++)
 	{
-		for (int j = 1; j < 6; j++)
+		if ((i % 2) == 0)
 		{
-			viewStack.PushMatrix();
-			viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
-			viewStack.Scale(8, 8, 8);
-			viewStack.Rotate(12.5*i, 0, 1, 0);
-			RenderMesh(meshList[GEO_FERN], godlights);
-			viewStack.PopMatrix();
+			for (int j = 1; j < 6; j++)
+			{
+				if ((j % 2) == 0)
+				{
+					viewStack.PushMatrix();
+						viewStack.Translate(-150 + (62 * i), 0, -180 + (62 * j));
+						viewStack.Scale(8, 8, 8);
+						viewStack.Rotate(12.5*i, 0, 1, 0);
+						RenderMesh(meshList[GEO_FERN], godlights);
+					viewStack.PopMatrix();
+				}
+			}
 		}
 	}
 	// End of environment //
