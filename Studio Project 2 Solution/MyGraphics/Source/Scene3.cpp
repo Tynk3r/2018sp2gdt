@@ -1893,7 +1893,7 @@ void Scene3::RenderMeshOnScreen(Mesh* mesh, int x, int y, int sizex, int sizey)
 	modelStack.LoadIdentity();
 	modelStack.Translate(x, y, 0);
 	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, godlights); // UI should not have light, but i added for fun
+	RenderMesh(mesh, false);
 	projectionStack.PopMatrix();
 	viewStack.PopMatrix();
 	modelStack.PopMatrix();
